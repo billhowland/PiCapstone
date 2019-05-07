@@ -1,0 +1,5 @@
+source piapp/bin/activate
+
+python manage.py runserver 0.0.0.0:8080
+
+password for superuser pi/6av5gaga
