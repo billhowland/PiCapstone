@@ -26,8 +26,11 @@ let app = new Vue({
   delimiters: ['${', '}'],
   data: {
     pins: [
-
+// set all to IN to start and report back
     ],
     GPIO2: 'IN'
+  },
+  mounted: function() {
+
   }
 })

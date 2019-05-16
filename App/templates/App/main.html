@@ -16,7 +16,8 @@
                   <span class='label'>GPIO2:</span>
                   <input type="radio" name="GPIO2" id="gpio2_in" value="IN"> In
                   <input type="radio" name="GPIO2" id="gpio2_out" value="OUT"> Out
-                    <span v-if="GPIO2.value === 'OUT'"><input type="radio" name="GPIO2_TEST" id="gpio2_test" value="TEST"> Test</span>
+                    <span v-if="GPIO2 === 'OUT'"><input type="radio" name="GPIO2_TEST" id="gpio2_test" value="TEST"> Test</span>
+                    {# the GPIO2 here means the item in app.data in main.js NOT the thing above! #}
               </div>
               <div class='pin'>
                   <span class='label'>GPIO3:</span>

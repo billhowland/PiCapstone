@@ -5,6 +5,7 @@ from .piscripts import (test_pin, set_pin_out, pin_out_hi, pin_out_low, set_pin_
 
 
 def main(request):
+    # set all the GPIOs to IN so we know
     return render(request, 'App/main.html', {})
 
 
