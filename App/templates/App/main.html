@@ -8,65 +8,49 @@
       <div class="header">
         <h1>Raspberry Pi I/O</h1>
       </div>
-        <div class='grid'>
+        {# ------------------------------------------------------------------------------------------------------------------------------------- #}
+        <div class='grid' id='app'>
         	<div class="leftcol">
             <div class="radio">
-              {# javascript event listener #}
-              GPIO2:
-              <input type="radio" name="GPIO2" id="gpio2_in" value="IN"> IN
-              <input type="radio" name="GPIO2" id="gpio2_out" value="OUT"> OUT
-               <br>
-               <div class='pin'>
+              <div class='pin'>
+                  <span class='label'>GPIO2:</span>
+                  <input type="radio" name="GPIO2" id="gpio2_in" value="IN"> In
+                  <input type="radio" name="GPIO2" id="gpio2_out" value="OUT"> Out
+                    <span v-if="GPIO2.value === 'OUT'"><input type="radio" name="GPIO2_TEST" id="gpio2_test" value="TEST"> Test</span>
+              </div>
+              <div class='pin'>
                   <span class='label'>GPIO3:</span>
-                  <input type="radio" name="GPIO3" value="IN"> IN
-                  <input type="radio" name="GPIO3" value="OUT"> OUT
+                  <input type="radio" id="gpio3_in" value="IN" v-model="picked">
+                  <label for="gpio3_in">In</label>
+                  <input type="radio" id="gpio3_out" value="OUT" v-model="picked">
+                  <label for="gpio3_out">Out</label>
+                    <span><input type="radio" id="gpio3_test" value="TEST"></span>
+                    <label for="gpio3_test">Test</label>
               </div>
               GPIO4:
-              <input type="radio" name="GPIO4" value="IN"> IN
-              <input type="radio" name="GPIO4" value="OUT"> OUT <br>
-              GPIO17:
-              <input type="radio" name="GPIO17" id="gpio17_in" value="IN"> IN
-              <input type="radio" name="GPIO17" id="gpio17_out" value="OUT"> OUT <br>
-              GPIO27:
-              <input type="radio" name="GPIO27" value="IN"> IN
-              <input type="radio" name="GPIO27" value="OUT"> OUT <br>
-              GPIO22:
-              <input type="radio" name="GPIO22" value="IN"> IN
-              <input type="radio" name="GPIO22" value="OUT"> OUT <br>
-              GPIO10:
-              <input type="radio" name="GPIO10" value="IN"> IN
-              <input type="radio" name="GPIO10" value="OUT"> OUT <br>
-              GPIO9:
-              <input type="radio" name="GPIO9" value="IN"> IN
-              <input type="radio" name="GPIO9" value="OUT"> OUT <br>
-              GPIO11:
-              <input type="radio" name="GPIO11" value="IN"> IN
-              <input type="radio" name="GPIO11" value="OUT"> OUT <br>
-              GPIO5:
-              <input type="radio" name="GPIO5" value="IN"> IN
-              <input type="radio" name="GPIO5" value="OUT"> OUT <br>
-              GPIO6:
-              <input type="radio" name="GPIO6" value="IN"> IN
-              <input type="radio" name="GPIO6" value="OUT"> OUT <br>
-              GPIO13:
-              <input type="radio" name="GPIO13" value="IN"> IN
-              <input type="radio" name="GPIO13" value="OUT"> OUT <br>
-              GPIO19:
-              <input type="radio" name="GPIO19" value="IN"> IN
-              <input type="radio" name="GPIO19" value="OUT"> OUT <br>
+              <br>
+              <div class='pin'>
+                  <span class='label'>GPIO17:</span>
+                  <input type="radio" name="GPIO17" id="gpio17_in" value="IN"> In
+                  <input type="radio" name="GPIO17" id="gpio17_out" value="OUT"> Out
+              </div>
             </div>
-        		<!-- <img class="img" src="/static/css/blank.png" alt="RaspPi IO Port" /> -->
+        		<!-- <img class="img" src="/static/css/blank.png" alt="" /> -->
         	</div>
   	      <div class="centercol">
   	      	<img class="img" src="/static/css/rp2_pinout.png" alt="RaspPi IO Port" />
   	      </div>
   	   	  <div class="rightcol">
-            <divclass="radio">
-              <input type="radio" name="GPIO2" value="IN"> IN
-              <input type="radio" name="GPIO2" value="OUT"> OUT
+            <div class="radio">
+              <div class='pin'>
+                  <span class='label'>GPIO18:</span>
+                  <input type="radio" name="GPIO18" id="gpio18_in" value="IN"> IN
+                  <input type="radio" name="GPIO18" id="gpio18_out" value="OUT"> OUT
+              </div><br>
             </div>
-  				  <!-- <img class="img" src="/static/css/blank.png" alt="RaspPi IO Port" /> -->
+  				  <!-- <img class="img" src="/static/css/blank.png" alt="" /> -->
   	   	  </div>
+          {# ----------------------------------------------------------------------------------------------------------------------------------- #}
         </div>
       <div>
       	And this? TEST

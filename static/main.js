@@ -20,3 +20,14 @@ gpio02.forEach(elem =>
     })
   })
 )
+
+let app = new Vue({
+  el: '#app',
+  delimiters: ['${', '}'],
+  data: {
+    pins: [
+
+    ],
+    GPIO2: 'IN'
+  }
+})

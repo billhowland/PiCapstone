@@ -26,7 +26,7 @@ def pin_out_hi(pin):
     GPIO.output((pin), GPIO.HIGH)
 
 
-def pin_out_lo(pin):
+def pin_out_low(pin):
     GPIO.output((pin), GPIO.LOW)
 
 # Inputs:
