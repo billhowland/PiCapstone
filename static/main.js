@@ -1,36 +1,43 @@
 // gpio radio button event listeners
-const gpio02 = document.getElementsByName('GPIO17')
-const api_root = 'set_pin/'
+const pins = document.getElementsByName('pins')
 const csrftoken = Cookies.get('csrftoken')
 const headers = new Headers({
 "X-CSRFToken": csrftoken
 });
 
-gpio02.forEach(elem =>
-  elem.addEventListener('change', (evt) => {
-    console.log(evt)
-    console.log(evt.target.value)
-    const res = fetch(api_root + '17', {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: headers,
-      body: {
-        value: evt.target.value
-      }
-    })
-  })
-)
-
 let app = new Vue({
   el: '#app',
   delimiters: ['${', '}'],
   data: {
-    pins: [
-// set all to IN to start and report back
-    ],
-    GPIO2: 'IN'
+    pins: null,
   },
   mounted: function() {
+    this.getAllPins()
+  },
+  methods: {
+    getAllPins: function() {
+      const request = fetch('get_all_pins')
+        .then(response => {
+          return response.json()
+        }).then(pinData => {
+          this.pins = pinData
+        }).catch(err => console.log(err))
+    },
+    setPin: function(pin, state) {
+        if (state == 1) {
+          api_root = 'gpin/'
+        } else {
+          api_root = 'gpout/'
+        }
+
+        // const api_root = (pin == 1 ? 'gpin/' : 'gpout/')
+
+        const request = fetch(api_root + pin, {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: headers
+        })
+      }
 
   }
 })

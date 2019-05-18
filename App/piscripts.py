@@ -38,3 +38,15 @@ def set_pin_in(pin):
 
 def read_pin(pin):
     return GPIO.input(pin)
+
+# Usage:
+
+def pin_use(pin):
+    return GPIO.gpio_function(pin)
+    # 0 = GPIO.OUT
+    # 1 = GPIO.IN
+    # 40 = GPIO.SERIAL
+    # 41 = GPIO.SPI
+    # 42 = GPIO.I2C
+    # 43 = GPIO.HARD_PWM
+    # -1 = GPIO.UNKNOWN
