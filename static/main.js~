@@ -39,7 +39,7 @@ let app = new Vue({
           credentials: 'same-origin',
           headers: headers
         })
-    },
+      }
 	 readPin: function(pin, in_lvl) {
         const request = fetch('gpread')
         	.then(response => {
@@ -47,6 +47,6 @@ let app = new Vue({
        }).then(in_lvl => {
           this.pins = in_lvl
        }).catch(err => console.log(err))
-   }
+      }
   }
 })

@@ -3,24 +3,61 @@
     <head>
         <title>Raspberry Pi I/O</title>
         <link rel="stylesheet" href="{% static 'css/stylesheet.css' %}">
+        <link rel="shortcut icon" href="{% static 'css/favicon.png' %}" type="image/x-icon" />
     </head>
     <body>
       <div class="header">
         <h1>Raspberry Pi I/O</h1>
       </div>
-      <div class='grid'>
-      	<div class="leftcol">
-      		Test
-      	</div>
-	      <div class="centercol">
-	      	<img src="/static/css/rp2_pinout.png" alt="RaspPi IO Port" /> 
-	      </div>
-	   	<div class="rightcol">
-				Test2	   	
-	   	</div> 
-      </div>
+        {# ------------------------------------------------------------------------------------------------------------------------------------- #}
+        <div class='grid' id='app'>
+        	<div class="leftcol">
+            <div class="radio">
+              <div class='pin' v-for="pin in pins" v-bind:key='pin[0]'>
+                  <span class='label'>GPIO ${pin[0]}</span>
+                  <input type="radio" v-bind:name="'GPIO'+pin[0]" value='1' v-model="pin[1]" v-on:change="setPin(pin[0], pin[1])">
+                  <label for="in">In</label>
+                  <input type="radio" v-bind:name="'GPIO'+pin[0]" value='0' v-model="pin[1]" v-on:change="setPin(pin[0], pin[1])">
+                  <label for="out">Out</label>
+                  	<span v-if="pin[1]==1">IN:
+                  		<input type="radio" v-bind:name="Hi" value='1'>
+                  		<label for="Hi">Hi</label>
+                  		<input type="radio" v-bind:name="Lo" value='0'>
+                  		<label for="Lo">Lo</label> </span>
+                  	<span v-else-if="pin[1]==0">OUT:
+                  		<input type="radio" v-bind:name="Hi" value='1'>
+                  		<label for="Hi">Hi</label>
+                  		<input type="radio" v-bind:name="Lo" value='0'>
+                  		<label for="Lo">Lo</label>
+                  		<input type="radio" v-bind:name="Test" value='2'>
+                  		<label for="Test">Test</label>
+                  	</span>
+                  <br>
+              </div>
+            </div>
+        	</div>
+  	      <div class="centercol">
+  	      	<img class="img" src="/static/css/rp2_pinout.png" alt="RaspPi IO Port" />
+  	      </div>
+  	   	  <div class="rightcol">
+            <div class="radio">
+            	<!-- <div class='pin' v-for="pin in pins" v-bind:key='pin[0]'>
+                  <span class='label'>GPIO ${pin[0]}</span>
+                  <input type="radio" v-bind:name="'GPIO'+pin[0]" value='1' v-model="pin[1]" v-on:change="setPin(pin[0], pin[1])">
+                  <label for="in">In</label>
+                  <input type="radio" v-bind:name="'GPIO'+pin[0]" value='0' v-model="pin[1]" v-on:change="setPin(pin[0], pin[1])">
+                  <label for="out">Out</label>
+                  <br>
+              </div>
+            </div> -->
+  	   	  </div>
+          {# ----------------------------------------------------------------------------------------------------------------------------------- #}
+        </div>
       <div>
-      	And this?
+      	And this? TEST
       </div>
+      <script src="static/vue.js"></script>
+      <script src="static/js.cookie.min.js"></script>
+      <script src="static/main.js"></script>
     </body>
 </html>

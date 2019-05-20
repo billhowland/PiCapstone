@@ -37,8 +37,8 @@ def gpin(request, pin):
 
 
 def gpread(request, pin):
-    in_lvl = read_pin(pin)
-    return JsonResponse(in_lvl, safe=False)
+    read_pin(pin)
+    return HttpResponse('Success')
 
 
 def gpuse(request, pin):
