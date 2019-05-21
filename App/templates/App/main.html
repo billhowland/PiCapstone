@@ -13,6 +13,7 @@
         <div class='grid' id='app'>
         	<div class="leftcol">
             <div class="radio">
+              <span>3.3V PWR</span>
               <div class='pin' v-for="pin in pins.slice(0, 14)" v-bind:key='pin[0]'>
                   <span class='label'>GPIO ${pin.name}</span>
                   <input type="radio" v-bind:name="'GPIO'+pin.name" value='1' v-model="pin.func" v-on:change="setPin(pin.name, pin.func)">
@@ -34,6 +35,7 @@
 
                   <br>
               </div>
+              <span>GND</span><br>
             </div>
         	</div>
   	      <div class="centercol">
@@ -41,6 +43,11 @@
   	      </div>
   	   	  <div class="rightcol">
             <div class="radio">
+              <span>5V PWR</span><br>
+              <span>5V PWR</span><br>
+              <span>GND</span><br>
+              <span>UART0 TX</span><br>
+              <span>UART0 RX</span><br>
               <div class='pin' v-for="pin in pins.slice(14)" v-bind:key='pin[0]'>
                     <span class='label'>GPIO ${pin.name}</span>
                     <input type="radio" v-bind:name="'GPIO'+pin.name" value='1' v-model="pin.func" v-on:change="setPin(pin.name, pin.func)">
@@ -62,6 +69,7 @@
 
                     <br>
               </div>
+
             </div>
   	   	  </div>
         </div>

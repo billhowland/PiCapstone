@@ -59,8 +59,8 @@ height: 95vh;
 	grid-area: left-col;
 	border-style: inset;
 	border-width: 10px;
-	height: 87%;
-	width: 75%;
+	/* height: 87%; */
+	width: 80%;
 	border-color: black;
 	background: lightgray;
 }
@@ -69,8 +69,8 @@ height: 95vh;
 	grid-area: right-col;
 	border-style: inset;
 	border-width: 10px;
-	height: 87%;
-	width: 75%;
+	/* height: 87%; */
+	width: 80%;
 	border-color: black;
 	background: lightgray;
 }
