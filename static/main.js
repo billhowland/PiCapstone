@@ -5,7 +5,7 @@ const headers = new Headers({
 "X-CSRFToken": csrftoken
 });
 
-//these call things in views.py:
+//these call things in views.py via pi_urls.py:
 
 let app = new Vue({
   el: '#app',
@@ -41,11 +41,35 @@ let app = new Vue({
         })
     },
 	 readPin: function(pin, in_lvl) {
-        const request = fetch('gpread')
+        const request = fetch('gpread/' + pin)
         	.then(response => {
           return response.json()
        }).then(in_lvl => {
           this.pins = in_lvl
+       }).catch(err => console.log(err))
+   },
+   gphigh: function(pin, high) {
+        const request = fetch('gphigh/' + pin)
+        	.then(response => {
+          return response.json()
+       }).then(high => {
+          this.pins = high
+       }).catch(err => console.log(err))
+   },
+   gplow: function(pin, low) {
+        const request = fetch('gplow/' + pin)
+        	.then(response => {
+          return response.json()
+       }).then(low => {
+          this.pins = low
+       }).catch(err => console.log(err))
+   },
+   gptest: function(pin, test) {
+        const request = fetch('gptest/' + pin)
+        	.then(response => {
+          return response.json()
+       }).then(test => {
+          this.pins = test
        }).catch(err => console.log(err))
    }
   }
