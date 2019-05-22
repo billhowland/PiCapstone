@@ -1,6 +1,3 @@
 from django.contrib import admin
-from .models import Pi
-
-admin.site.register App
 
 # Register your models here.

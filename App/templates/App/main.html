@@ -8,7 +8,10 @@
     <body>
       <div class="header">
         <h1>Raspberry Pi I/O</h1>
+        <span class="user">{{request.user.username}}</span>
+        <a id='logout' href="{% url 'logout' %}"><button class='btn'>Logout</button></a>        
       </div>
+
         {# ---These here call stuff in main.js-------------------------------------------------------------------------------------------------- #}
         <div class='grid' id='app'>
         	<div class="leftcol">
