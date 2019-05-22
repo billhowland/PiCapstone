@@ -14,7 +14,7 @@ background-size: 100% auto;
 
 .grid {
 display: grid;
-grid-template-areas: "header header user"
+grid-template-areas: "user header menu"
 							"left-col picture right-col"
 							"footer footer footer";
 grid-template-columns: repeat(3, 1fr);
@@ -26,17 +26,15 @@ height: 95vh;
 
 .header {
 	grid-area: header;
-	/* background-color: gray; */
 	top: 0;
 	left: 0;
 	font-weight: bolder;
 	font-family: Arial;
-	font-size: 2.0rem;
+	font-size: 1.6rem;
 	color: white;
 	text-align: center;
-	position: absolute;
-	width: 100%;
-	margin-bottom: 10px;
+	/* position: absolute; */
+	/* width: 100%; */
 }
 
 .footer {
@@ -48,7 +46,7 @@ height: 95vh;
 	border-style: inset;
 	border-width: 10px;
 	/* height: 87%; */
-	width: 80%;
+	/* width: 80%; */
 	border-color: black;
 	background: lightgray;
 }
@@ -58,7 +56,7 @@ height: 95vh;
 	border-style: inset;
 	border-width: 10px;
 	/* height: 87%; */
-	width: 80%;
+	/* width: 80%; */
 	border-color: black;
 	background: lightgray;
 }
@@ -76,9 +74,9 @@ height: 95vh;
 }
 
 .user {
-	text-align: left;
+	grid-area: user;
 	justify-items: left;
-	align-items: left;
+	text-align: left;
 	color: lightgreen;
 	font-weight: bolder;
 	font-family: Arial;
@@ -87,6 +85,7 @@ height: 95vh;
 }
 
 .btn {
+	grid-area: user;
   background-color: inherit;
   padding: 4px 8px;
   font-size: 14px;
