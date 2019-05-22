@@ -25,7 +25,7 @@ SECRET_KEY = 'z33g*%y@qc82mn&%%-745xvo6dl-409@h8u84y1!hv^7=k8)6u'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*'] #['127.0.0.1', '192.168.1.113', '192.168.1.226', '0.0.0.0', '.pythonanywhere.com', '172.16.3.242']
+ALLOWED_HOSTS = ['*']  # ['127.0.0.1', '192.168.1.113', '192.168.1.226', '0.0.0.0', '.pythonanywhere.com', '172.16.3.242']
 
 
 # Application definition
@@ -55,7 +55,7 @@ ROOT_URLCONF = 'pisite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -126,3 +126,7 @@ STATICFILES_DIRS = (
         'static',
     ),
 )
+
+# my_project/settings.py
+LOGIN_REDIRECT_URL = 'main'
+LOGOUT_REDIRECT_URL = 'main'

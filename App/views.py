@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
+from django.contrib.auth.decorators import login_required
 from .piscripts import (test_pin, set_pin_out, pin_out_hi, pin_out_low, set_pin_in, read_pin, pin_use)
 # from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
@@ -7,6 +8,7 @@ from .piscripts import (test_pin, set_pin_out, pin_out_hi, pin_out_low, set_pin_
 # These come from main.js and call things in piscripts.py
 
 
+@login_required
 def main(request):
     # set all the GPIOs to IN so we know
     return render(request, 'App/main.html', {})
@@ -56,7 +58,7 @@ def gpuse(request, pin):
 
 
 def get_all_pins(request):
-    pins = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
+    pins = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 14, 15, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
     pin_info = []
     for pin in pins:
         func = pin_use(pin)
