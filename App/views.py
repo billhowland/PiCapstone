@@ -21,7 +21,8 @@ def gptest(request, pin):
 
 def gpout(request, pin):
     set_pin_out(pin)
-    return HttpResponse('Success')
+    out_lvl = {pin: read_pin(pin)}
+    return JsonResponse(out_lvl, safe=False)
 
 
 def gphigh(request, pin):
@@ -38,12 +39,8 @@ def gplow(request, pin):
 
 def gpin(request, pin):
     set_pin_in(pin)
-    return HttpResponse('Success')
-
-
-def gpreadr(request, pin):
-    out_lvl = {pin: read_pin(pin)}
-    return JsonResponse(out_lvl, safe=False)
+    in_lvl = {pin: read_pin(pin)}
+    return JsonResponse(in_lvl, safe=False)
 
 
 def gpread(request, pin):
@@ -57,14 +54,11 @@ def gpuse(request, pin):
 
 
 def get_all_pins(request):
-    pins = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 14, 15, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
+    pins = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
     pin_info = []
     for pin in pins:
         func = pin_use(pin)
-        if func == 1:
-            in_lvl = read_pin(pin)
-        else:
-            in_lvl = False
+        in_lvl = read_pin(pin)
 
         pin_info.append({
             'name': pin,

@@ -1,24 +1,42 @@
-from gpiozero import LED
 from time import sleep
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM)
-pins = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 14, 15, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
+pins = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
+
 for pin in pins:
     GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 # URL -> View -> Piscript
 
 
-def test_pin(pin):
-    led = LED(pin)
+def blink_pin(pin, test):
+    GPIO.setup((pin), GPIO.OUT)
+    while test == 1:
+        print(test)
+        if GPIO.gpio_function(pin) == 0 and test == 1:
+            GPIO.output(pin, GPIO.HIGH)
+            sleep(1)
+            if GPIO.gpio_function(pin) == 0 and test == 1:
+                GPIO.output(pin, GPIO.LOW)
+                sleep(1)
+            else:
+                test = 0
+        else:
+            test = 0
+            continue
 
-    while True:
-        led.on()
-        sleep(1)
-        led.off()
-        sleep(1)
 
 # Outputs:
+
+
+def test_pin(pin):
+    test = 1
+    blink_pin(pin, test)
+
+
+def untest_pin(pin):
+    print("untest called")
+    # blink_pin(pin, 0) doesn't work
 
 
 def set_pin_out(pin):
@@ -26,10 +44,12 @@ def set_pin_out(pin):
 
 
 def pin_out_hi(pin):
+    untest_pin(pin)
     GPIO.output((pin), GPIO.HIGH)
 
 
 def pin_out_low(pin):
+    untest_pin(pin)
     GPIO.output((pin), GPIO.LOW)
 
 # Inputs:

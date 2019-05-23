@@ -45,7 +45,7 @@ let app = new Vue({
         	.then(response => {
           return response.json()
        }).then(in_lvl => {
-          this.pins = in_lvl
+          this.getAllPins()
        }).catch(err => console.log(err))
    },
    gphigh: function(pin, high) {
@@ -53,7 +53,7 @@ let app = new Vue({
         	.then(response => {
           return response.json()
        }).then(high => {
-          this.pins = high
+         this.getAllPins()
        }).catch(err => console.log(err))
    },
    gplow: function(pin, low) {
@@ -61,16 +61,14 @@ let app = new Vue({
         	.then(response => {
           return response.json()
        }).then(low => {
-          this.pins = low
+          this.getAllPins()
        }).catch(err => console.log(err))
    },
-   gptest: function(pin, test) {
+   gptest: function(pin) {
         const request = fetch('gptest/' + pin)
         	.then(response => {
           return response.json()
-       }).then(test => {
-          this.pins = test
-       }).catch(err => console.log(err))
+        })
    }
   }
 })
