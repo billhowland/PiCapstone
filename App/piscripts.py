@@ -1,15 +1,17 @@
 from time import sleep
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM)
-pins = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
-
+pins = [4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
+GPIO.setup(2, GPIO.IN)
+GPIO.setup(3, GPIO.IN)
 for pin in pins:
     GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-
+test = 0
 # URL -> View -> Piscript
 
 
-def blink_pin(pin, test):
+def blink_pin(pin):
+    global test
     GPIO.setup((pin), GPIO.OUT)
     while test == 1:
         print(test)
@@ -30,13 +32,15 @@ def blink_pin(pin, test):
 
 
 def test_pin(pin):
+    global test
     test = 1
-    blink_pin(pin, test)
+    blink_pin(pin)
 
 
 def untest_pin(pin):
     print("untest called")
-    # blink_pin(pin, 0) doesn't work
+    global test
+    test = 0
 
 
 def set_pin_out(pin):

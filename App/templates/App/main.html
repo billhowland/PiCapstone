@@ -10,69 +10,46 @@
       <div class="header">
         <h1>Raspberry Pi I/O</h1>
       </div>
-      <span class="user">{{request.user.username}}</span>
-      <a id='logout' href="{% url 'logout' %}"><button class='btn'>Logout</button></a>
+      <a class="user">{{request.user.username}}</a>
+      <button class='btn'>Logout</button> id='logout' href="{% url 'logout' %}">
         {# ---These here call stuff in main.js-------------------------------------------------------------------------------------------------- #}
         	<div class="leftcol">
             <div class="radio">
-              <span>3.3V PWR</span>
-              <div class='pin' v-for="pin in pins.slice(0, 14)" v-bind:key='pin.name'>
-                  <span class='label'>GPIO ${pin.name}</span>
-                  <input type="radio" v-bind:name="'GPIO'+pin.name" value='1' v-model="pin.func" v-on:change="setPin(pin.name, pin.func)">
-                  <label for="in">In</label>
-                  <input type="radio" v-bind:name="'GPIO'+pin.name" value='0' v-model="pin.func" v-on:change="setPin(pin.name, pin.func)">
-                  <label for="out">Out</label>
-                  	<span v-if="pin.func==1">IN:
-                  		<input type="radio" v-bind:name="'IN'+pin.name" value='1' v-model="pin.in_lvl" v-on:change="readPin(pin.name, pin.in_lvl)">
-                  		<label for="Hi">Hi</label>
-                  		<input type="radio" v-bind:name="'IN'+pin.name" value='0' v-model="pin.in_lvl" v-on:change="readPin(pin.name, pin.in_lvl)">
-                  		<label for="Lo">Lo</label> </span>
-                  	<span v-if="pin.func==0">OUT:
-                  		<input type="radio" v-bind:name="'OUT'+pin.name" value='1' v-model="pin.in_lvl" v-on:change="gphigh(pin.name, pin.high)">
-                  		<label for="Hi">Hi</label>
-                  		<input type="radio" v-bind:name="'OUT'+pin.name" value='0' v-model="pin.in_lvl" v-on:change="gplow(pin.name, pin.low)">
-                  		<label for="Lo">Lo</label>
-                  		<input type="radio" v-bind:name="'TEST'+pin.name" value='2' v-model="pin.in_lvl" v-on:change="gptest(pin.name)">
-                  		<label for="Test">Test</label> </span>
+              <div class='pin' v-for="pin in pins" v-bind:key='pin.name'>
+                <div class='grid' id='io_select'>
+                    <a class='name'>GPIO ${pin.name}</a>
+                    <a class='set'>
+                    <input type="radio" v-bind:name="'GPIO'+pin.name" value='1' v-model="pin.func" v-on:change="setPin(pin.name, pin.func)">
+                    <label for="in">In</label>
+                    <input type="radio" v-bind:name="'GPIO'+pin.name" value='0' v-model="pin.func" v-on:change="setPin(pin.name, pin.func)">
+                    <label for="out">Out</label></a>
+                  	<a class='linout' v-if="pin.func==1">
+                         <label>IN:</label>
+                  		   <input type="radio" v-bind:name="'IN'+pin.name" value='1' v-model="pin.in_lvl" v-on:change="readPin(pin.name, pin.in_lvl)">
+                  		   <label for="Hi">Hi</label>
+                  		   <input type="radio" v-bind:name="'IN'+pin.name" value='0' v-model="pin.in_lvl" v-on:change="readPin(pin.name, pin.in_lvl)">
+                  		   <label for="Lo">Lo</label>
+                    </a>
+                  	<a class='linout'v-if="pin.func==0">
+                         <label>OUT</label>:
+                  		   <input type="radio" v-bind:name="'OUT'+pin.name" value='1' v-model="pin.in_lvl" v-on:change="gphigh(pin.name, pin.high)">
+                  		   <label for="Hi">Hi</label>
+                  		   <input type="radio" v-bind:name="'OUT'+pin.name" value='0' v-model="pin.in_lvl" v-on:change="gplow(pin.name, pin.low)">
+                  		   <label for="Lo">Lo</label>
+                  		   <input type="radio" v-bind:name="'TEST'+pin.name" value='2' v-model="pin.in_lvl" v-on:change="gptest(pin.name)">
+                  		   <label for="Test">Test</label>
+                    </a>
 
-                  <br>
+                    <br>
+                </div>
               </div>
-              <span>GND</span><br>
             </div>
         	</div>
   	      <div class="centercol">
   	      	<img class="img" src="/static/css/rp2_pinout.png" alt="RaspPi IO Port" />
   	      </div>
   	   	  <div class="rightcol">
-            <div class="radio">
-              <span>5V PWR</span><br>
-              <span>5V PWR</span><br>
-              <span>GND</span><br>
-              <span>UART0 TX</span><br>
-              <span>UART0 RX</span><br>
-              <div class='pin' v-for="pin in pins.slice(14)" v-bind:key='pin.name'>
-                    <span class='label'>GPIO ${pin.name}</span>
-                    <input type="radio" v-bind:name="'GPIO'+pin.name" value='1' v-model="pin.func" v-on:change="setPin(pin.name, pin.func)">
-                    <label for="in">In</label>
-                    <input type="radio" v-bind:name="'GPIO'+pin.name" value='0' v-model="pin.func" v-on:change="setPin(pin.name, pin.func)">
-                    <label for="out">Out</label>
-                    	<span v-if="pin.func==1">IN:
-                    		<input type="radio" v-bind:name="'IN'+pin.name" value='1' v-model="pin.in_lvl" v-on:change="readPin(pin.name, pin.in_lvl)">
-                    		<label for="Hi">Hi</label>
-                    		<input type="radio" v-bind:name="'IN'+pin.name" value='0' v-model="pin.in_lvl" v-on:change="readPin(pin.name, pin.in_lvl)">
-                    		<label for="Lo">Lo</label> </span>
-                    	<span v-if="pin.func==0">OUT:
-                    		<input type="radio" v-bind:name="'OUT'+pin.name" value='1' v-model="pin.in_lvl" v-on:change="gphigh(pin.name, pin.high)">
-                    		<label for="Hi">Hi</label>
-                    		<input type="radio" v-bind:name="'OUT'+pin.name" value='0' v-model="pin.in_lvl" v-on:change="gplow(pin.name, pin.low)">
-                    		<label for="Lo">Lo</label>
-                    		<input type="radio" v-bind:name="'TEST'+pin.name" value='2' v-model="pin.in_lvl" v-on:change="gptest(pin.name)">
-                    		<label for="Test">Test</label> </span>
 
-                    <br>
-              </div>
-
-            </div>
   	   	  </div>
         </div>
 ``    </div>
