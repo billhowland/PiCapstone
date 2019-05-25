@@ -7,6 +7,7 @@ GPIO.setup(3, GPIO.IN)
 for pin in pins:
     GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 test = 0
+
 # URL -> View -> Piscript
 
 
@@ -27,6 +28,22 @@ def blink_pin(pin):
             test = 0
             continue
 
+
+def get_all_pins():
+    pins = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
+    pin_info = []
+    for pin in pins:
+        func = pin_use(pin)
+        in_lvl = read_pin(pin)
+        pud = x
+
+        pin_info.append({
+            'name': pin,
+            'func': func,
+            'in_lvl': in_lvl,
+            'pud': pud,
+        })
+    return(pin_info)
 
 # Outputs:
 
@@ -78,3 +95,13 @@ def pin_use(pin):
     # 42 = GPIO.I2C
     # 43 = GPIO.HARD_PWM
     # -1 = GPIO.UNKNOWN
+
+# pull_up_down
+
+
+def pud_dn(pin):
+    GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+
+
+def pud_up(pin):
+    GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)

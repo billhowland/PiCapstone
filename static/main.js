@@ -64,6 +64,26 @@ let app = new Vue({
           this.getAllPins()
        }).catch(err => console.log(err))
    },
+   gpup: function(pin, high) {
+        const request = fetch('gpup/' + pin)
+          .then(response => {
+          return response.json()
+       }).then(high => {
+         this.getAllPins()
+       }).catch(err => console.log(err))
+   },
+   gpdn: function(pin, low) {
+        const request = fetch('gpdn/' + pin)
+          .then(response => {
+          return response.json()
+       }).then(low => {
+          this.getAllPins()
+       }).catch(err => console.log(err))
+   },
+
+
+
+
    gptest: function(pin) {
         const request = fetch('gptest/' + pin)
         	.then(response => {

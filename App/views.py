@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
-from .piscripts import (test_pin, set_pin_out, pin_out_hi, pin_out_low, set_pin_in, read_pin, pin_use)
+from .piscripts import (test_pin, set_pin_out, pin_out_hi, pin_out_low, set_pin_in, read_pin, pin_use, pud_up, pud_dn)
 # Create your views here.
 
 # These come from main.js and call things in piscripts.py
@@ -9,13 +9,12 @@ from .piscripts import (test_pin, set_pin_out, pin_out_hi, pin_out_low, set_pin_
 
 @login_required
 def main(request):
-    # set all the GPIOs to IN so we know
     return render(request, 'App/main.html', {})
 
 
 def gptest(request, pin):
     test_pin(pin)
-    out_lvl = 2
+    out_lvl = ("Test")
     return JsonResponse(out_lvl, safe=False)
 
 
@@ -51,6 +50,18 @@ def gpread(request, pin):
 def gpuse(request, pin):
     pin_use(pin)
     return HttpResponse('Success')
+
+
+def gpup(request, pin):
+    pud = ("Up")
+    pud_up(pin)
+    return JsonResponse(pud, safe=False)
+
+
+def gpdn(request, pin):
+    pud = ("Down")
+    pud_dn(pin)
+    return JsonResponse(pud, safe=False)
 
 
 def get_all_pins(request):

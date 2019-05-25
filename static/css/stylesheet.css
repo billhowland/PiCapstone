@@ -13,21 +13,31 @@ background-size: 100% auto;
 }
 
 #app {
-display: grid;
-grid-template-areas: "user header menu"
-							"left-col picture right-col"
-							"footer footer footer";
-grid-template-columns: repeat(3, 1fr);
-grid-template-rows: 70px auto 0px;
-justify-items: center;
-align-items: center;
-height: 95vh;
+	display: grid;
+	grid-template-areas: "user header menu"
+											 "left-col picture right-col"
+											 "footer footer footer";
+	grid-template-columns: repeat(3, 1fr);
+	grid-template-rows: 70px auto 0px;
+	justify-items: center;
+	align-items: center;
+	height: 95vh;
 }
 
 #io_select {
-display: grid;
-grid-template-areas: "name set inout";
-grid-template-columns: 75px 120px 230px;
+	display: grid;
+	grid-template-areas: "name set pud inout";
+	grid-template-columns: 65px 115px 115px 205px;
+}
+
+#logout {
+	grid-area: user;
+	justify-self: center;
+  background-color: inherit;
+  padding: 4px 8px;
+  font-size: 14px;
+  cursor: pointer;
+	color: lightgreen;
 }
 
 .name{
@@ -53,6 +63,16 @@ grid-template-columns: 75px 120px 230px;
 	border-color: white;
 }
 
+.pud{
+	grid-area: pud;
+	justify-self: stretch;
+	align-self: stretch;
+	justify-content: center;
+  background-color: lightgreen;
+	border-style: solid;
+	border-color: white;
+}
+
 .lset{
 	grid-area: set;
 	justify-self: end;
@@ -69,7 +89,19 @@ grid-template-columns: 75px 120px 230px;
   background-color: inherit;
 }
 
-.linout{
+.lin{
+	grid-area: inout;
+	justify-self: center;
+	align-self: center;
+	align-items: center;
+  background-color: black;
+	color: white;
+	border-style: solid;
+	border-color: white;
+	width: 100%;
+}
+
+.lout{
 	grid-area: inout;
 	justify-self: center;
 	align-self: center;
@@ -96,6 +128,7 @@ grid-template-columns: 75px 120px 230px;
 }
 
 .leftcol {
+	font-size: 14px;
 	grid-area: left-col;
 	border-style: inset;
 	border-width: 10px;
@@ -108,10 +141,11 @@ grid-template-columns: 75px 120px 230px;
 	grid-area: right-col;
 	border-style: inset;
 	border-width: 10px;
-	height: 80%;
-	width: 50%;
+	height: 92%;
+	width: 80%;
 	border-color: black;
-	background: lightgray;
+	background: black;
+	color: white;
 }
 
 .centercol {
@@ -137,7 +171,6 @@ grid-template-columns: 75px 120px 230px;
 }
 
 .btn {
-	grid-area: user;
 	justify-self: center;
   background-color: inherit;
   padding: 4px 8px;

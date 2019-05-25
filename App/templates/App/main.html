@@ -10,8 +10,8 @@
       <div class="header">
         <h1>Raspberry Pi I/O</h1>
       </div>
-      <a class="user">{{request.user.username}}</a>
-      <button class='btn'>Logout</button> id='logout' href="{% url 'logout' %}">
+      <a class="user">User: {{request.user.username}}</a>
+      <a id='logout' href="{% url 'logout' %}"><button class='btn'>Logout</button></a>
         {# ---These here call stuff in main.js-------------------------------------------------------------------------------------------------- #}
         	<div class="leftcol">
             <div class="radio">
@@ -23,14 +23,19 @@
                     <label for="in">In</label>
                     <input type="radio" v-bind:name="'GPIO'+pin.name" value='0' v-model="pin.func" v-on:change="setPin(pin.name, pin.func)">
                     <label for="out">Out</label></a>
-                  	<a class='linout' v-if="pin.func==1">
+                    <a class='pud'>
+                    <input type="radio" v-bind:name="'PUD'+pin.name" value='1' v-model="pin.pud" v-on:change="gpup(pin.name, pin.pud)">
+                    <label for="up">Up</label>
+                    <input type="radio" v-bind:name="'PUD'+pin.name" value='0' v-model="pin.pud" v-on:change="gpdn(pin.name, pin.pud)">
+                    <label for="down">Dn</label></a>
+                  	<a class='lin' v-if="pin.func==1">
                          <label>IN:</label>
                   		   <input type="radio" v-bind:name="'IN'+pin.name" value='1' v-model="pin.in_lvl" v-on:change="readPin(pin.name, pin.in_lvl)">
                   		   <label for="Hi">Hi</label>
                   		   <input type="radio" v-bind:name="'IN'+pin.name" value='0' v-model="pin.in_lvl" v-on:change="readPin(pin.name, pin.in_lvl)">
                   		   <label for="Lo">Lo</label>
                     </a>
-                  	<a class='linout'v-if="pin.func==0">
+                  	<a class='lout'v-if="pin.func==0">
                          <label>OUT</label>:
                   		   <input type="radio" v-bind:name="'OUT'+pin.name" value='1' v-model="pin.in_lvl" v-on:change="gphigh(pin.name, pin.high)">
                   		   <label for="Hi">Hi</label>
@@ -49,7 +54,7 @@
   	      	<img class="img" src="/static/css/rp2_pinout.png" alt="RaspPi IO Port" />
   	      </div>
   	   	  <div class="rightcol">
-
+            Try to put a terminal here
   	   	  </div>
         </div>
 ``    </div>
