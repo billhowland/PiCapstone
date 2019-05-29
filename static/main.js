@@ -5,7 +5,7 @@ const headers = new Headers({
 "X-CSRFToken": csrftoken
 });
 
-//these call things in views.py via pi_urls.py:
+//from html these call things in views.py via pi_urls.py:
 
 let app = new Vue({
   el: '#app',

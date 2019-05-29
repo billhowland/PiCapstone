@@ -28,6 +28,7 @@ background-size: 100% auto;
 	display: grid;
 	grid-template-areas: "name set pud inout";
 	grid-template-columns: 65px 115px 115px 205px;
+	gap: 0;
 }
 
 #logout {
@@ -141,11 +142,11 @@ background-size: 100% auto;
 	grid-area: right-col;
 	border-style: inset;
 	border-width: 10px;
-	height: 92%;
-	width: 80%;
+	/* height: 92%; */
+	/* width: 80%; */
 	border-color: black;
-	background: black;
-	color: white;
+	/* background: black; */
+	/* color: white; */
 }
 
 .centercol {
@@ -183,4 +184,14 @@ background-size: 100% auto;
 .btn:hover {
 	background-color: lightgreen;
 	color: black;
+}
+
+.pyterm {
+	height: 730;
+	width: 500;
+}
+
+.grid {
+	gap: 0;
+	grid-template-rows: 1fr;
 }

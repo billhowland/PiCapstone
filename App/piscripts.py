@@ -1,14 +1,9 @@
 from time import sleep
 import RPi.GPIO as GPIO
-GPIO.setmode(GPIO.BCM)
-pins = [4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
-GPIO.setup(2, GPIO.IN)
-GPIO.setup(3, GPIO.IN)
-for pin in pins:
-    GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-test = 0
+import os
 
-# URL -> View -> Piscript
+test = 0
+pins = []
 
 
 def blink_pin(pin):
@@ -29,13 +24,26 @@ def blink_pin(pin):
             continue
 
 
-def get_all_pins():
-    pins = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
+def get_pud(pin):
+    pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
+    pin = pins[pin_names.index(pin)]
+    return pin['pud']
+
+
+def get_all_pins(init=False):
+    global pins
+    pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
     pin_info = []
-    for pin in pins:
+    for pin in pin_names:
         func = pin_use(pin)
         in_lvl = read_pin(pin)
-        pud = x
+        if init:
+            if pin not in [2, 3]:
+                pud = 'down'
+            else:
+                pud = 'up'
+        else:
+            pud = get_pud(pin)
 
         pin_info.append({
             'name': pin,
@@ -43,7 +51,8 @@ def get_all_pins():
             'in_lvl': in_lvl,
             'pud': pud,
         })
-    return(pin_info)
+    pins = pin_info
+    return pins
 
 # Outputs:
 
@@ -77,7 +86,11 @@ def pin_out_low(pin):
 
 
 def set_pin_in(pin):
-    GPIO.setup((pin), GPIO.IN)
+    pud = get_pud(pin)
+    if pud == 'down':
+        GPIO.setup((pin), GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+    else:
+        GPIO.setup((pin), GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
 def read_pin(pin):
@@ -101,7 +114,29 @@ def pin_use(pin):
 
 def pud_dn(pin):
     GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+    pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
+    idx = pin_names.index(pin)
+    pins[idx]['pud'] = 'down'
 
 
 def pud_up(pin):
     GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
+    idx = pin_names.index(pin)
+    pins[idx]['pud'] = 'up'
+
+
+def main():
+    global pins
+    GPIO.setmode(GPIO.BCM)
+    pin_names = [4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
+    GPIO.setup(2, GPIO.IN)
+    GPIO.setup(3, GPIO.IN)
+    for pin in pin_names:
+        GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+    os.system("gotty bash")
+    pins = get_all_pins(init=True)
+    # URL -> View -> Piscript
+
+
+main()

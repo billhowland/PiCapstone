@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
-from .piscripts import (test_pin, set_pin_out, pin_out_hi, pin_out_low, set_pin_in, read_pin, pin_use, pud_up, pud_dn)
+from .piscripts import (test_pin, set_pin_out, pin_out_hi, pin_out_low, set_pin_in, read_pin, pin_use, pud_up, pud_dn, get_pud)
 # Create your views here.
 
 # These come from main.js and call things in piscripts.py
@@ -70,10 +70,16 @@ def get_all_pins(request):
     for pin in pins:
         func = pin_use(pin)
         in_lvl = read_pin(pin)
+        pud = get_pud(pin)
 
         pin_info.append({
             'name': pin,
             'func': func,
             'in_lvl': in_lvl,
+            'pud': pud
         })
     return JsonResponse(pin_info, safe=False)
+
+
+def python_term():
+    return HttpResponse('Success')

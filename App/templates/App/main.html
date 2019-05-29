@@ -24,9 +24,9 @@
                     <input type="radio" v-bind:name="'GPIO'+pin.name" value='0' v-model="pin.func" v-on:change="setPin(pin.name, pin.func)">
                     <label for="out">Out</label></a>
                     <a class='pud'>
-                    <input type="radio" v-bind:name="'PUD'+pin.name" value='1' v-model="pin.pud" v-on:change="gpup(pin.name, pin.pud)">
+                    <input type="radio" v-bind:name="'PUD'+pin.name" value='up' v-model="pin.pud" v-on:change="gpup(pin.name, pin.pud)">
                     <label for="up">Up</label>
-                    <input type="radio" v-bind:name="'PUD'+pin.name" value='0' v-model="pin.pud" v-on:change="gpdn(pin.name, pin.pud)">
+                    <input type="radio" v-bind:name="'PUD'+pin.name" value='down' v-model="pin.pud" v-on:change="gpdn(pin.name, pin.pud)">
                     <label for="down">Dn</label></a>
                   	<a class='lin' v-if="pin.func==1">
                          <label>IN:</label>
@@ -44,8 +44,6 @@
                   		   <input type="radio" v-bind:name="'TEST'+pin.name" value='2' v-model="pin.in_lvl" v-on:change="gptest(pin.name)">
                   		   <label for="Test">Test</label>
                     </a>
-
-                    <br>
                 </div>
               </div>
             </div>
@@ -54,8 +52,8 @@
   	      	<img class="img" src="/static/css/rp2_pinout.png" alt="RaspPi IO Port" />
   	      </div>
   	   	  <div class="rightcol">
-            Try to put a terminal here
-  	   	  </div>
+             <iframe class="pyterm" src="http://192.168.1.226:9000"></iframe>
+          </div>
         </div>
 ``    </div>
       <script src="static/vue.js"></script>
