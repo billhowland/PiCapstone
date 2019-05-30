@@ -82,15 +82,24 @@ background-size: 100% auto;
   background-color: inherit;
 }
 
-.inout{
+.center {
+	text-align: center;
+}
+
+.linh{
 	grid-area: inout;
 	justify-self: center;
 	align-self: center;
 	align-items: center;
-  background-color: inherit;
+  background-color: red;
+	color: black;
+	border-style: solid;
+	border-color: white;
+	width: 100%;
+	font-size: 18px;
 }
 
-.lin{
+.linl{
 	grid-area: inout;
 	justify-self: center;
 	align-self: center;
@@ -100,6 +109,7 @@ background-size: 100% auto;
 	border-style: solid;
 	border-color: white;
 	width: 100%;
+	font-size: 18px;
 }
 
 .lout{

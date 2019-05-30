@@ -12,9 +12,14 @@ let app = new Vue({
   delimiters: ['${', '}'],
   data: {
     pins: null,
+    timer: null,
   },
   mounted: function() {
+    this.timer = setInterval(this.getAllPins, 500)
     this.getAllPins()
+  },
+  beforeDestroy: function() {
+    clearInterval(this.timer)
   },
   methods: {
     getAllPins: function() {
@@ -38,7 +43,9 @@ let app = new Vue({
           method: 'POST',
           credentials: 'same-origin',
           headers: headers
-        })
+        }).then(in_lvl => {
+           this.getAllPins()
+        }).catch(err => console.log(err))
     },
 	 readPin: function(pin, in_lvl) {
         const request = fetch('gpread/' + pin)

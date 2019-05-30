@@ -1,15 +1,23 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
-from .piscripts import (test_pin, set_pin_out, pin_out_hi, pin_out_low, set_pin_in, read_pin, pin_use, pud_up, pud_dn, get_pud)
+from .piscripts import (test_pin, set_pin_out, pin_out_hi, pin_out_low, set_pin_in, read_pin, pin_use, pud_up, pud_dn, get_pud, get_ip, get_test)
+# from background_task import background
+
 # Create your views here.
 
 # These come from main.js and call things in piscripts.py
 
 
+# @background(schedule=1)
+# def update_all_pins():
+#     get_all_pins()
+
+
 @login_required
 def main(request):
-    return render(request, 'App/main.html', {})
+    IP = 'http://{}:9000'.format(get_ip())
+    return render(request, 'App/main.html', {'IP': IP})
 
 
 def gptest(request, pin):
@@ -71,12 +79,13 @@ def get_all_pins(request):
         func = pin_use(pin)
         in_lvl = read_pin(pin)
         pud = get_pud(pin)
-
+        test = get_test(pin)
         pin_info.append({
             'name': pin,
             'func': func,
             'in_lvl': in_lvl,
-            'pud': pud
+            'pud': pud,
+            'test': test,
         })
     return JsonResponse(pin_info, safe=False)
 

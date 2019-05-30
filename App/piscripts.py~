@@ -3,41 +3,45 @@ import RPi.GPIO as GPIO
 import os
 import socket
 
-# test = 0
+test = 0
 pins = []
 
 # URL -> View -> Piscript
 
 
 def get_ip():
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    try:
-        s.connect(('10.255.255.255', 1))
-        IP = s.getsockname()[0]
-    except:
-        IP = '127.0.0.1'
-    finally:
-        s.close()
-        return IP
-
-
-def get_pin_idx(pin):
-    pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
-    return pin_names.index(pin)
+	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	try:
+		s.connect(('10.255.255.255', 1))
+		IP = s.getsockname()[0]
+	except:
+		IP = '127.0.0.1'
+	finally:
+		s.close()
+	return IP
 
 
 def blink_pin(pin):
-    # global test
+    global test
     GPIO.setup((pin), GPIO.OUT)
-    while pins[get_pin_idx(pin)]['test']:
-        GPIO.output(pin, GPIO.HIGH)
-        sleep(1)
-        GPIO.output(pin, GPIO.LOW)
-        sleep(1)
+    while test == 1:
+        print(test)
+        if GPIO.gpio_function(pin) == 0 and test == 1:
+            GPIO.output(pin, GPIO.HIGH)
+            sleep(1)
+            if GPIO.gpio_function(pin) == 0 and test == 1:
+                GPIO.output(pin, GPIO.LOW)
+                sleep(1)
+            else:
+                test = 0
+        else:
+            test = 0
+            continue
 
 
 def get_pud(pin):
-    pin = pins[get_pin_idx(pin)]
+    pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
+    pin = pins[pin_names.index(pin)]
     return pin['pud']
 
 
@@ -49,13 +53,11 @@ def get_all_pins(init=False):
         func = pin_use(pin)
         in_lvl = read_pin(pin)
         if init:
-            test = False
             if pin not in [2, 3]:
                 pud = 'down'
             else:
                 pud = 'up'
         else:
-            test = get_test(pin)
             pud = get_pud(pin)
 
         pin_info.append({
@@ -63,7 +65,6 @@ def get_all_pins(init=False):
             'func': func,
             'in_lvl': in_lvl,
             'pud': pud,
-            'test': test,
         })
     pins = pin_info
     return pins
@@ -72,24 +73,15 @@ def get_all_pins(init=False):
 
 
 def test_pin(pin):
-    # global test
-    # test = 1
-    idx = get_pin_idx(pin)
-    pins[idx]['test'] = True
+    global test
+    test = 1
     blink_pin(pin)
 
 
-def get_test(pin):
-    pin = pins[get_pin_idx(pin)]
-    return pin['test']
-
-
 def untest_pin(pin):
-    # print("untest called")
-    # global test
-    # test = 0
-    idx = get_pin_idx(pin)
-    pins[idx]['test'] = False
+    print("untest called")
+    global test
+    test = 0
 
 
 def set_pin_out(pin):
@@ -137,14 +129,15 @@ def pin_use(pin):
 
 def pud_dn(pin):
     GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-    idx = get_pin_idx(pin)
-    if pins[idx]['name'] not in [2, 3]:
-        pins[idx]['pud'] = 'down'
+    pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
+    idx = pin_names.index(pin)
+    pins[idx]['pud'] = 'down'
 
 
 def pud_up(pin):
     GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    idx = get_pin_idx(pin)
+    pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
+    idx = pin_names.index(pin)
     pins[idx]['pud'] = 'up'
 
 
@@ -158,6 +151,5 @@ def main():
         GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     pins = get_all_pins(init=True)
     os.system("gotty bash &")
-
-
+    
 main()
