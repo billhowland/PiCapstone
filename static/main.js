@@ -15,7 +15,7 @@ let app = new Vue({
     timer: null,
   },
   mounted: function() {
-    this.timer = setInterval(this.getAllPins, 500)
+    this.timer = setInterval(this.getAllPins, 250)
     this.getAllPins()
   },
   beforeDestroy: function() {

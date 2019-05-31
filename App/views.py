@@ -17,7 +17,8 @@ from .piscripts import (test_pin, set_pin_out, pin_out_hi, pin_out_low, set_pin_
 @login_required
 def main(request):
     IP = 'http://{}:9000'.format(get_ip())
-    return render(request, 'App/main.html', {'IP': IP})
+    IPX = ' {}:8080'.format(get_ip())
+    return render(request, 'App/main.html', {'IP': IP, 'IPX': IPX})
 
 
 def gptest(request, pin):
