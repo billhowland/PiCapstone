@@ -27,59 +27,95 @@ background-size: 100% auto;
 #io_select {
 	display: grid;
 	grid-template-areas: "name set pud inout";
-	grid-template-columns: 65px 115px 115px 205px;
+	grid-template-columns: 80px 115px 115px 215px;
 	gap: 0;
 }
 
 #logout {
 	grid-area: user;
 	justify-self: center;
-  background-color: inherit;
-  padding: 4px 8px;
-  font-size: 14px;
-  cursor: pointer;
+   background-color: inherit;
+   padding: 4px 8px;
+   font-size: 14px;
+   cursor: pointer;
 	color: lightgreen;
 }
 
 .name{
+	box-sizing: border-box;
 	grid-area: name;
 	width: auto;
 	height: auto;
 	justify-self: stretch;
 	align-self: stretch;
 	justify-content: center;
+	text-align: center;
 	background-color: orange;
 	border-style: solid;
 	border-color: white;
+	font-size: 16px;
 
 }
 
 .set{
+	box-sizing: border-box;
 	grid-area: set;
 	justify-self: stretch;
 	align-self: stretch;
 	justify-content: center;
-  background-color: darkgray;
+   background-color: darkgray;
 	border-style: solid;
 	border-color: white;
 }
 
 .pud{
+	box-sizing: border-box;
 	grid-area: pud;
 	justify-self: stretch;
 	align-self: stretch;
 	justify-content: center;
-  background-color: lightgreen;
+   background-color: powderblue;
 	border-style: solid;
 	border-color: white;
 }
 
+.col3{
+	grid-area: pud;
+	justify-self: center;
+	box-sizing: border-box;
+	align-self: center;
+	align-items: center;
+   background-color: wheat;
+	color: black;
+	border-style: solid;
+	border-color: white;
+	width: 100%;
+	font-size: 17px;
+}
+
+.col3serial{
+	background-color: lime;
+}
+
+.col3spi{
+	background-color: magenta;
+}
+
+.col3i2c{
+	background-color: cyan;
+}
+
+.col3pwm{
+	background-color: yellow;
+}
+
 .lset{
+	box-sizing: border-box;
 	grid-area: set;
 	justify-self: end;
 	align-self: center;
 	align-items: center;
-  background-color: inherit;
+   background-color: inherit;
 }
 
 .center {
@@ -87,37 +123,40 @@ background-size: 100% auto;
 }
 
 .linh{
+	box-sizing: border-box;
 	grid-area: inout;
 	justify-self: center;
 	align-self: center;
 	align-items: center;
-  background-color: red;
+   background-color: red;
 	color: black;
 	border-style: solid;
 	border-color: white;
 	width: 100%;
-	font-size: 16px;
+	font-size: 17px;
 }
 
 .linl{
+	box-sizing: border-box;
 	grid-area: inout;
 	justify-self: center;
 	align-self: center;
 	align-items: center;
-  background-color: black;
+   background-color: black;
 	color: white;
 	border-style: solid;
 	border-color: white;
 	width: 100%;
-	font-size: 16px;
+	font-size: 17px;
 }
 
 .lout{
+	box-sizing: border-box;
 	grid-area: inout;
 	justify-self: center;
 	align-self: center;
 	align-items: center;
-  background-color: inherit;
+   background-color: inherit;
 	border-style: solid;
 	border-color: white;
 	width: 100%;

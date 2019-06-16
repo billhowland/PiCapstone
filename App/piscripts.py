@@ -2,9 +2,13 @@ from time import sleep
 import RPi.GPIO as GPIO
 import os
 import socket
+import time
+import pigpio
 
 # test = 0
 pins = []
+pi = pigpio.pi()
+# pi.set_PWM_dutycycle(18, 128)
 
 # URL -> View -> Piscript
 
@@ -30,9 +34,11 @@ def blink_pin(pin):
     # global test
     GPIO.setup((pin), GPIO.OUT)
     while pins[get_pin_idx(pin)]['test']:
-        GPIO.output(pin, GPIO.HIGH)
+        if GPIO.gpio_function(pin) == 0:
+            GPIO.output(pin, GPIO.HIGH)
         sleep(1)
-        GPIO.output(pin, GPIO.LOW)
+        if GPIO.gpio_function(pin) == 0:
+            GPIO.output(pin, GPIO.LOW)
         sleep(1)
 
 
