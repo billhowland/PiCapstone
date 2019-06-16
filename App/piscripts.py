@@ -2,13 +2,13 @@ from time import sleep
 import RPi.GPIO as GPIO
 import os
 import socket
-import time
-import pigpio
+# import time
+# import pigpio
 
 # test = 0
 pins = []
-pi = pigpio.pi()
-# pi.set_PWM_dutycycle(18, 128)
+# pi = pigpio.pi()
+# pi.hardware_PWM(18, 2, 500000)  # 2Hz 50% dutycycle
 
 # URL -> View -> Piscript
 
