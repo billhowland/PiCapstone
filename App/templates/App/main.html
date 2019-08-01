@@ -30,9 +30,9 @@
                         <label for="up">Up</label>
                         <input type="radio" v-bind:name="'PUD'+pin.name" value='down' v-model="pin.pud" v-on:change="gpdn(pin.name, pin.pud)">
                         <label for="down">Dn</label></a>
-                        
-                        
-                    
+
+
+
                     <template v-if="pin.func==0"> {# Show Alt functions when not set to input #}
                          <a class='col3 center' v-if="pin.func==0">GPIO OUT</a>
                          <a class='col3 center col3serial' v-if="pin.func==40">SERIAL</a>
@@ -40,8 +40,8 @@
                          <a class='col3 center col3i2c' v-if="pin.func==42">I2C</a>
                          <a class='col3 center col3pwm' v-if="pin.func==43">PWM</a>
                     </template>
-                    
-                    
+
+
                     {# This is column 4 stuff #}
                   	<template v-if="pin.func==1"> {# 1 = Input #}
                          <a class='linh center' v-if="pin.in_lvl==1">***HIGH***</a>
@@ -64,7 +64,9 @@
   	      	<img class="img" src="/static/css/rp2_pinout.png" alt="RaspPi IO Port" />
   	      </div>
   	   	  <div class="rightcol">
-             <iframe class="pyterm" src="{{IP}}"></iframe>
+            <template v-if='"{{request.user.username}}"=="bill"'>
+              <iframe class="pyterm" src="{{IP}}"></iframe>
+            </template>
           </div>
         </div>
 ``    </div>
