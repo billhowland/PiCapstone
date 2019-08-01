@@ -7,6 +7,7 @@ import socket
 
 # test = 0
 pins = []
+pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
 # pi = pigpio.pi()
 # pi.hardware_PWM(18, 2, 500000)  # 2Hz 50% dutycycle
 
@@ -26,7 +27,7 @@ def get_ip():
 
 
 def get_pin_idx(pin):
-    pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
+    # pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
     return pin_names.index(pin)
 
 
@@ -46,15 +47,27 @@ def get_pud(pin):
     pin = pins[get_pin_idx(pin)]
     return pin['pud']
 
+def get_used(pin):
+    pin = pins[get_pin_idx(pin)]
+    return pin['used']
+
+def set_used(pin):
+    idx = get_pin_idx(pin)
+    pins[idx]['used'] = True
+
+def set_not_used(pin):
+    idx = get_pin_idx(pin)
+    pins[idx]['used'] = False
 
 def get_all_pins(init=False):
     global pins
-    pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
+    # pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
     pin_info = []
     for pin in pin_names:
         func = pin_use(pin)
         in_lvl = read_pin(pin)
         if init:
+            used = True
             test = False
             if pin not in [2, 3]:
                 pud = 'down'
@@ -63,6 +76,7 @@ def get_all_pins(init=False):
         else:
             test = get_test(pin)
             pud = get_pud(pin)
+            used = get_used(pin)
 
         pin_info.append({
             'name': pin,
@@ -70,6 +84,7 @@ def get_all_pins(init=False):
             'in_lvl': in_lvl,
             'pud': pud,
             'test': test,
+            'used': used,
         })
     pins = pin_info
     return pins
@@ -164,6 +179,5 @@ def main():
         GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     pins = get_all_pins(init=True)
     os.system("gotty bash &")
-
 
 main()

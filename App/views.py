@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
-from .piscripts import (test_pin, set_pin_out, pin_out_hi, pin_out_low, set_pin_in, read_pin, pin_use, pud_up, pud_dn, get_pud, get_ip, get_test)
+from .piscripts import (test_pin, set_pin_out, pin_out_hi, pin_out_low, set_pin_in, read_pin, pin_use, pud_up, pud_dn, get_pud, get_ip, get_test, get_used)
 # from background_task import background
 
 # Create your views here.
@@ -60,6 +60,15 @@ def gpuse(request, pin):
     pin_use(pin)
     return HttpResponse('Success')
 
+def gpused(request, pin):
+    used = True
+    get_used(pin)
+    return JsonResponse(used, safe=False)
+
+def gpnot_used(request, pin):
+    used = False
+    get_used(pin)
+    return JsonResponse(used, safe=False)
 
 def gpup(request, pin):
     pud = ("Up")
@@ -81,12 +90,14 @@ def get_all_pins(request):
         in_lvl = read_pin(pin)
         pud = get_pud(pin)
         test = get_test(pin)
+        used = get_used(pin)
         pin_info.append({
             'name': pin,
             'func': func,
             'in_lvl': in_lvl,
             'pud': pud,
             'test': test,
+            'used': used,
         })
     return JsonResponse(pin_info, safe=False)
 
