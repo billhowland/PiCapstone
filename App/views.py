@@ -2,6 +2,9 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from .piscripts import (test_pin, set_pin_out, pin_out_hi, pin_out_low, set_pin_in, read_pin, pin_use, pud_up, pud_dn, get_pud, get_ip, get_test, get_used)
+from .pimain import *
+
+pins = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
 # from background_task import background
 
 # Create your views here.
@@ -83,7 +86,7 @@ def gpdn(request, pin):
 
 
 def get_all_pins(request):
-    pins = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
+
     pin_info = []
     for pin in pins:
         func = pin_use(pin)

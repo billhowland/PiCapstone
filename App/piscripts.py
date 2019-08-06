@@ -27,7 +27,6 @@ def get_ip():
 
 
 def get_pin_idx(pin):
-    # pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
     return pin_names.index(pin)
 
 
@@ -56,12 +55,12 @@ def set_used(pin):
     pins[idx]['used'] = True
 
 def set_not_used(pin):
+    print(pins)
     idx = get_pin_idx(pin)
     pins[idx]['used'] = False
 
 def get_all_pins(init=False):
     global pins
-    # pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
     pin_info = []
     for pin in pin_names:
         func = pin_use(pin)
@@ -106,9 +105,6 @@ def get_test(pin):
 
 
 def untest_pin(pin):
-    # print("untest called")
-    # global test
-    # test = 0
     idx = get_pin_idx(pin)
     pins[idx]['test'] = False
 
@@ -168,16 +164,12 @@ def pud_up(pin):
     idx = get_pin_idx(pin)
     pins[idx]['pud'] = 'up'
 
-
-def main():
+def setup_call():
     global pins
     GPIO.setmode(GPIO.BCM)
-    pin_names = [4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
     GPIO.setup(2, GPIO.IN)
     GPIO.setup(3, GPIO.IN)
     for pin in pin_names:
         GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     pins = get_all_pins(init=True)
-    os.system("gotty bash &")
-
-main()
+    
