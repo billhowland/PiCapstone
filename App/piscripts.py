@@ -5,7 +5,6 @@ import socket
 # import time
 # import pigpio
 
-# test = 0
 pins = []
 pin_info = []
 
@@ -76,7 +75,6 @@ def get_all_pins(init=False):
                 pud = 'down'
             else:
                 pud = 'up'
-            test = False
             pin_info.append({
                 'name': pin,
                 'func': func,
@@ -89,6 +87,14 @@ def get_all_pins(init=False):
             test = get_test(pin)
             pud = get_pud(pin)
             used = get_used(pin)
+            pin_info.append({
+                'name': pin,
+                'func': func,
+                'in_lvl': in_lvl,
+                'pud': pud,
+                'test': test,
+                'used': used,
+            })
 
 
     pins = pin_info
@@ -183,7 +189,7 @@ def setup_call(mode):
                 GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
             else:
                 GPIO.setup(pin, GPIO.IN)
-        pins = get_all_pins(init=True) # works but sets all pins as used
+        pins = get_all_pins(init=True)
 
     else:
         pins = get_all_pins(init=False)

@@ -27,6 +27,8 @@ def main():
         set_not_used(pin)
         set_pin_in(pin)
 
+    print(pin_info)
+
     setup_call(False)
 
 
