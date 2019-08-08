@@ -7,7 +7,11 @@ import socket
 
 # test = 0
 pins = []
-pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
+pin_info = []
+
+# pin order on display is set by the list order here:
+# pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
+pin_names = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
 # pi = pigpio.pi()
 # pi.hardware_PWM(18, 2, 500000)  # 2Hz 50% dutycycle
 
@@ -55,36 +59,38 @@ def set_used(pin):
     pins[idx]['used'] = True
 
 def set_not_used(pin):
-    print(pins)
     idx = get_pin_idx(pin)
     pins[idx]['used'] = False
 
 def get_all_pins(init=False):
     global pins
-    pin_info = []
+
     for pin in pin_names:
         func = pin_use(pin)
         in_lvl = read_pin(pin)
         if init:
+
             used = True
             test = False
             if pin not in [2, 3]:
                 pud = 'down'
             else:
                 pud = 'up'
+            test = False
+            pin_info.append({
+                'name': pin,
+                'func': func,
+                'in_lvl': in_lvl,
+                'pud': pud,
+                'test': test,
+                'used': used,
+            })
         else:
             test = get_test(pin)
             pud = get_pud(pin)
             used = get_used(pin)
 
-        pin_info.append({
-            'name': pin,
-            'func': func,
-            'in_lvl': in_lvl,
-            'pud': pud,
-            'test': test,
-            'used': used,
-        })
+
     pins = pin_info
     return pins
 
@@ -114,11 +120,13 @@ def set_pin_out(pin):
 
 
 def pin_out_hi(pin):
+    set_pin_out(pin)
     untest_pin(pin)
     GPIO.output((pin), GPIO.HIGH)
 
 
 def pin_out_low(pin):
+    set_pin_out(pin)
     untest_pin(pin)
     GPIO.output((pin), GPIO.LOW)
 
@@ -164,12 +172,18 @@ def pud_up(pin):
     idx = get_pin_idx(pin)
     pins[idx]['pud'] = 'up'
 
-def setup_call():
+def setup_call(mode):
     global pins
     GPIO.setmode(GPIO.BCM)
-    GPIO.setup(2, GPIO.IN)
-    GPIO.setup(3, GPIO.IN)
-    for pin in pin_names:
-        GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-    pins = get_all_pins(init=True)
-    
+    GPIO.setwarnings(False)
+
+    if mode:
+        for pin in pin_names:
+            if pin not in [2, 3]:
+                GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+            else:
+                GPIO.setup(pin, GPIO.IN)
+        pins = get_all_pins(init=True) # works but sets all pins as used
+
+    else:
+        pins = get_all_pins(init=False)

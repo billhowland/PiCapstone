@@ -27,7 +27,7 @@ let app = new Vue({
         .then(response => {
           return response.json()
         }).then(pinData => {
-          this.pins = pinData
+          this.pins = pinData.filter(pin => pin.used)
         }).catch(err => console.log(err))
     },
     setPin: function(pin, func) {
@@ -87,10 +87,9 @@ let app = new Vue({
           this.getAllPins()
        }).catch(err => console.log(err))
    },
-
-
-
-
+   pinused: function(pin) {
+        return pinData(pinused==True)
+   },
    gptest: function(pin) {
         const request = fetch('gptest/' + pin)
         	.then(response => {
