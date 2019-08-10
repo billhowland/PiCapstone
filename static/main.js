@@ -27,7 +27,7 @@ let app = new Vue({
         .then(response => {
           return response.json()
         }).then(pinData => {
-          this.pins = pinData.filter(pin => pin.used)
+          this.pins = pinData.filter(function(pin) { return pin.used == "True"})
         }).catch(err => console.log(err))
     },
     setPin: function(pin, func) {
