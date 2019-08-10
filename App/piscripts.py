@@ -5,9 +5,12 @@ import socket
 # import time
 # import pigpio
 
-# test = 0
 pins = []
-pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
+pin_info = []
+
+# pin order on display is set by the list order here:
+# pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
+pin_names = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
 # pi = pigpio.pi()
 # pi.hardware_PWM(18, 2, 500000)  # 2Hz 50% dutycycle
 
@@ -27,7 +30,6 @@ def get_ip():
 
 
 def get_pin_idx(pin):
-    # pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
     return pin_names.index(pin)
 
 
@@ -61,31 +63,40 @@ def set_not_used(pin):
 
 def get_all_pins(init=False):
     global pins
-    # pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
-    pin_info = []
+
     for pin in pin_names:
         func = pin_use(pin)
         in_lvl = read_pin(pin)
         if init:
+
             used = True
             test = False
             if pin not in [2, 3]:
                 pud = 'down'
             else:
                 pud = 'up'
+            pin_info.append({
+                'name': pin,
+                'func': func,
+                'in_lvl': in_lvl,
+                'pud': pud,
+                'test': test,
+                'used': used,
+            })
         else:
             test = get_test(pin)
             pud = get_pud(pin)
             used = get_used(pin)
+            pin_info.append({
+                'name': pin,
+                'func': func,
+                'in_lvl': in_lvl,
+                'pud': pud,
+                'test': test,
+                'used': used,
+            })
 
-        pin_info.append({
-            'name': pin,
-            'func': func,
-            'in_lvl': in_lvl,
-            'pud': pud,
-            'test': test,
-            'used': used,
-        })
+
     pins = pin_info
     return pins
 
@@ -106,9 +117,6 @@ def get_test(pin):
 
 
 def untest_pin(pin):
-    # print("untest called")
-    # global test
-    # test = 0
     idx = get_pin_idx(pin)
     pins[idx]['test'] = False
 
@@ -118,11 +126,13 @@ def set_pin_out(pin):
 
 
 def pin_out_hi(pin):
+    set_pin_out(pin)
     untest_pin(pin)
     GPIO.output((pin), GPIO.HIGH)
 
 
 def pin_out_low(pin):
+    set_pin_out(pin)
     untest_pin(pin)
     GPIO.output((pin), GPIO.LOW)
 
@@ -168,16 +178,18 @@ def pud_up(pin):
     idx = get_pin_idx(pin)
     pins[idx]['pud'] = 'up'
 
-
-def main():
+def setup_call(mode):
     global pins
     GPIO.setmode(GPIO.BCM)
-    pin_names = [4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
-    GPIO.setup(2, GPIO.IN)
-    GPIO.setup(3, GPIO.IN)
-    for pin in pin_names:
-        GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-    pins = get_all_pins(init=True)
-    os.system("gotty bash &")
+    GPIO.setwarnings(False)
 
-main()
+    if mode:
+        for pin in pin_names:
+            if pin not in [2, 3]:
+                GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+            else:
+                GPIO.setup(pin, GPIO.IN)
+        pins = get_all_pins(init=True)
+
+    else:
+        pins = get_all_pins(init=False)

@@ -1,24 +1,35 @@
 import RPi.GPIO as GPIO
-from App.piscripts import set_not_used
-pins = []
+# from App import pimain
+from App.piscripts import *
+
+# BUG: Does not clear test mode/blink!
+
 
 def main():
-    global pins
     GPIO.setmode(GPIO.BCM)
-    # pin_names = [4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21, 2, 3] (24 pins)
+    setup_call(True)
 
     LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
     for pin in LED_Pins:
-        GPIO.setup(pin, GPIO.OUT)
-        GPIO.output((pin), GPIO.HIGH)
+        set_used(pin)
+        pin_out_low(pin) # fails to untest pin
+
 
     Pushbutton_Pins = [18, 17, 23, 22, 27, 24, 25, 13, 26]
     for pin in Pushbutton_Pins:
-        GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        set_used(pin)
+        pud_up(pin)
+        set_pin_in(pin)
+
 
     Unused_Pins = [19, 16, 20, 21, 2, 3]
     for pin in Unused_Pins:
-        GPIO.setup(pin, GPIO.IN)
         set_not_used(pin)
+        set_pin_in(pin)
+
+    print(pin_info)
+
+    setup_call(False)
+
 
 main()

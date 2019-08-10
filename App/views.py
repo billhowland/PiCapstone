@@ -1,18 +1,10 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
-from .piscripts import (test_pin, set_pin_out, pin_out_hi, pin_out_low, set_pin_in, read_pin, pin_use, pud_up, pud_dn, get_pud, get_ip, get_test, get_used)
-# from background_task import background
-
-# Create your views here.
+from .piscripts import (pin_names, test_pin, set_pin_out, pin_out_hi, pin_out_low, set_pin_in, read_pin, pin_use, pud_up, pud_dn, get_pud, get_ip, get_test, get_used)
+from .pimain import *
 
 # These come from main.js and call things in piscripts.py
-
-
-# @background(schedule=1)
-# def update_all_pins():
-#     get_all_pins()
-
 
 @login_required
 def main(request):
@@ -83,9 +75,9 @@ def gpdn(request, pin):
 
 
 def get_all_pins(request):
-    pins = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
+
     pin_info = []
-    for pin in pins:
+    for pin in pin_names:
         func = pin_use(pin)
         in_lvl = read_pin(pin)
         pud = get_pud(pin)

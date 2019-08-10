@@ -33,7 +33,7 @@
 
 
 
-                    <template v-if="pin.func==0"> {# Show Alt functions when not set to input #}
+                    <template> {# v-if="pin.func==0" -Show Alt functions when not set to input #}
                          <a class='col3 center' v-if="pin.func==0">GPIO OUT</a>
                          <a class='col3 center col3serial' v-if="pin.func==40">SERIAL</a>
                          <a class='col3 center col3spi' v-if="pin.func==41">SPI</a>
