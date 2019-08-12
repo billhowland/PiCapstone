@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
 # from App import pimain
-from piscripts import *
+from ..App.piscripts import *
 
 
 print(pin_info)  # is empty here
