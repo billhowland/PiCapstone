@@ -1,6 +1,5 @@
 from time import sleep
 import RPi.GPIO as GPIO
-import os  # Yes, this is used!
 import socket
 # from .config1 import pin_info
 # import time
@@ -23,7 +22,7 @@ def get_ip():
     try:
         s.connect(('10.255.255.255', 1))
         IP = s.getsockname()[0]
-    except:
+    except ValueError:
         IP = '127.0.0.1'
     finally:
         s.close()

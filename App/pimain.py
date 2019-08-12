@@ -1,4 +1,5 @@
-from .piscripts import (GPIO, os, get_all_pins, pin_names, set_used, pin_out_low, pud_up, set_not_used, set_pin_in)
+import os
+from .piscripts import (GPIO, get_all_pins, pin_names, set_used, pin_out_low, pud_up, set_not_used, set_pin_in)
 
 
 def main():
