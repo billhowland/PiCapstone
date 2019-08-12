@@ -37,7 +37,7 @@ def main():
     print(pin_info)  # this pin_info is local to config1.py and not the same as pin_info inside piscripts.py
     print(pins)  # is never assigned
 
-    get_all_pins(False)  # this will build a new
+    get_all_pins(False)
 
 
 main()
