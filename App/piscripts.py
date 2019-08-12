@@ -2,12 +2,12 @@ from time import sleep
 import RPi.GPIO as GPIO
 import os  # Yes, this is used!
 import socket
-from config1 import (pin_info)
+# from .config1 import pin_info
 # import time
 # import pigpio
 
 pins = []
-# pin_info = []
+pin_info = []
 
 # pin order on display is set by the list order here:
 # pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
@@ -181,20 +181,3 @@ def pud_up(pin):
     GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     idx = get_pin_idx(pin)
     pins[idx]['pud'] = 'up'
-
-
-def setup_call(mode):
-    global pins
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setwarnings(False)
-
-    if mode:
-        for pin in pin_names:
-            if pin not in [2, 3]:
-                GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-            else:
-                GPIO.setup(pin, GPIO.IN)
-        pins = get_all_pins(init=True)
-
-    else:
-        pins = get_all_pins(init=False)
