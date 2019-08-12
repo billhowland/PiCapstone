@@ -1,6 +1,8 @@
 import RPi.GPIO as GPIO
 # from App import pimain
-from App.piscripts import *
+from piscripts.py import *
+
+pin_info = []
 
 # BUG: Does not clear test mode/blink!
 
@@ -18,7 +20,6 @@ def main():
     for pin in Pushbutton_Pins:
         set_used(pin)
         pud_up(pin)
-        set_pin_in(pin)
 
     Unused_Pins = [19, 16, 20, 21, 2, 3]
     for pin in Unused_Pins:

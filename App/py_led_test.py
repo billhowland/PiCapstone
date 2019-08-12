@@ -36,4 +36,3 @@ except KeyboardInterrupt: # If CTRL+C is pressed, exit cleanly:
     pwm.stop() # stop PWM
 #    GPIO.cleanup() # cleanup all GPIO
     exit()
- 

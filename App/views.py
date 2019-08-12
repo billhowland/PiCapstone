@@ -52,15 +52,18 @@ def gpuse(request, pin):
     pin_use(pin)
     return HttpResponse('Success')
 
+
 def gpused(request, pin):
     used = True
     get_used(pin)
     return JsonResponse(used, safe=False)
 
+
 def gpnot_used(request, pin):
     used = False
     get_used(pin)
     return JsonResponse(used, safe=False)
+
 
 def gpup(request, pin):
     pud = ("Up")
