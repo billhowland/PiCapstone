@@ -37,7 +37,7 @@ def main():
     #     else:
     #         GPIO.setup(pin, GPIO.IN)
     # pins = get_all_pins(init=True)
-    os.system("gotty bash &")
+    # os.system("gotty bash &")
 
 
 main()

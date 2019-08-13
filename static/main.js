@@ -13,15 +13,28 @@ let app = new Vue({
   data: {
     pins: null,
     timer: null,
+    scripts: null,
   },
   mounted: function() {
     this.timer = setInterval(this.getAllPins, 250)
     this.getAllPins()
+    this.getScripts()
   },
   beforeDestroy: function() {
     clearInterval(this.timer)
   },
   methods: {
+    getScripts: function() {
+      const request = fetch('get_scripts')
+        .then(response => {
+          return response.json()
+        }).then(scriptData => {
+          this.scripts = scriptData
+        }).catch(err => console.log(err))
+    },
+
+  // leftcol pin-related methods:
+
     getAllPins: function() {
       const request = fetch('get_all_pins')
         .then(response => {

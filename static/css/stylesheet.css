@@ -31,6 +31,13 @@ background-size: 100% auto;
 	gap: 0;
 }
 
+#script_select {
+	display: grid;
+	grid-template-areas: "name running";
+	grid-template-columns: 195px 330px;
+	gap: 0;
+}
+
 #logout {
 	grid-area: user;
 	justify-self: center;
@@ -63,7 +70,7 @@ background-size: 100% auto;
 	justify-self: stretch;
 	align-self: stretch;
 	justify-content: center;
-   background-color: darkgray;
+  background-color: darkgray;
 	border-style: solid;
 	border-color: white;
 }
@@ -74,7 +81,7 @@ background-size: 100% auto;
 	justify-self: stretch;
 	align-self: stretch;
 	justify-content: center;
-   background-color: powderblue;
+  background-color: powderblue;
 	border-style: solid;
 	border-color: white;
 }
@@ -85,7 +92,7 @@ background-size: 100% auto;
 	box-sizing: border-box;
 	align-self: center;
 	align-items: center;
-   background-color: wheat;
+  background-color: wheat;
 	color: black;
 	border-style: solid;
 	border-color: white;
@@ -115,7 +122,7 @@ background-size: 100% auto;
 	justify-self: end;
 	align-self: center;
 	align-items: center;
-   background-color: inherit;
+  background-color: inherit;
 }
 
 .center {
@@ -128,7 +135,7 @@ background-size: 100% auto;
 	justify-self: center;
 	align-self: center;
 	align-items: center;
-   background-color: red;
+  background-color: red;
 	color: black;
 	border-style: solid;
 	border-color: white;
@@ -142,7 +149,7 @@ background-size: 100% auto;
 	justify-self: center;
 	align-self: center;
 	align-items: center;
-   background-color: black;
+  background-color: black;
 	color: white;
 	border-style: solid;
 	border-color: white;
@@ -156,7 +163,7 @@ background-size: 100% auto;
 	justify-self: center;
 	align-self: center;
 	align-items: center;
-   background-color: inherit;
+  background-color: inherit;
 	border-style: solid;
 	border-color: white;
 	width: 100%;
@@ -188,14 +195,13 @@ background-size: 100% auto;
 }
 
 .rightcol {
+	font-size: 14px;
 	grid-area: right-col;
 	border-style: inset;
 	border-width: 10px;
-	/* height: 92%; */
-	/* width: 80%; */
 	border-color: black;
-	/* background: black; */
-	/* color: white; */
+	background: lightgray;
+
 }
 
 .centercol {
@@ -222,10 +228,10 @@ background-size: 100% auto;
 
 .btn {
 	justify-self: center;
-   background-color: inherit;
-   padding: 4px 8px;
-   font-size: 14px;
-   cursor: pointer;
+  background-color: inherit;
+  padding: 4px 8px;
+  font-size: 14px;
+  cursor: pointer;
 	color: lightgreen;
 }
 

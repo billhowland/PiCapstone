@@ -7,10 +7,12 @@ import socket
 
 pins = []
 pin_info = []
-
+script_info = []
 # pin order on display is set by the list order here:
 # pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
 pin_names = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
+scripts = ['Config 1', 'Script 2', 'Script 3', 'Script 4', 'Script 5', 'Script 6', 'Script 7', 'Script 8', 'Scripts 9', 'Script 10']
+
 # pi = pigpio.pi()
 # pi.hardware_PWM(18, 2, 500000)  # 2Hz 50% dutycycle
 
@@ -180,3 +182,20 @@ def pud_up(pin):
     GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     idx = get_pin_idx(pin)
     pins[idx]['pud'] = 'up'
+
+def get_Scripts():
+    for script in scripts:
+        if init:
+            running = "off"
+            script_info.append({
+                'name': script,
+                'running': running,
+            })
+        else:
+            running = get.running(script)
+            script_info.append({
+                'name': script,
+                'running': running,
+            })
+    scripts = script_info
+    return scripts

@@ -99,3 +99,18 @@ def get_all_pins(request):
 
 def python_term():
     return HttpResponse('Success')
+
+def get_scripts(request):
+
+    script_info = []
+    for script in scripts:
+        func = pin_use(pin)
+        in_lvl = read_pin(pin)
+        pud = get_pud(pin)
+        test = get_test(pin)
+        used = get_used(pin)
+        pin_info.append({
+            'name': script,
+            'running': running,
+        })
+    return JsonResponse(script_info, safe=False)

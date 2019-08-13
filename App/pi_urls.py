@@ -15,4 +15,5 @@ urlpatterns = [
     path('gpused/<int:pin>', views.gpused, name='gpused'),
     path('gpnot_used/<int:pin>', views.gpnot_used, name='gpnot_used'),
     path('get_all_pins', views.get_all_pins, name='get_all_pins'),
+    path('get_scripts', views.get_scripts, name='get_scripts'),
 ]
