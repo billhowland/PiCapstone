@@ -30,7 +30,7 @@ let app = new Vue({
           return response.json()
         }).then(scriptData => {
           this.scripts = scriptData
-        }).catch(err => console.log(err))
+        }).catch(err => console.log(err)) // unexpected character in JSON
     },
 
   // leftcol pin-related methods:
