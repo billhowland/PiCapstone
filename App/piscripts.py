@@ -11,7 +11,9 @@ script_info = []
 # pin order on display is set by the list order here:
 # pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
 pin_names = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
-scripts = ["Config 1", "Script 2", "Script 3", "Script 4", "Script 5", "Script 6", "Script 7", "Script 8", "Script 9", "Script 10"]
+scripts = ["Base Config", "My Hat Conf. 1", "Script 3", "Script 4", "Script 5", "Script 6",
+"Script 7", "Script 8", "Script 9", "Script 10", "Script 11", "Script 12", "Script 13"
+, "Script 14", "Script 15", "Script 16"]
 running = []
 
 # pi = pigpio.pi()
@@ -203,3 +205,46 @@ def get_scripts():
 
 def get_running():
     return script['running']
+
+# ------------------------------------------------------------------------------
+
+def config_base():
+    global pins
+    GPIO.setmode(GPIO.BCM)  # required by RPi.GPIO
+    GPIO.setwarnings(False)  # Allows us to repeat config without errors
+
+    for pin in pin_names:
+        if pin not in [2, 3]:
+            GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        else:
+            GPIO.setup(pin, GPIO.IN)
+    pins = get_all_pins(init=True)
+    # os.system("gotty bash &")
+
+
+def config_one():
+    global pins
+    GPIO.setmode(GPIO.BCM)  # required by RPi.GPIO
+    GPIO.setwarnings(False)  # Allows us to repeat config without errors
+
+    for pin in pin_names:
+        if pin not in [2, 3]:
+            GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        else:
+            GPIO.setup(pin, GPIO.IN)
+    get_all_pins(True)  # since local pin_info = [], pins set to [] here.
+
+    LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
+    for pin in LED_Pins:
+        set_used(pin)
+        pin_out_low(pin)
+
+    Pushbutton_Pins = [18, 17, 23, 22, 27, 24, 25, 13, 26]
+    for pin in Pushbutton_Pins:
+        set_used(pin)
+        pud_up(pin)
+
+    Unused_Pins = [19, 16, 20, 21, 2, 3]
+    for pin in Unused_Pins:
+        set_not_used(pin)
+        set_pin_in(pin)

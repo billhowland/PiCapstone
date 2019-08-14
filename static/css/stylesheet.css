@@ -34,7 +34,7 @@ background-size: 100% auto;
 #script_select {
 	display: grid;
 	grid-template-areas: "name button running";
-	grid-template-columns: 95px 330px 100px;
+	grid-template-columns: 80px 200px 80px;
 	gap: 0;
 }
 
@@ -60,7 +60,7 @@ background-size: 100% auto;
 	background-color: orange;
 	border-style: solid;
 	border-color: white;
-	font-size: 16px;
+	font-size: 14px;
 }
 
 .scriptname{
@@ -75,7 +75,7 @@ background-size: 100% auto;
 	background-color: orange;
 	border-style: solid;
 	border-color: white;
-	font-size: 16px;
+	font-size: 14px;
 }
 
 .set{
@@ -226,7 +226,7 @@ background-size: 100% auto;
 }
 
 .img {
-	max-width: 100%;
+	max-width: 100%;<!-- <a id='logout' href="{% url 'logout' %}"><button class='btn'>Logout</button></a> -->
 	height: auto;
 }
 
