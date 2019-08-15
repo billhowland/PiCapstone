@@ -33,18 +33,18 @@ background-size: 100% auto;
 
 #script_select {
 	display: grid;
-	grid-template-areas: "name button running";
-	grid-template-columns: 80px 200px 80px;
+	grid-template-areas: "scriptbtn running";
+	grid-template-columns: 280px 80px;
 	gap: 0;
 }
 
 #logout {
 	grid-area: user;
 	justify-self: center;
-   background-color: inherit;
-   padding: 4px 8px;
-   font-size: 14px;
-   cursor: pointer;
+  background-color: inherit;
+  /* padding: 4px 8px; */
+  font-size: 14px;
+  cursor: pointer;
 	color: lightgreen;
 }
 
@@ -65,14 +65,14 @@ background-size: 100% auto;
 
 .scriptname{
 	box-sizing: border-box;
-	grid-area: name;
+	grid-area: scriptname;
 	width: auto;
 	height: auto;
 	justify-self: stretch;
 	align-self: stretch;
 	justify-content: center;
 	text-align: center;
-	background-color: orange;
+	background-color: red;
 	border-style: solid;
 	border-color: white;
 	font-size: 14px;
@@ -251,14 +251,14 @@ background-size: 100% auto;
 
 .scriptbtn {
 	box-sizing: border-box;
-	grid-area: button;
-	width: auto;
+	grid-area: scriptbtn;
+	width: 100%;
 	height: auto;
 	justify-self: stretch;
 	align-self: stretch;
 	justify-content: center;
-  background-color: lightgreen;
-	border-style: solid;
+  background-color: lightblue;
+
 	border-color: white;
   padding: 4px 8px;
   font-size: 16px;
@@ -274,7 +274,7 @@ background-size: 100% auto;
 }
 
 .scriptbtn:hover {
-	background-color: green;
+	background-color: blue;
 	color: white;
 }
 
