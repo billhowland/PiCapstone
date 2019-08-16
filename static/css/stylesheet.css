@@ -45,7 +45,7 @@ background-size: 100% auto;
   /* padding: 4px 8px; */
   font-size: 14px;
   cursor: pointer;
-	color: lightgreen;
+	/* color: lightgreen; */
 }
 
 .name{
@@ -63,7 +63,7 @@ background-size: 100% auto;
 	font-size: 14px;
 }
 
-.scriptname{
+.script{
 	box-sizing: border-box;
 	grid-area: scriptname;
 	width: auto;

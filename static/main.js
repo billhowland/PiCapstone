@@ -32,9 +32,13 @@ let app = new Vue({
           this.scripts = scriptData
         }).catch(err => console.log(err)) // unexpected character in JSON
     },
-
+    script1: function() {
+         const request = fetch('script1')
+           .then(response => {
+           return response.json()
+         })
+    },
   // leftcol pin-related methods:
-
     getAllPins: function() {
       const request = fetch('get_all_pins')
         .then(response => {

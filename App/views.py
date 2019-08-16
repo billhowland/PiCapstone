@@ -3,7 +3,7 @@ from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from .piscripts import (pin_names, scripts, running, test_pin, set_pin_out, pin_out_hi,
 pin_out_low, set_pin_in, read_pin, pin_use, pud_up, pud_dn, get_pud, get_ip,
-get_test, get_used, get_scripts)
+get_test, get_used, get_scripts, config_base, config_one)
 from .pimain import *
 
 # These come from main.js and call things in piscripts.py
@@ -99,15 +99,18 @@ def get_all_pins(request):
     return JsonResponse(pin_info, safe=False)
 
 
-def python_term():
-    return HttpResponse('Success')
-
 def get_scripts(request):
 
     script_info = []
     for script in scripts:
         script_info.append({
             'name': script,
+            'script_url': script_url,
             'running': running,
         })
     return JsonResponse(script_info, safe=False)
+
+def script(request, scr_num):
+
+    running = True
+    return JsonResponse(running, safe=False)

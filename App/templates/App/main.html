@@ -65,10 +65,10 @@
   	      </div>
 <!-- ----------------------------------------------------------------------------------------------- -->
   	   	  <div class="rightcol">
-            <div class='scriptname' v-for="script in scripts" v-bind:key='script.name'>
+            <div class='script' v-for="script in scripts" v-bind:key='script.name'>
               <div class='grid' id='script_select'>
                 <div>
-                  <a id='logout' href="{% url 'logout' %}"><button class='scriptbtn'>${script.name}</button></a>
+                  <a id='logout' v-bind:href="script.url"><button class='scriptbtn'>${script.name}</button></a>
                 </div>
               </div>
             </div>
