@@ -48,6 +48,16 @@ background-size: 100% auto;
 	/* color: lightgreen; */
 }
 
+#script {
+	grid-area: user;
+	justify-self: center;
+  background-color: inherit;
+  /* padding: 4px 8px; */
+  font-size: 14px;
+  cursor: pointer;
+	/* color: lightgreen; */
+}
+
 .name{
 	box-sizing: border-box;
 	grid-area: name;

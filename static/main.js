@@ -1,5 +1,6 @@
 // gpio radio button event listeners
 const pins = document.getElementsByName('pins')
+const scripts = document.getElementsByName('scripts')
 const csrftoken = Cookies.get('csrftoken')
 const headers = new Headers({
 "X-CSRFToken": csrftoken
