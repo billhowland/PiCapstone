@@ -67,9 +67,14 @@
   	   	  <div class="rightcol">
             <div class='script' v-for="script in scripts" v-bind:key='script.name'>
               <div class='grid' id='script_select'>
+                <!-- <a class='name'>${script.name}</a> -->
+
                 <div>
-                  <a id='script' href="script"><button class='scriptbtn'>${script.name}</button></a>
+                  <!-- <a id='script' href="script"><button class='scriptbtn'>${script.name}</button></a> -->
+                  <button class='scriptbtn' v-bind:name="script.name" value='script.name' v-on:click="script()">${script.name}</button>
+
                 </div>
+
               </div>
             </div>
             <!-- <template v-if='"{{request.user.username}}"=="bill"'>

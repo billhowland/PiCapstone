@@ -219,7 +219,7 @@ background-size: 100% auto;
 }
 
 .rightcol {
-	font-size: 14px;
+	/* font-size: 14px; */
 	grid-area: right-col;
 	border-style: inset;
 	border-width: 10px;
@@ -270,8 +270,8 @@ background-size: 100% auto;
   background-color: lightblue;
 
 	border-color: white;
-  padding: 4px 8px;
-  font-size: 16px;
+  /* padding: 2px 2px; */
+  font-size: 15px;
   cursor: pointer;
 	color: black;
 }

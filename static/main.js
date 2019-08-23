@@ -33,8 +33,8 @@ let app = new Vue({
           this.scripts = scriptData
         }).catch(err => console.log(err)) // unexpected character in JSON
     },
-    script1: function() {
-         const request = fetch('script1')
+    script: function() {
+         const request = fetch('script')
            .then(response => {
            return response.json()
          })

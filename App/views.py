@@ -4,15 +4,15 @@ from django.contrib.auth.decorators import login_required
 from .piscripts import (pin_names, test_pin,
 set_pin_out, pin_out_hi, pin_out_low, set_pin_in, read_pin, pin_use, pud_up,
 pud_dn, get_pud, get_ip, get_test, get_used, config_base,
-config_one)
+config_one, running)
 from .pimain import *
 
-script_names = ["Base Config", "My Hat Conf. 1", "Script 3", "Script 4", "Script 5", "Script 6",
+script_names = ["Base Configuration", "My Hat Configuration 1", "Script 3", "Script 4", "Script 5", "Script 6",
 "Script 7", "Script 8", "Script 9", "Script 10", "Script 11", "Script 12", "Script 13"
-, "Script 14", "Script 15", "Script 16"]
+, "Script 14", "Script 15", "Script 16", "Script 17", "Script 18"]
 script_urls = ["script1", "script2", "script3", "script4", "script5",
 "script6", "script7", "script8", "script9", "script10", "script11",
-"script12", "script13", "script14", "script15", "script16"]
+"script12", "script13", "script14", "script15", "script16", "Script 17", "Script 18"]
 running = []
 scripts = zip(script_urls, script_names)
 
@@ -53,7 +53,7 @@ def gpin(request, pin):
     set_pin_in(pin)
     in_lvl = {pin: read_pin(pin)}
     return JsonResponse(in_lvl, safe=False)
-"Script_1",
+
 
 def gpread(request, pin):
     in_lvl = {pin: read_pin(pin)}
@@ -89,8 +89,9 @@ def gpdn(request, pin):
     return JsonResponse(pud, safe=False)
 
 def script(request):
-
+    config_one()
     running = True
+    # return HttpResponse('Success')
     return JsonResponse(running, safe=False)
 
 def get_all_pins(request):
