@@ -35,7 +35,6 @@ def get_pin_idx(pin):
 
 
 def blink_pin(pin):
-    # global test
     GPIO.setup((pin), GPIO.OUT)
     while pins[get_pin_idx(pin)]['test']:
         if GPIO.gpio_function(pin) == 0:
@@ -107,12 +106,12 @@ def get_all_pins(init=False):
 # Outputs:
 
 
-def test_pin(pin):
+def test_pin(pin):  # sets the test flag...
     # global test
     # test = 1
     idx = get_pin_idx(pin)
     pins[idx]['test'] = True
-    blink_pin(pin)
+    # blink_pin(pin)  # blinking should be done elsewhere.
 
 
 def get_test(pin):
@@ -182,32 +181,11 @@ def pud_up(pin):
     idx = get_pin_idx(pin)
     pins[idx]['pud'] = 'up'
 
-# def get_scripts():
-#     scripts = zip(script_urls, script_names)
-#     for script_url, script_name in scripts:
-#         if init:
-#             running = "off"
-#             script_info.append({
-#                 'name': script_name,
-#                 'script_url': script_url,
-#                 'running': running,
-#             })
-#         else:
-#             # running = get.running(script)
-#             script_info.append({
-#                 'name': script_name,
-#                 'script_url': script_url,
-#                 'running': running,
-#             })
-#     scripts = script_info
-#     return scripts
 
-def get_running():
-    return script['running']
+# --script 1----------------------------------------------------------------------------
 
-# ------------------------------------------------------------------------------
 
-def config_base():
+def script_1():
     global pins
     GPIO.setmode(GPIO.BCM)  # required by RPi.GPIO
     GPIO.setwarnings(False)  # Allows us to repeat config without errors
@@ -215,24 +193,33 @@ def config_base():
     for pin in pin_names:
         if pin not in [2, 3]:
             GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+            pud_dn(pin)
         else:
             GPIO.setup(pin, GPIO.IN)
-    pins = get_all_pins(init=True)
+            pud_up(pin)
+        untest_pin(pin)
+        set_used(pin)
+        pin_out_low(pin)
+        set_pin_in(pin)
+    get_all_pins(init=True)
     running = False
-    # os.system("gotty bash &")
 
 
-def config_one():
+# --script 2----------------------------------------------------------------------------
+
+
+def script_2():
     global pins
     GPIO.setmode(GPIO.BCM)  # required by RPi.GPIO
     GPIO.setwarnings(False)  # Allows us to repeat config without errors
 
     for pin in pin_names:
+        untest_pin(pin)
         if pin not in [2, 3]:
             GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         else:
             GPIO.setup(pin, GPIO.IN)
-    get_all_pins(True)  # since local pin_info = [], pins set to [] here.
+    get_all_pins(init=True)
 
     LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
     for pin in LED_Pins:
@@ -248,4 +235,38 @@ def config_one():
     for pin in Unused_Pins:
         set_not_used(pin)
         set_pin_in(pin)
+    running = False
+
+
+# --script 2----------------------------------------------------------------------------
+
+
+def script_3():
+    global pins
+    GPIO.setmode(GPIO.BCM)  # required by RPi.GPIO
+    GPIO.setwarnings(False)  # Allows us to repeat config without errors
+
+    for pin in pin_names:
+        if pin not in [2, 3]:
+            GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        else:
+            GPIO.setup(pin, GPIO.IN)
+    get_all_pins(init=True)
+
+    Pushbutton_Pins = [18, 17, 23, 22, 27, 24, 25, 13, 26]
+    for pin in Pushbutton_Pins:
+        set_used(pin)
+        pud_up(pin)
+
+    Unused_Pins = [19, 16, 20, 21, 2, 3]
+    for pin in Unused_Pins:
+        set_not_used(pin)
+        set_pin_in(pin)
+
+    LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
+    for pin in LED_Pins:
+        set_used(pin)
+        pin_out_hi(pin)
+        test_pin(pin)
+
     running = False

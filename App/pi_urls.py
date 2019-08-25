@@ -16,5 +16,7 @@ urlpatterns = [
     path('gpnot_used/<int:pin>', views.gpnot_used, name='gpnot_used'),
     path('get_all_pins', views.get_all_pins, name='get_all_pins'),
     path('get_scripts', views.get_scripts, name='get_scripts'),
-    path('script', views.script, name='script'),
+    path('script1', views.script1, name='script1'),
+    path('script2', views.script2, name='script2'),
+    path('script3', views.script3, name='script3'),
 ]

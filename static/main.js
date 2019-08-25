@@ -17,7 +17,7 @@ let app = new Vue({
     scripts: null,
   },
   mounted: function() {
-    this.timer = setInterval(this.getAllPins, 250)
+    this.timer = setInterval(this.getAllPins, 250) //call getAllPins 4 times/sec
     this.getAllPins()
     this.getScripts()
   },
@@ -33,15 +33,15 @@ let app = new Vue({
           this.scripts = scriptData
         }).catch(err => console.log(err)) // unexpected character in JSON
     },
-    script: function() {
-         const request = fetch('script')
+    runscript: function(url) {
+         const request = fetch(url)
            .then(response => {
            return response.json()
          })
     },
   // leftcol pin-related methods:
     getAllPins: function() {
-      const request = fetch('get_all_pins')
+      const request = fetch('get_all_pins') // Calls get_all_pins in views.py
         .then(response => {
           return response.json()
         }).then(pinData => {
