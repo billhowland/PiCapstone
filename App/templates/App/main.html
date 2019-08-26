@@ -53,8 +53,8 @@
                   		   <label for="Hi">Hi</label>
                   		   <input type="radio" v-bind:name="'OUT'+pin.name" value='0' v-model="pin.in_lvl" v-on:change="gplow(pin.name, pin.low)">
                   		   <label for="Lo">Lo</label>
-                  		   <input type="radio" v-bind:name="'TEST'+pin.name" value='2' v-model="pin.in_lvl" v-on:change="gptest(pin.name)">
-                  		   <label for="Test">Test</label>
+                  		   <input type="radio" v-bind:name="'TEST'+pin.name" value='true' v-model="pin.test" v-on:change="gptest(pin.name)">
+                  		   <label for="Test">Flash</label>
                     </a>
                 </div>
               </div>

@@ -29,8 +29,8 @@ def main(request):
 
 def gptest(request, pin):
     test_pin(pin)
-    out_lvl = ("Test")
-    return JsonResponse(out_lvl, safe=False)
+    test = 2  # was out_lvl = ("Test")
+    return JsonResponse(test, safe=False) # was out_lvl
 
 
 def gpout(request, pin):
@@ -91,7 +91,10 @@ def gpdn(request, pin):
     return JsonResponse(pud, safe=False)
 
 
-def get_all_pins(request):  # returns pin data back to the html
+def get_all_pins(request):  # returns pin data back to the html, does not call
+                            # get_all_pins in piscripts!
+                            # if this is the spot called by main.js 4 times a
+                            # second, blinking s/b done here!
 
     pin_info = []
     for pin in pin_names:

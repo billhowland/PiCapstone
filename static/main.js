@@ -112,7 +112,9 @@ let app = new Vue({
         const request = fetch('gptest/' + pin)
         	.then(response => {
           return response.json()
-        })
+        }).then(test => {
+           this.getAllPins()
+        }).catch(err => console.log(err))
    }
   }
 })
