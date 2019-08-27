@@ -34,7 +34,7 @@ background-size: 100% auto;
 #script_select {
 	display: grid;
 	grid-template-areas: "scriptbtn running";
-	grid-template-columns: 280px 80px;
+	grid-template-columns: 450px 80px;
 	gap: 0;
 }
 
@@ -121,7 +121,7 @@ background-size: 100% auto;
 	border-style: solid;
 	border-color: white;
 	width: 100%;
-	font-size: 14px;
+	font-size: 17px;
 }
 
 .col3serial{

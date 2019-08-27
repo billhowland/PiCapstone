@@ -34,15 +34,15 @@ def get_pin_idx(pin):
     return pin_names.index(pin)
 
 
-def blink_pin(pin):
-    GPIO.setup((pin), GPIO.OUT)
-    while pins[get_pin_idx(pin)]['test']:
-        if GPIO.gpio_function(pin) == 0:
-            GPIO.output(pin, GPIO.HIGH)
-        sleep(1)
-        if GPIO.gpio_function(pin) == 0:
-            GPIO.output(pin, GPIO.LOW)
-        sleep(1)
+# def blink_pin(pin):
+#     GPIO.setup((pin), GPIO.OUT)
+#     while pins[get_pin_idx(pin)]['test']:
+#         if GPIO.gpio_function(pin) == 0:
+#             GPIO.output(pin, GPIO.HIGH)
+#         sleep(1)
+#         if GPIO.gpio_function(pin) == 0:
+#             GPIO.output(pin, GPIO.LOW)
+#         sleep(1)
 
 
 def get_pud(pin):
@@ -268,5 +268,6 @@ def script_3():
         set_used(pin)
         pin_out_hi(pin)
         test_pin(pin)
+        sleep(.25)
 
     running = False

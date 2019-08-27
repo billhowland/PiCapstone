@@ -19,4 +19,5 @@ urlpatterns = [
     path('script1', views.script1, name='script1'),
     path('script2', views.script2, name='script2'),
     path('script3', views.script3, name='script3'),
+    path('script/<int:num>', views.script, name='script'),
 ]

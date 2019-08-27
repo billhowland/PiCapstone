@@ -3,11 +3,11 @@ from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from .piscripts import (pin_names, test_pin,
                         set_pin_out, pin_out_hi, pin_out_low, set_pin_in, read_pin, pin_use, pud_up,
-                        pud_dn, get_pud, get_ip, get_test, get_used, running, blink_pin,
+                        pud_dn, get_pud, get_ip, get_test, get_used, running,
                         script_1, script_2, script_3)
 
 from .pimain import *
-
+script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
 script_names = ["Base Configuration", "My Hat Configuration 1", "Blinkies!", "Script 4", "Script 5", "Script 6",
                 "Script 7", "Script 8", "Script 9", "Script 10", "Script 11", "Script 12", "Script 13",
                 "Script 14", "Script 15", "Script 16", "Script 17", "Script 18"]
@@ -15,7 +15,7 @@ script_urls = ["script1", "script2", "script3", "script4", "script5",
                "script6", "script7", "script8", "script9", "script10", "script11",
                "script12", "script13", "script14", "script15", "script16", "script17", "script18"]
 # running = []
-scripts = zip(script_urls, script_names)
+scripts = zip(script_nums, script_urls, script_names)
 
 # These come from main.js and call things in piscripts.py
 
@@ -102,6 +102,8 @@ def get_all_pins(request):  # returns pin data back to the html, does not call
         in_lvl = read_pin(pin)
         pud = get_pud(pin)
         test = get_test(pin)
+        if test:
+            gptog(pin)
         used = get_used(pin)
         pin_info.append({
             'name': pin,
@@ -113,6 +115,13 @@ def get_all_pins(request):  # returns pin data back to the html, does not call
         })
     return JsonResponse(pin_info, safe=False)
 
+def gptog(pin):
+    if read_pin(pin) == 0:
+        set_pin_out(pin)
+        GPIO.output((pin), GPIO.HIGH)
+    elif read_pin(pin) == 1:
+        set_pin_out(pin)
+        GPIO.output((pin), GPIO.LOW)
 
 def get_scripts(request):
     scripts = zip(script_urls, script_names)
@@ -142,3 +151,6 @@ def script3(request):
     script_3()
     running = True
     return JsonResponse(running, safe=False)
+
+def script(request, num):
+    pass
