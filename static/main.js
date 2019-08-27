@@ -33,8 +33,8 @@ let app = new Vue({
           this.scripts = scriptData
         }).catch(err => console.log(err)) // unexpected character in JSON
     },
-    runscript: function(url) {
-         const request = fetch(url)
+    runscript: function(num) { // was (url)
+         const request = fetch('run_script/' + num) // was (url)
            .then(response => {
            return response.json()
          })

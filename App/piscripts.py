@@ -12,6 +12,11 @@ script_info = []
 # pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
 pin_names = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
 running = False
+# script_funcs = {1:script_1(), 2:script_2(), 3:script_3(), 4:script_4(),
+# 5:script_5(), 6:script_6(), 7:script_7(), 8:script_8(), 9:script_9(),
+# 10:script_10(), 11:script_11(), 12:script_12(), 13:script_13(), 14:script_14(),
+# 15:script_15(), 16:script_16(), 17:script_17(), 18:script_18()}
+
 # pi = pigpio.pi()
 # pi.hardware_PWM(18, 2, 500000)  # 2Hz 50% dutycycle
 
@@ -107,11 +112,8 @@ def get_all_pins(init=False):
 
 
 def test_pin(pin):  # sets the test flag...
-    # global test
-    # test = 1
     idx = get_pin_idx(pin)
     pins[idx]['test'] = True
-    # blink_pin(pin)  # blinking should be done elsewhere.
 
 
 def get_test(pin):
@@ -181,6 +183,16 @@ def pud_up(pin):
     idx = get_pin_idx(pin)
     pins[idx]['pud'] = 'up'
 
+
+def do_script(num):
+    # script_funcs[num]
+
+    if num == 1:
+        script_1()
+    elif num == 2:
+        script_2()
+    elif num == 3:
+        script_3()
 
 # --script 1----------------------------------------------------------------------------
 

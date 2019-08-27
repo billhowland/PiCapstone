@@ -34,7 +34,7 @@ background-size: 100% auto;
 #script_select {
 	display: grid;
 	grid-template-areas: "scriptbtn running";
-	grid-template-columns: 450px 80px;
+	grid-template-columns: 410px 100px;
 	gap: 0;
 }
 
@@ -199,7 +199,7 @@ background-size: 100% auto;
 	left: 0;
 	font-weight: bolder;
 	font-family: Arial;
-	font-size: 1.6rem;
+	font-size: 1.8rem;
 	color: white;
 	text-align: center;
 }
@@ -228,11 +228,11 @@ background-size: 100% auto;
 
 }
 
-.centercol {
+.picture {
 	grid-area: picture;
-	border-style: inset;
+	/* border-style: inset;
 	border-width: 10px;
-	border-color: black;
+	border-color: black; */
 }
 
 .img {

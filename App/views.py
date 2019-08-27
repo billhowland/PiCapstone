@@ -3,7 +3,7 @@ from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from .piscripts import (pin_names, test_pin,
                         set_pin_out, pin_out_hi, pin_out_low, set_pin_in, read_pin, pin_use, pud_up,
-                        pud_dn, get_pud, get_ip, get_test, get_used, running,
+                        pud_dn, get_pud, get_ip, get_test, get_used, running, do_script,
                         script_1, script_2, script_3)
 
 from .pimain import *
@@ -124,33 +124,18 @@ def gptog(pin):
         GPIO.output((pin), GPIO.LOW)
 
 def get_scripts(request):
-    scripts = zip(script_urls, script_names)
+    scripts = zip(script_nums, script_urls, script_names)
     script_info = []
-    for script_url, script_name in scripts:
+    for script_num, script_url, script_name in scripts:
         script_info.append({
+            'num': script_num,
             'name': script_name,
             'url': script_url,
             'running': running,
         })
     return JsonResponse(script_info, safe=False)
 
-
-def script1(request):
-    script_1()
+def run_script(request, num):
+    do_script(num)
     running = True
     return JsonResponse(running, safe=False)
-
-
-def script2(request):
-    script_2()
-    running = True
-    return JsonResponse(running, safe=False)
-
-
-def script3(request):
-    script_3()
-    running = True
-    return JsonResponse(running, safe=False)
-
-def script(request, num):
-    pass
