@@ -1,18 +1,21 @@
 {% load static %}
 <html>
     <head>
-        <title>Raspberry Pi I/O</title>
+        <title>Raspberry Pi I/O Controller</title>
         <link rel="stylesheet" href="{% static 'css/stylesheet.css' %}">
         <link rel="shortcut icon" href="{% static 'css/favicon.png' %}" type="image/x-icon" />
     </head>
     <body>
-      <div class='grid' id='app'>
       <div class="header">
-        <h1>Raspberry Pi I/O</h1>
+        <h1>Raspberry Pi I/O Controller</h1> <a class="ipadd">IP: {{IPX}}</a>
       </div>
+      <div id='app'>
+      <!-- <div class="header">
+        <h1>Raspberry Pi I/O</h1>
+      </div> -->
       <a class="user">User: {{request.user.username}}</a>
       <a id='logout' href="{% url 'logout' %}"><button class='btn'>Logout</button></a>
-      <a class="ipadd">IP: {{IPX}}</a>
+      <!-- <a class="ipadd">IP: {{IPX}}</a> -->
         {# ---These here call stuff in main.js-------------------------------------------------------------------------------------------------- #}
         	<div class="leftcol">
             <div class="radio">
@@ -78,7 +81,6 @@
           </div>
 <!-- ----------------------------------------------------------------------------------------------- -->
         </div>
-      </div>
       <script src="static/vue.js"></script>
       <script src="static/js.cookie.min.js"></script>
       <script src="static/main.js"></script>

@@ -14,10 +14,10 @@ background-size: 100% auto;
 
 #app {
 	display: grid;
-	grid-template-areas: "user header menu"
-											 "left-col picture right-col"
-											 "footer footer footer";
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-areas: "user menu"
+											 "left-col right-col"
+											 "footer footer";
+	grid-template-columns: repeat(2, 1fr);
 	grid-template-rows: 70px auto 0px;
 	justify-items: center;
 	align-items: center;
@@ -28,7 +28,7 @@ background-size: 100% auto;
 	display: grid;
 	grid-template-areas: "name set pud inout";
 	grid-template-columns: 80px 115px 115px 220px;
-	gap: 0;
+	/* gap: 0; */
 }
 
 #script_select {
@@ -42,30 +42,21 @@ background-size: 100% auto;
 	grid-area: user;
 	justify-self: center;
   background-color: inherit;
-  /* padding: 4px 8px; */
+
   font-size: 14px;
   cursor: pointer;
-	/* color: lightgreen; */
+	
 }
 
 #script {
 	grid-area: user;
 	justify-self: center;
   background-color: inherit;
-  /* padding: 4px 8px; */
   font-size: 14px;
   cursor: pointer;
-	/* color: lightgreen; */
 }
 
 .name{
-	box-sizing: border-box;
-	grid-area: name;
-	width: auto;
-	height: auto;
-	justify-self: stretch;
-	align-self: stretch;
-	justify-content: center;
 	text-align: center;
 	background-color: orange;
 	border-style: solid;
@@ -114,7 +105,7 @@ background-size: 100% auto;
 	grid-area: pud;
 	justify-self: center;
 	box-sizing: border-box;
-	align-self: center;
+
 	align-items: center;
   background-color: wheat;
 	color: black;
@@ -194,12 +185,12 @@ background-size: 100% auto;
 }
 
 .header {
-	grid-area: header;
+
 	top: 0;
 	left: 0;
 	font-weight: bolder;
 	font-family: Arial;
-	font-size: 1.8rem;
+	font-size: 1.6rem;
 	color: white;
 	text-align: center;
 }
@@ -293,17 +284,13 @@ background-size: 100% auto;
 	width: 500;
 }
 
-.grid {
-	gap: 0;
-	grid-template-rows: 1fr;
-}
-
 .ipadd {
-	grid-area: menu;
+
 	justify-self: end;
 	color: lightgreen;
 	font-weight: bolder;
 	font-family: Arial;
 	font-size: 1.2rem;
 	padding: 4px 8px;
+
 }
