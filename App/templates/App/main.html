@@ -1,22 +1,25 @@
 {% load static %}
 <html>
     <head>
-        <title>Raspberry Pi I/O Controller</title>
+        <title>Raspberry Pi I/O</title>
         <link rel="stylesheet" href="{% static 'css/stylesheet.css' %}">
         <link rel="shortcut icon" href="{% static 'css/favicon.png' %}" type="image/x-icon" />
     </head>
     <body>
       <div class="header">
-        <h1>Raspberry Pi I/O Controller</h1> <a class="ipadd">IP: {{IPX}}</a>
+
       </div>
       <div id='app'>
       <!-- <div class="header">
         <h1>Raspberry Pi I/O</h1>
       </div> -->
       <a class="user">User: {{request.user.username}}</a>
+      <h1 class="header">Raspberry Pi I/O Controller</h1>
+      <a class="ipadd">IP: {{IPX}}</a>
       <a id='logout' href="{% url 'logout' %}"><button class='btn'>Logout</button></a>
       <!-- <a class="ipadd">IP: {{IPX}}</a> -->
         {# ---These here call stuff in main.js-------------------------------------------------------------------------------------------------- #}
+<!-- ----------------------------------------------------------------------------------------------- -->
         	<div class="leftcol">
             <div class="radio">
               <div class='pin' v-for="pin in pins" v-bind:key='pin.name'>
@@ -67,7 +70,7 @@
   	      	<img class="img" src="/static/css/rp2_pinout.png" alt="RaspPi IO Port" />
   	      </div> -->
 <!-- ----------------------------------------------------------------------------------------------- -->
-  	   	  <div class="rightcol">
+  	   	  <div class="centercol">
             <div class='script' v-for="script in scripts" v-bind:key='script.name'>
               <div class='grid' id='script_select'>
                 <div>
@@ -75,9 +78,15 @@
                 </div>
               </div>
             </div>
-            <!-- <template v-if='"{{request.user.username}}"=="bill"'>
+          </div>
+<!-- ----------------------------------------------------------------------------------------------- -->
+          <div class="rightcol">
+            <template v-if='"{{request.user.username}}"=="bill"'>
               <iframe class="pyterm" src="{{IP}}"></iframe>
-            </template> -->
+            </template>
+            <template v-if='"{{request.user.username}}"=="pi"'>
+    	      	<img class="img" src="/static/css/rp2_pinout.png" alt="RaspPi IO Port" />
+    	      </template>
           </div>
 <!-- ----------------------------------------------------------------------------------------------- -->
         </div>

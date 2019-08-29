@@ -1,5 +1,5 @@
-# import os
-from .piscripts import (GPIO, get_all_pins, pin_names)
+import os
+from .piscripts import (GPIO, get_all_pins, pin_names, script_2)
 
 
 def main():
@@ -13,7 +13,11 @@ def main():
         else:
             GPIO.setup(pin, GPIO.IN)
     pins = get_all_pins(init=True)
-    # os.system("gotty bash &")
+    os.system("gotty bash &")
+
+    # Call start config here:
+
+    script_2()
 
 
 main()
