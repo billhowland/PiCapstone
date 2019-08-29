@@ -39,15 +39,15 @@ def get_pin_idx(pin):
     return pin_names.index(pin)
 
 
-# def blink_pin(pin):
-#     GPIO.setup((pin), GPIO.OUT)
-#     while pins[get_pin_idx(pin)]['test']:
-#         if GPIO.gpio_function(pin) == 0:
-#             GPIO.output(pin, GPIO.HIGH)
-#         sleep(1)
-#         if GPIO.gpio_function(pin) == 0:
-#             GPIO.output(pin, GPIO.LOW)
-#         sleep(1)
+def blink_pin(pin):  # Not currently used
+    GPIO.setup((pin), GPIO.OUT)
+    while pins[get_pin_idx(pin)]['test']:
+        if GPIO.gpio_function(pin) == 0:
+            GPIO.output(pin, GPIO.HIGH)
+        sleep(1)
+        if GPIO.gpio_function(pin) == 0:
+            GPIO.output(pin, GPIO.LOW)
+        sleep(1)
 
 
 def get_pud(pin):
@@ -80,6 +80,7 @@ def get_all_pins(init=False):
 
             used = True
             test = False
+            testing = False
             if pin not in [2, 3]:
                 pud = 'down'
             else:
@@ -91,9 +92,11 @@ def get_all_pins(init=False):
                 'pud': pud,
                 'test': test,
                 'used': used,
+                'testing': testing,
             })
         else:
             test = get_test(pin)
+            testing = get_testing(pin)
             pud = get_pud(pin)
             used = get_used(pin)
             pin_info.append({
@@ -103,6 +106,7 @@ def get_all_pins(init=False):
                 'pud': pud,
                 'test': test,
                 'used': used,
+                'testing': testing,
             })
 
     pins = pin_info
@@ -119,6 +123,11 @@ def test_pin(pin):  # sets the test flag...
 def get_test(pin):
     pin = pins[get_pin_idx(pin)]
     return pin['test']
+
+
+def get_testing(pin):
+    pin = pins[get_pin_idx(pin)]
+    return pin['testing']
 
 
 def untest_pin(pin):
@@ -140,6 +149,16 @@ def pin_out_low(pin):
     set_pin_out(pin)
     untest_pin(pin)
     GPIO.output((pin), GPIO.LOW)
+
+
+def pin_tog(pin):
+    if not get_testing(pin):
+        if read_pin(pin) == 0:
+            set_pin_out(pin)
+            GPIO.output((pin), GPIO.HIGH)
+        elif read_pin(pin) == 1:
+            set_pin_out(pin)
+            GPIO.output((pin), GPIO.LOW)
 
 # Inputs:
 

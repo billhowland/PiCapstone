@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from .piscripts import (pin_names, test_pin,
-                        set_pin_out, pin_out_hi, pin_out_low, set_pin_in, read_pin, pin_use, pud_up,
-                        pud_dn, get_pud, get_ip, get_test, get_used, running, do_script,
+                        set_pin_out, pin_out_hi, pin_out_low, pin_tog, set_pin_in, read_pin, pin_use, pud_up,
+                        pud_dn, get_pud, get_ip, get_test, get_testing, get_used, running, do_script,
                         script_1, script_2, script_3)
 
 from .pimain import *
@@ -30,7 +30,7 @@ def main(request):
 def gptest(request, pin):
     test_pin(pin)
     test = 2  # was out_lvl = ("Test")
-    return JsonResponse(test, safe=False) # was out_lvl
+    return JsonResponse(test, safe=False)  # was out_lvl
 
 
 def gpout(request, pin):
@@ -97,13 +97,17 @@ def get_all_pins(request):  # returns pin data back to the html, does not call
                             # second, blinking s/b done here!
 
     pin_info = []
+
     for pin in pin_names:
+        testing = get_testing(pin)
         func = pin_use(pin)
         in_lvl = read_pin(pin)
         pud = get_pud(pin)
         test = get_test(pin)
         if test:
-            gptog(pin)
+            if not testing:
+                testing = True
+                pin_tog(pin)
         used = get_used(pin)
         pin_info.append({
             'name': pin,
@@ -112,16 +116,19 @@ def get_all_pins(request):  # returns pin data back to the html, does not call
             'pud': pud,
             'test': test,
             'used': used,
+            'testing': testing,
         })
     return JsonResponse(pin_info, safe=False)
 
-def gptog(pin):
+
+def gptog(pin):  # replaced by piscripts.py/pin_tog()
     if read_pin(pin) == 0:
         set_pin_out(pin)
         GPIO.output((pin), GPIO.HIGH)
     elif read_pin(pin) == 1:
         set_pin_out(pin)
         GPIO.output((pin), GPIO.LOW)
+
 
 def get_scripts(request):
     scripts = zip(script_nums, script_urls, script_names)
@@ -134,6 +141,7 @@ def get_scripts(request):
             'running': running,
         })
     return JsonResponse(script_info, safe=False)
+
 
 def run_script(request, num):
     do_script(num)
