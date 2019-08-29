@@ -104,10 +104,10 @@ def get_all_pins(request):  # returns pin data back to the html, does not call
         in_lvl = read_pin(pin)
         pud = get_pud(pin)
         test = get_test(pin)
-        if test:
-            if not testing:
-                testing = True
+        if not testing:
+            if test:
                 pin_tog(pin)
+                testing = True
         used = get_used(pin)
         pin_info.append({
             'name': pin,
