@@ -214,14 +214,13 @@ def do_script(num):
         script_2()
     elif num == 3:
         script_3()
-
+    elif num == 4:
+        script_4()
 # --script 1----------------------------------------------------------------------------
 
 
 def script_1():
     global pins
-    GPIO.setmode(GPIO.BCM)  # required by RPi.GPIO
-    GPIO.setwarnings(False)  # Allows us to repeat config without errors
 
     for pin in pin_names:
         if pin not in [2, 3]:
@@ -243,8 +242,6 @@ def script_1():
 
 def script_2():
     global pins
-    GPIO.setmode(GPIO.BCM)  # required by RPi.GPIO
-    GPIO.setwarnings(False)  # Allows us to repeat config without errors
 
     for pin in pin_names:
         untest_pin(pin)
@@ -271,13 +268,11 @@ def script_2():
     running = False
 
 
-# --script 2----------------------------------------------------------------------------
+# --script 3----------------------------------------------------------------------------
 
 
 def script_3():
     global pins
-    GPIO.setmode(GPIO.BCM)  # required by RPi.GPIO
-    GPIO.setwarnings(False)  # Allows us to repeat config without errors
     # file = os.open(“dev/pts/2”, os.O_RDWR)
     # os.write(file, "Hello World!")
     # os.close(file)
@@ -307,3 +302,42 @@ def script_3():
         sleep(.25)
 
     running = False
+
+# --script 4----------------------------------------------------------------------------
+
+def script_4():
+
+    # Pin Definitons:
+    pwmPin = 10 # Broadcom pin 18 (P1 pin 12)
+    ledPin = 4 # Broadcom pin 23 (P1 pin 16)
+    butPin = 17 # Broadcom pin 17 (P1 pin 11)
+    exitPin = 13
+
+    dc = 80 # duty cycle (0-100) for PWM pin
+
+    # Pin Setup:
+
+    set_pin_out(ledPin) # LED pin set as output
+    set_pin_out(pwmPin) # PWM pin set as output
+    pwm = GPIO.PWM(pwmPin, 5)  # Initialize PWM on pwmPin 100Hz frequency
+    pud_up(butPin) # Button pin set as input w/ pull-up
+
+    # Initial state for LEDs:
+    pin_out_low(ledPin)
+    pwm.start(dc)
+
+    while read_pin(exitPin):
+        if read_pin(butPin) == 0:
+            pwm.ChangeDutyCycle(dc)
+            pin_out_low(ledPin)
+        else:
+            pwm.ChangeDutyCycle(100-dc)
+            pin_out_hi(ledPin)
+            sleep(0.1)
+            pin_out_low(ledPin)
+            sleep(0.1)
+
+    pwm.stop() # stop PWM
+#    GPIO.cleanup() # cleanup all GPIO
+    running = False
+    exit()
