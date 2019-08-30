@@ -8,7 +8,7 @@ from .piscripts import (pin_names, test_pin,
 
 from .pimain import *
 script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
-script_names = ["Base Configuration", "My Hat Configuration 1", "Blinkies!", "Script 4", "Script 5", "Script 6",
+script_names = ["Pi Configuration", "My Hat Configuration", "Blinkies!", "Script 4", "Script 5", "Script 6",
                 "Script 7", "Script 8", "Script 9", "Script 10", "Script 11", "Script 12", "Script 13",
                 "Script 14", "Script 15", "Script 16", "Script 17", "Script 18"]
 script_urls = ["script1", "script2", "script3", "script4", "script5",

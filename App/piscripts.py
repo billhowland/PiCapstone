@@ -1,6 +1,7 @@
 from time import sleep
 import RPi.GPIO as GPIO
 import socket
+import os
 # from .config1 import pin_info
 # import time
 # import pigpio
@@ -80,6 +81,7 @@ def get_all_pins(init=False):
 
             used = True
             test = False
+
             testing = False
             if pin not in [2, 3]:
                 pud = 'down'
@@ -276,7 +278,10 @@ def script_3():
     global pins
     GPIO.setmode(GPIO.BCM)  # required by RPi.GPIO
     GPIO.setwarnings(False)  # Allows us to repeat config without errors
-
+    # file = os.open(“dev/pts/2”, os.O_RDWR)
+    # os.write(file, "Hello World!")
+    # os.close(file)
+# if testing not declared:
     for pin in pin_names:
         if pin not in [2, 3]:
             GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)

@@ -58,10 +58,12 @@ background-size: 100% auto;
 
 .name{
 	text-align: center;
+	/* margin-top: 9px; */
 	background-color: orange;
-	border-style: solid;
-	border-color: white;
+	border-style: outset;
+	border-color: black;
 	font-size: 13px;
+	/* height: 82%; */
 }
 
 .script{
@@ -74,8 +76,8 @@ background-size: 100% auto;
 	justify-content: center;
 	text-align: center;
 	background-color: red;
-	border-style: solid;
-	border-color: white;
+	border-style: outset;
+	border-color: black;
 	font-size: 14px;
 }
 
@@ -86,8 +88,8 @@ background-size: 100% auto;
 	align-self: stretch;
 	justify-content: center;
   background-color: darkgray;
-	border-style: solid;
-	border-color: white;
+	border-style: outset;
+	border-color: black;
 }
 
 .pud{
@@ -96,9 +98,9 @@ background-size: 100% auto;
 	justify-self: stretch;
 	align-self: stretch;
 	justify-content: center;
-  background-color: powderblue;
-	border-style: solid;
-	border-color: white;
+  background-color: #8475ff;
+	border-style: outset;
+	border-color: black;
 }
 
 .col3{
@@ -109,8 +111,8 @@ background-size: 100% auto;
 	align-items: center;
   background-color: wheat;
 	color: black;
-	border-style: solid;
-	border-color: white;
+	border-style: outset;
+	border-color: black;
 	width: 100%;
 	font-size: 15px;
 }
@@ -152,8 +154,8 @@ background-size: 100% auto;
 	align-items: center;
   background-color: red;
 	color: black;
-	border-style: solid;
-	border-color: white;
+	border-style: outset;
+	border-color: black;
 	width: 100%;
 	font-size: 15px;
 }
@@ -166,8 +168,8 @@ background-size: 100% auto;
 	align-items: center;
   background-color: black;
 	color: white;
-	border-style: solid;
-	border-color: white;
+	border-style: outset;
+	border-color: black;
 	width: 100%;
 	font-size: 15px;
 }
@@ -179,8 +181,8 @@ background-size: 100% auto;
 	align-self: center;
 	align-items: center;
   background-color: inherit;
-	border-style: solid;
-	border-color: white;
+	border-style: outset;
+	border-color: black;
 	width: 100%;
 }
 
@@ -202,7 +204,7 @@ background-size: 100% auto;
 .leftcol {
 	font-size: 13px;
 	grid-area: left-col;
-	border-style: inset;
+	border-style: ridge;
 	border-width: 10px;
 	border-color: black;
 	background: lightgray;
@@ -212,7 +214,7 @@ background-size: 100% auto;
 .rightcol {
 
 	grid-area: right-col;
-	border-style: inset;
+	border-style: ridge;
 	border-width: 10px;
 	border-color: black;
 	background: lightgray;
@@ -222,7 +224,7 @@ background-size: 100% auto;
 .centercol {
 
 	grid-area: center-col;
-	border-style: inset;
+	border-style: ridge;
 	border-width: 10px;
 	border-color: black;
 	background: lightgray;
