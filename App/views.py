@@ -14,9 +14,12 @@ script_names = ["Pi Configuration", "My Hat Configuration", "Blinkies!", "PWM Te
 script_urls = ["script1", "script2", "script3", "script4", "script5",
                "script6", "script7", "script8", "script9", "script10", "script11",
                "script12", "script13", "script14", "script15", "script16", "script17", "script18"]
-# running = []
-scripts = zip(script_nums, script_urls, script_names)
-
+script_running = {1: "False", 2: "False", 3: "False", 4: "False", 5: "False", 6: "False", 7: "False",
+                  8: "False", 9: "False", 10: "False", 11: "False", 12: "False", 13: "False",
+                  14: "False", 15: "False", 16: "False", 17: "False", 18: "False"}
+# scripts_zip = zip(script_nums, script_urls, script_names)
+# scripts = list(scripts_zip)
+script_info = []
 # These come from main.js and call things in piscripts.py
 
 
@@ -131,7 +134,8 @@ def gptog(pin):  # replaced by piscripts.py/pin_tog()
 
 
 def get_scripts(request, init = False):
-    scripts = zip(script_nums, script_urls, script_names)
+    scripts_zip = zip(script_nums, script_urls, script_names)
+    scripts = list(scripts_zip)
     script_info = []
 
     for script_num, script_url, script_name in scripts:
@@ -155,11 +159,11 @@ def get_scripts(request, init = False):
 
 
 def get_scr_idx(script_num):
-    return scripts.index(script_num)
+    return script_nums.index(script_num)
 
 
 def get_running(script_num):
-    scr = scripts[get_scr_idx(script_num)]
+    scr = script_running[get_scr_idx(script_num)]
     return scr['running']
 
 
