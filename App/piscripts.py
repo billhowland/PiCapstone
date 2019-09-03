@@ -2,21 +2,23 @@ from time import sleep
 import RPi.GPIO as GPIO
 import socket
 import os
-# from .config1 import pin_info
 # import time
 # import pigpio
 
 pins = []
 pin_info = []
+scripts = []
 script_info = []
 # pin order on display is set by the list order here:
 # pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
 pin_names = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
-running = False
-# script_funcs = {1:script_1(), 2:script_2(), 3:script_3(), 4:script_4(),
-# 5:script_5(), 6:script_6(), 7:script_7(), 8:script_8(), 9:script_9(),
-# 10:script_10(), 11:script_11(), 12:script_12(), 13:script_13(), 14:script_14(),
-# 15:script_15(), 16:script_16(), 17:script_17(), 18:script_18()}
+script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+script_names = ["Pi Configuration", "My Hat Configuration", "Blinkies!", "PWM Test", "Script 5", "Script 6",
+                "Script 7", "Script 8", "Script 9", "Script 10", "Script 11", "Script 12", "Script 13",
+                "Script 14", "Script 15", "Script 16", "Script 17", "Script 18"]
+script_urls = ["script1", "script2", "script3", "script4", "script5",
+               "script6", "script7", "script8", "script9", "script10", "script11",
+               "script12", "script13", "script14", "script15", "script16", "script17", "script18"]
 
 # pi = pigpio.pi()
 # pi.hardware_PWM(18, 2, 500000)  # 2Hz 50% dutycycle
@@ -78,10 +80,8 @@ def get_all_pins(init=False):
         func = pin_use(pin)
         in_lvl = read_pin(pin)
         if init:
-
             used = True
             test = False
-
             testing = False
             if pin not in [2, 3]:
                 pud = 'down'
@@ -205,6 +205,52 @@ def pud_up(pin):
     pins[idx]['pud'] = 'up'
 
 
+def get_scripts(init):
+    global scripts
+    script_info = []
+    for scr in script_nums:
+        if init:
+            name = get_name(scr)
+            url = get_url(scr)
+            running = False
+            script_info.append({
+                'num': scr,
+                'name': name,
+                'url': url,
+                'running': running,
+                })
+        else:
+            name = get_name(scr)
+            url = get_url(scr)
+            running = get_running(scr)
+            script_info.append({
+                'num': scr,
+                'name': name,
+                'url': url,
+                'running': running,
+                })
+    scripts = script_info
+
+
+def get_scr_idx(scr):
+    return script_nums.index(scr)
+
+
+def get_running(scr):
+    scr = scripts[get_scr_idx(scr)]
+    return scr['running']
+
+
+def get_name(scr):
+    scr = script_names[get_scr_idx(scr)]
+    return scr['name']
+
+
+def get_url(scr):
+    scr = script_urls[get_scr_idx(scr)]
+    return scr['url']
+
+
 def do_script(num):
     # script_funcs[num]
 
@@ -305,22 +351,23 @@ def script_3():
 
 # --script 4----------------------------------------------------------------------------
 
+
 def script_4():
 
     # Pin Definitons:
-    pwmPin = 10 # Broadcom pin 18 (P1 pin 12)
-    ledPin = 4 # Broadcom pin 23 (P1 pin 16)
-    butPin = 17 # Broadcom pin 17 (P1 pin 11)
+    pwmPin = 10  # Broadcom pin 18 (P1 pin 12)
+    ledPin = 4  # Broadcom pin 23 (P1 pin 16)
+    butPin = 17  # Broadcom pin 17 (P1 pin 11)
     exitPin = 13
 
-    dc = 80 # duty cycle (0-100) for PWM pin
+    dc = 80  # duty cycle (0-100) for PWM pin
 
     # Pin Setup:
 
-    set_pin_out(ledPin) # LED pin set as output
-    set_pin_out(pwmPin) # PWM pin set as output
+    set_pin_out(ledPin)  # LED pin set as output
+    set_pin_out(pwmPin)  # PWM pin set as output
     pwm = GPIO.PWM(pwmPin, 5)  # Initialize PWM on pwmPin 100Hz frequency
-    pud_up(butPin) # Button pin set as input w/ pull-up
+    pud_up(butPin)  # Button pin set as input w/ pull-up
 
     # Initial state for LEDs:
     pin_out_low(ledPin)
@@ -337,7 +384,7 @@ def script_4():
             pin_out_low(ledPin)
             sleep(0.1)
 
-    pwm.stop() # stop PWM
+    pwm.stop()  # stop PWM
 #    GPIO.cleanup() # cleanup all GPIO
     running = False
     exit()

@@ -52,6 +52,7 @@
                   	<template v-if="pin.func==1"> {# 1 = Input #}
                          <a class='linh center' v-if="pin.in_lvl==1">***HIGH***</a>
                          <a class='linl center' v-if="pin.in_lvl==0">---LOW---</a>
+                         <!-- <a class='linl center' v-if="script.running==true">---PRESS TO EXIT---</a> -->
                     </template>
                   	<a class='lout' v-if="pin.func==0"> {# 0 = Output #}
                          <label>OUT:</label>
