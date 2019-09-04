@@ -130,5 +130,6 @@ def get_scripts(request):
 
 def run_script(request, num):
     do_script(num)
-    running = True
-    return JsonResponse(running, safe=False)
+    return HttpResponse('Success')
+    # running = True
+    # return JsonResponse(running, safe=False)

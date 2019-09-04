@@ -13,7 +13,7 @@ script_info = []
 # pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
 pin_names = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
 script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
-script_names = ["Pi Configuration", "My Hat Configuration", "Blinkies!", "PWM Test", "Script 5", "Script 6",
+script_names = ["Default Configuration", "My Hat Configuration", "Test Hat LEDs", "PWM Test", "Strobe", "Script 6",
                 "Script 7", "Script 8", "Script 9", "Script 10", "Script 11", "Script 12", "Script 13",
                 "Script 14", "Script 15", "Script 16", "Script 17", "Script 18"]
 script_urls = ["script1", "script2", "script3", "script4", "script5",
@@ -272,6 +272,8 @@ def do_script(num):
         script_3()
     elif num == 4:
         script_4()
+    elif num == 5:
+        script_5()
 
 # --script 1----------------------------------------------------------------------------
 
@@ -279,6 +281,7 @@ def do_script(num):
 def script_1():
     global pins
     set_running(1)
+    clr_running(2)
     sleep(0.25)
 
     for pin in pin_names:
@@ -295,7 +298,7 @@ def script_1():
     get_all_pins(init=True)
 
     sleep(0.25)
-    clr_running(1)
+    # clr_running(1)
 
 
 # --script 2----------------------------------------------------------------------------
@@ -304,6 +307,7 @@ def script_1():
 def script_2():
     global pins
     set_running(2)
+    clr_running(1)
     sleep(0.25)
 
     for pin in pin_names:
@@ -330,7 +334,7 @@ def script_2():
         set_pin_in(pin)
 
     sleep(0.25)
-    clr_running(2)
+    # clr_running(2)
 
 
 # --script 3----------------------------------------------------------------------------
@@ -338,37 +342,17 @@ def script_2():
 
 def script_3():
     global pins
-    if get_running(3):
-        clr_running(3)
+    set_running(3)
+    script_2()
 
-    else:
-        set_running(3)
-        for pin in pin_names:
-            if pin not in [2, 3]:
-                GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-            else:
-                GPIO.setup(pin, GPIO.IN)
-                get_all_pins(init=True)
+    LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
+    for pin in LED_Pins:
+        set_used(pin)
+        pin_out_hi(pin)
+        test_pin(pin)
+        sleep(.25)
 
-        while get_running(3):
-            Pushbutton_Pins = [18, 17, 23, 22, 27, 24, 25, 13, 26]
-            for pin in Pushbutton_Pins:
-                set_used(pin)
-                pud_up(pin)
-
-            Unused_Pins = [19, 16, 20, 21, 2, 3]
-            for pin in Unused_Pins:
-                set_not_used(pin)
-                set_pin_in(pin)
-
-            LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
-            for pin in LED_Pins:
-                set_used(pin)
-                pin_out_hi(pin)
-                test_pin(pin)
-                sleep(.25)
-
-            clr_running(3)
+    clr_running(3)
 
 # --script 4----------------------------------------------------------------------------
 
@@ -376,13 +360,12 @@ def script_3():
 def script_4():
     if get_running(4):
         clr_running(4)
-
     else:
         set_running(4)
-        # Pin Definitons:
-        pwmPin = 10  # Broadcom pin 18 (P1 pin 12)
-        ledPin = 4  # Broadcom pin 23 (P1 pin 16)
-        butPin = 17  # Broadcom pin 17 (P1 pin 11)
+
+        pwmPin = 10
+        ledPin = 4
+        butPin = 17
         exitPin = 13
 
         dc = 80  # duty cycle (0-100) for PWM pin
@@ -393,11 +376,11 @@ def script_4():
         set_pin_out(pwmPin)  # PWM pin set as output
         pwm = GPIO.PWM(pwmPin, 5)  # Initialize PWM on pwmPin 100Hz frequency
         pud_up(butPin)  # Button pin set as input w/ pull-up
+        pud_up(exitPin)
 
         # Initial state for LEDs:
         pin_out_low(ledPin)
         pwm.start(dc)
-
 
         while get_running(4) and read_pin(exitPin):
             if read_pin(butPin) == 0:
@@ -413,3 +396,25 @@ def script_4():
         pwm.stop()  # stop PWM
         #    GPIO.cleanup() # cleanup all GPIO
         clr_running(4)
+
+# --script 5----------------------------------------------------------------------------
+
+
+def script_5():
+    if get_running(5):
+        clr_running(5)
+    else:
+        set_running(5)
+
+    script_2()
+
+    LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
+    while get_running(5):
+        for pin in LED_Pins:
+            set_used(pin)
+            pin_out_hi(pin)
+            sleep(.25)
+            pin_out_low(pin)
+            # sleep(.1)
+
+    clr_running(5)
