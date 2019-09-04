@@ -18,6 +18,7 @@ let app = new Vue({
   },
   mounted: function() {
     this.timer = setInterval(this.getAllPins, 250) //call getAllPins 4 times/sec
+    this.timer = setInterval(this.getScripts, 250)
     this.getAllPins()
     this.getScripts()
   },
@@ -38,6 +39,9 @@ let app = new Vue({
            .then(response => {
            return response.json()
          })
+    },
+    scrrunning: function(script) {
+         return scriptData(scrrunning==True)
     },
   // leftcol pin-related methods:
     getAllPins: function() {

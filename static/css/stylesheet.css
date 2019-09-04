@@ -33,9 +33,9 @@ background-size: 100% auto;
 
 #script_select {
 	display: grid;
-	grid-template-areas: "scriptbtn running";
+	grid-template-areas: "scriptbtn scr-running";
 	grid-template-columns: 210px 50px;
-	gap: 0;
+	/* gap: 0; */
 }
 
 #logout {
@@ -75,7 +75,7 @@ background-size: 100% auto;
 	align-self: stretch;
 	justify-content: center;
 	text-align: center;
-	background-color: red;
+	background-color: black;
 	border-style: outset;
 	border-color: darkgray;
 	font-size: 14px;
@@ -279,6 +279,31 @@ background-size: 100% auto;
 	color: black;
 }
 
+.running {
+	box-sizing: border-box;
+	grid-area: scr-running;
+	width: 100%;
+	justify-self: center;
+	align-self: center;
+	background-color: red;
+	border-color: white;
+  font-size: 15px;
+  color: black;
+	border-style: outset;
+}
+
+.notrunning {
+	box-sizing: border-box;
+	grid-area: scr-running;
+	width: 100%;
+	justify-self: center;
+	align-self: center;
+	background-color: black;
+	border-color: white;
+  font-size: 15px;
+	color: black;
+	border-style: outset;
+}
 
 /* On mouse-over */
 .btn:hover {

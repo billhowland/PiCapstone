@@ -243,12 +243,22 @@ def get_running(scr):
 
 def get_name(scr):
     scr = script_names[get_scr_idx(scr)]
-    return scr['name']
+    return scr
 
 
 def get_url(scr):
     scr = script_urls[get_scr_idx(scr)]
-    return scr['url']
+    return scr
+
+
+def set_running(scr):
+    scr = get_scr_idx(scr)
+    scripts[scr]['running'] = True
+
+
+def clr_running(scr):
+    scr = get_scr_idx(scr)
+    scripts[scr]['running'] = False
 
 
 def do_script(num):
@@ -262,11 +272,14 @@ def do_script(num):
         script_3()
     elif num == 4:
         script_4()
+
 # --script 1----------------------------------------------------------------------------
 
 
 def script_1():
     global pins
+    set_running(1)
+    sleep(0.25)
 
     for pin in pin_names:
         if pin not in [2, 3]:
@@ -280,7 +293,9 @@ def script_1():
         pin_out_low(pin)
         set_pin_in(pin)
     get_all_pins(init=True)
-    running = False
+
+    sleep(0.25)
+    clr_running(1)
 
 
 # --script 2----------------------------------------------------------------------------
@@ -288,6 +303,8 @@ def script_1():
 
 def script_2():
     global pins
+    set_running(2)
+    sleep(0.25)
 
     for pin in pin_names:
         untest_pin(pin)
@@ -311,7 +328,9 @@ def script_2():
     for pin in Unused_Pins:
         set_not_used(pin)
         set_pin_in(pin)
-    running = False
+
+    sleep(0.25)
+    clr_running(2)
 
 
 # --script 3----------------------------------------------------------------------------
@@ -319,72 +338,78 @@ def script_2():
 
 def script_3():
     global pins
-    # file = os.open(“dev/pts/2”, os.O_RDWR)
-    # os.write(file, "Hello World!")
-    # os.close(file)
-# if testing not declared:
-    for pin in pin_names:
-        if pin not in [2, 3]:
-            GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-        else:
-            GPIO.setup(pin, GPIO.IN)
-    get_all_pins(init=True)
+    if get_running(3):
+        clr_running(3)
 
-    Pushbutton_Pins = [18, 17, 23, 22, 27, 24, 25, 13, 26]
-    for pin in Pushbutton_Pins:
-        set_used(pin)
-        pud_up(pin)
+    else:
+        set_running(3)
+        for pin in pin_names:
+            if pin not in [2, 3]:
+                GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+            else:
+                GPIO.setup(pin, GPIO.IN)
+                get_all_pins(init=True)
 
-    Unused_Pins = [19, 16, 20, 21, 2, 3]
-    for pin in Unused_Pins:
-        set_not_used(pin)
-        set_pin_in(pin)
+        while get_running(3):
+            Pushbutton_Pins = [18, 17, 23, 22, 27, 24, 25, 13, 26]
+            for pin in Pushbutton_Pins:
+                set_used(pin)
+                pud_up(pin)
 
-    LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
-    for pin in LED_Pins:
-        set_used(pin)
-        pin_out_hi(pin)
-        test_pin(pin)
-        sleep(.25)
+            Unused_Pins = [19, 16, 20, 21, 2, 3]
+            for pin in Unused_Pins:
+                set_not_used(pin)
+                set_pin_in(pin)
 
-    running = False
+            LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
+            for pin in LED_Pins:
+                set_used(pin)
+                pin_out_hi(pin)
+                test_pin(pin)
+                sleep(.25)
+
+            clr_running(3)
 
 # --script 4----------------------------------------------------------------------------
 
 
 def script_4():
+    if get_running(4):
+        clr_running(4)
 
-    # Pin Definitons:
-    pwmPin = 10  # Broadcom pin 18 (P1 pin 12)
-    ledPin = 4  # Broadcom pin 23 (P1 pin 16)
-    butPin = 17  # Broadcom pin 17 (P1 pin 11)
-    exitPin = 13
+    else:
+        set_running(4)
+        # Pin Definitons:
+        pwmPin = 10  # Broadcom pin 18 (P1 pin 12)
+        ledPin = 4  # Broadcom pin 23 (P1 pin 16)
+        butPin = 17  # Broadcom pin 17 (P1 pin 11)
+        exitPin = 13
 
-    dc = 80  # duty cycle (0-100) for PWM pin
+        dc = 80  # duty cycle (0-100) for PWM pin
 
-    # Pin Setup:
+        # Pin Setup:
 
-    set_pin_out(ledPin)  # LED pin set as output
-    set_pin_out(pwmPin)  # PWM pin set as output
-    pwm = GPIO.PWM(pwmPin, 5)  # Initialize PWM on pwmPin 100Hz frequency
-    pud_up(butPin)  # Button pin set as input w/ pull-up
+        set_pin_out(ledPin)  # LED pin set as output
+        set_pin_out(pwmPin)  # PWM pin set as output
+        pwm = GPIO.PWM(pwmPin, 5)  # Initialize PWM on pwmPin 100Hz frequency
+        pud_up(butPin)  # Button pin set as input w/ pull-up
 
-    # Initial state for LEDs:
-    pin_out_low(ledPin)
-    pwm.start(dc)
+        # Initial state for LEDs:
+        pin_out_low(ledPin)
+        pwm.start(dc)
 
-    while read_pin(exitPin):
-        if read_pin(butPin) == 0:
-            pwm.ChangeDutyCycle(dc)
-            pin_out_low(ledPin)
-        else:
-            pwm.ChangeDutyCycle(100-dc)
-            pin_out_hi(ledPin)
-            sleep(0.1)
-            pin_out_low(ledPin)
-            sleep(0.1)
 
-    pwm.stop()  # stop PWM
-#    GPIO.cleanup() # cleanup all GPIO
-    running = False
-    exit()
+        while get_running(4) and read_pin(exitPin):
+            if read_pin(butPin) == 0:
+                pwm.ChangeDutyCycle(dc)
+                pin_out_low(ledPin)
+            else:
+                pwm.ChangeDutyCycle(100-dc)
+                pin_out_hi(ledPin)
+                sleep(0.1)
+                pin_out_low(ledPin)
+                sleep(0.1)
+
+        pwm.stop()  # stop PWM
+        #    GPIO.cleanup() # cleanup all GPIO
+        clr_running(4)
