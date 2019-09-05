@@ -12,16 +12,15 @@ script_info = []
 # pin order on display is set by the list order here:
 # pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
 pin_names = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
-script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 script_names = ["Default Configuration", "My Hat Configuration", "Test Hat LEDs", "PWM Test", "Strobe", "Script 6",
                 "Script 7", "Script 8", "Script 9", "Script 10", "Script 11", "Script 12", "Script 13",
-                "Script 14", "Script 15", "Script 16", "Script 17", "Script 18"]
+                "Script 14", "Script 15", "Script 16", "Script 17", "Script 18", "Script 19", "Script 20"]
 script_urls = ["script1", "script2", "script3", "script4", "script5",
                "script6", "script7", "script8", "script9", "script10", "script11",
-               "script12", "script13", "script14", "script15", "script16", "script17", "script18"]
+               "script12", "script13", "script14", "script15", "script16", "script17", "script18", "script19", "script20"]
 
 pi = pigpio.pi()
-# pi.hardware_PWM(18, 2, 500000)  # 2Hz 50% dutycycle
 
 
 # URL -> View -> Piscript
@@ -207,7 +206,7 @@ def pud_up(pin):
 
 
 def tty_message(message):
-    tty_msg = str.encode("\r\n" + message + "\r\n")
+    tty_msg = str.encode("\r\n" + "Message: " + message + "\r\n")
     tty = os.open("/dev/pts/2", os.O_RDWR)
     os.write(tty, tty_msg)
 
@@ -351,7 +350,7 @@ def script_3():
     global pins
     set_running(3)
     script_2()
-
+    tty_message("All pins to 'Test' mode at 250ms interval.")
     LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
     for pin in LED_Pins:
         set_used(pin)
@@ -360,6 +359,7 @@ def script_3():
         sleep(.25)
 
     clr_running(3)
+    tty_message("Script terminated.")
 
 # --script 4----------------------------------------------------------------------------
 
@@ -389,9 +389,11 @@ def script_4():
         pin_out_low(ledPin)
         pwm.start(dc)
         set_pin_out(18)
-        pi.hardware_PWM(18, 2, 500000)  # 2Hz 50% dutycycle
+        pi.hardware_PWM(18, 4, 500000)  # 2Hz 50% dutycycle
+        # bus = pi.i2c_open(1, 0x53)  # open device at address 0x53 on bus 1
+        # h = pi.spi_open(1, 50000, 3)
 
-        tty_message("Hello World")
+        tty_message("Hardware PWM on pin 18")
 
         while get_running(4) and read_pin(exitPin):
             if read_pin(butPin) == 0:
@@ -406,6 +408,7 @@ def script_4():
 
         pwm.stop()  # stop PWM
         pi.hardware_PWM(18, 0, 500000)
+        tty_message("Script terminated.")
         set_pin_in(18)
         #    GPIO.cleanup() # cleanup all GPIO
         clr_running(4)
@@ -418,16 +421,16 @@ def script_5():
         clr_running(5)
     else:
         set_running(5)
+        script_2()
+        tty_message("One LED at a time...")
+        LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
+        while get_running(5):
+            for pin in LED_Pins:
+                set_used(pin)
+                pin_out_hi(pin)
+                sleep(.25)
+                pin_out_low(pin)
+                # sleep(.1)
 
-    script_2()
-
-    LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
-    while get_running(5):
-        for pin in LED_Pins:
-            set_used(pin)
-            pin_out_hi(pin)
-            sleep(.25)
-            pin_out_low(pin)
-            # sleep(.1)
-
-    clr_running(5)
+        clr_running(5)
+        tty_message("Script terminated.")
