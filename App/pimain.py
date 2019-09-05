@@ -18,7 +18,7 @@ def main():
             GPIO.setup(pin, GPIO.IN)
     pins = get_all_pins(init)
     scripts = get_scripts(init)
-    os.system("gotty bash &")
+    os.system("gotty -w bash &")  # permit writes with -w
 
     # Call start config here:
 

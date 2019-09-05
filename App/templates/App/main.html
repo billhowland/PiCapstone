@@ -63,6 +63,10 @@
                   		   <input type="radio" v-bind:name="'TEST'+pin.name" value='true' v-model="pin.test" v-on:change="gptest(pin.name)">
                   		   <label for="Test">Flash</label>
                     </a>
+                    <template v-if="pin.func==43"> {# 43 = PWM, Display the out level #}
+                         <a class='linh center' v-if="pin.in_lvl==1">***HIGH***</a>
+                         <a class='linl center' v-if="pin.in_lvl==0">---LOW---</a>
+                    </template>
                 </div>
               </div>
             </div>
