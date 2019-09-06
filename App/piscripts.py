@@ -2,6 +2,9 @@ from time import sleep
 import RPi.GPIO as GPIO
 import socket
 import os
+os.system("sudo pigpiod")
+os.system('gotty --config "/home/pi/.gotty" bash &')  # permit writes with -w
+os.system('gotty --config "/home/pi/.gotty9001" cat &')
 # import time
 import pigpio
 pi = pigpio.pi()
@@ -207,7 +210,7 @@ def pud_up(pin):
 
 def tty_message(message):
     (_, _, ttynames) = next(os.walk("/dev/pts"))
-    tty_msg = str.encode("\r\n" + "Message: " + message + "\r\n")
+    tty_msg = str.encode("\r\n" + "Msg:> " + message + "\r\n")
     for ttyname in ttynames:
         if ttyname != "ptmx":
             tty = os.open("/dev/pts/" + ttyname, os.O_RDWR)
@@ -372,7 +375,7 @@ def script_4():
         clr_running(4)
     else:
         set_running(4)
-
+        h = ()
         pwmPin = 10
         ledPin = 4
         butPin = 17
@@ -392,9 +395,11 @@ def script_4():
         pin_out_low(ledPin)
         pwm.start(dc)
         set_pin_out(18)
-        pi.hardware_PWM(18, 2, 500000)  # 2Hz 50% dutycycle
+        pi.hardware_PWM(18, 1, 500000)  # 2Hz 50% dutycycle
         # bus = pi.i2c_open(1, 0x53)  # open device at address 0x53 on bus 1
-        # h = pi.spi_open(1, 50000, 3)
+        h = pi.spi_open(1, 50000, 3)  #  This one works!
+        pi.spi_write(h, b'a')
+        spi_data = pi.spi_read(h, 1)
 
         tty_message("Hardware PWM on pin 18")
 
@@ -411,6 +416,7 @@ def script_4():
 
         pwm.stop()  # stop PWM
         pi.hardware_PWM(18, 0, 500000)
+        pi.spi_close(h)
         tty_message("Script terminated.")
         set_pin_in(18)
         #    GPIO.cleanup() # cleanup all GPIO

@@ -1,7 +1,6 @@
 import os
-from .piscripts import (GPIO, get_all_pins, get_scripts, pin_names, script_2)
-
-
+from .piscripts import (GPIO, get_all_pins, get_scripts, pin_names, tty_message, script_2)
+from time import sleep
 init = True
 
 
@@ -19,12 +18,8 @@ def main():
             GPIO.setup(pin, GPIO.IN)
     pins = get_all_pins(init)
     scripts = get_scripts(init)
-    os.system("sudo pigpiod")
-    os.system("gotty bash &")  # permit writes with -w
-    os.system("gotty -c /home/pi/.gotty9001 cat &")
 
     # Call start config here:
-
     script_2()
     init = False
 

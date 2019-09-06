@@ -1,14 +1,14 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
+from .pimain import *
 from .piscripts import (pin_names, test_pin, script_nums, set_pin_out,
                         pin_out_hi, pin_out_low, pin_tog, set_pin_in, read_pin,
                         pin_use, pud_up, pud_dn, get_pud, get_ip, get_test,
                         get_testing, get_used, get_name, get_url, get_running,
                         do_script)
-from .pimain import *
 
-# These come from main.js and call things in piscripts.py
+# These come from main.js and call things in piscripts.py:
 
 
 @login_required
