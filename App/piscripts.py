@@ -4,6 +4,8 @@ import socket
 import os
 # import time
 import pigpio
+pi = pigpio.pi()
+
 
 pins = []
 pin_info = []
@@ -19,8 +21,6 @@ script_names = ["Default Configuration", "My Hat Configuration", "Test Hat LEDs"
 script_urls = ["script1", "script2", "script3", "script4", "script5",
                "script6", "script7", "script8", "script9", "script10", "script11",
                "script12", "script13", "script14", "script15", "script16", "script17", "script18", "script19", "script20"]
-
-pi = pigpio.pi()
 
 
 # URL -> View -> Piscript
@@ -206,9 +206,12 @@ def pud_up(pin):
 
 
 def tty_message(message):
+    (_, _, ttynames) = next(os.walk("/dev/pts"))
     tty_msg = str.encode("\r\n" + "Message: " + message + "\r\n")
-    tty = os.open("/dev/pts/2", os.O_RDWR)
-    os.write(tty, tty_msg)
+    for ttyname in ttynames:
+        if ttyname != "ptmx":
+            tty = os.open("/dev/pts/" + ttyname, os.O_RDWR)
+            os.write(tty, tty_msg)
 
 
 def get_scripts(init):
@@ -389,7 +392,7 @@ def script_4():
         pin_out_low(ledPin)
         pwm.start(dc)
         set_pin_out(18)
-        pi.hardware_PWM(18, 4, 500000)  # 2Hz 50% dutycycle
+        pi.hardware_PWM(18, 2, 500000)  # 2Hz 50% dutycycle
         # bus = pi.i2c_open(1, 0x53)  # open device at address 0x53 on bus 1
         # h = pi.spi_open(1, 50000, 3)
 
