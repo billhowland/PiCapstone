@@ -14,8 +14,9 @@ from .pimain import *
 @login_required
 def main(request):
     IP = 'http://{}:9000'.format(get_ip())
+    IPB = 'http://{}:9001'.format(get_ip())
     IPX = ' {}:8080'.format(get_ip())
-    return render(request, 'App/main.html', {'IP': IP, 'IPX': IPX})
+    return render(request, 'App/main.html', {'IP': IP, 'IPB': IPB, 'IPX': IPX})
 
 
 def gptest(request, pin):

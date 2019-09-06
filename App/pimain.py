@@ -20,8 +20,8 @@ def main():
     pins = get_all_pins(init)
     scripts = get_scripts(init)
     os.system("sudo pigpiod")
-    # os.system("gotty bash &")  # permit writes with -w
-    os.system("gotty cat &")
+    os.system("gotty bash &")  # permit writes with -w
+    os.system("gotty -c /home/pi/.gotty9001 cat &")
 
     # Call start config here:
 
