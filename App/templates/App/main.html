@@ -26,12 +26,12 @@
                 <div class='grid' id='io_select'>
                     <a class='name'>GPIO ${pin.name}</a>
                     <a class='set'>
-                    <input type="radio" v-bind:name="'GPIO'+pin.name" value='1' v-model="pin.func" v-on:change="setPin(pin.name, pin.func)">
-                    <label for="in">In</label>
                     <input type="radio" v-bind:name="'GPIO'+pin.name" value='0' v-model="pin.func" v-on:change="setPin(pin.name, pin.func)">
+                    <label for="in">In</label>
+                    <input type="radio" v-bind:name="'GPIO'+pin.name" value='1' v-model="pin.func" v-on:change="setPin(pin.name, pin.func)">
                     <label for="out">Out</label></a>
                     {# This is column 3 stuff #}
-                    <a class='pud' v-if="pin.func==1"> {# 1 = Input #}
+                    <a class='pud' v-if="pin.func==0"> {# 1 = Input #}
                         <input type="radio" v-bind:name="'PUD'+pin.name" value='up' v-model="pin.pud" v-on:change="gpup(pin.name, pin.pud)">
                         <label for="up">Up</label>
                         <input type="radio" v-bind:name="'PUD'+pin.name" value='down' v-model="pin.pud" v-on:change="gpdn(pin.name, pin.pud)">
@@ -39,22 +39,22 @@
 
 
 
-                    <template> {# v-if="pin.func==0" -Show Alt functions when not set to input #}
-                         <a class='col3 center' v-if="pin.func==0">GPIO OUT</a>
+                    <template> {# v-if="pin.func==1" -Show Alt functions when not set to input #}
+                         <a class='col3 center' v-if="pin.func==1">GPIO OUT</a>
                          <a class='col3 center col3serial' v-if="pin.func==40">SERIAL</a>
-                         <a class='col3 center col3spi' v-if="pin.func==41">SPI</a>
+                         <a class='col3 center col3spi' v-if="pin.func==4">SPI</a>
                          <a class='col3 center col3i2c' v-if="pin.func==42">I2C</a>
-                         <a class='col3 center col3pwm' v-if="pin.func==43">PWM</a>
+                         <a class='col3 center col3pwm' v-if="pin.func==2">PWM</a>
                     </template>
 
 
                     {# This is column 4 stuff #}
-                  	<template v-if="pin.func==1"> {# 1 = Input #}
+                  	<template v-if="pin.func==0"> {# 1 = Input #}
                          <a class='linh center' v-if="pin.in_lvl==1">***HIGH***</a>
                          <a class='linl center' v-if="pin.in_lvl==0">---LOW---</a>
 
                     </template>
-                  	<a class='lout' v-if="pin.func==0"> {# 0 = Output #}
+                  	<a class='lout' v-if="pin.func==1"> {# 0 = Output #}
                          <label>OUT:</label>
                   		   <input type="radio" v-bind:name="'OUT'+pin.name" value='1' v-model="pin.in_lvl" v-on:change="gphigh(pin.name, pin.high)">
                   		   <label for="Hi">Hi</label>
@@ -63,7 +63,7 @@
                   		   <input type="radio" v-bind:name="'TEST'+pin.name" value='true' v-model="pin.test" v-on:change="gptest(pin.name)">
                   		   <label for="Test">Flash</label>
                     </a>
-                    <template v-if="pin.func==43"> {# 43 = PWM, Display the out level #}
+                    <template v-if="pin.func==2"> {# 43 = PWM, Display the out level #}
                          <a class='linh center' v-if="pin.in_lvl==1">***HIGH***</a>
                          <a class='linl center' v-if="pin.in_lvl==0">---LOW---</a>
                     </template>

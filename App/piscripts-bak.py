@@ -1,13 +1,13 @@
 from time import sleep
-# import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 import socket
 import os
-import pigpio
-pi = pigpio.pi()
 os.system("sudo pigpiod")
 os.system('gotty --config "/home/pi/.gotty" bash &')  # permit writes with -w
 os.system('gotty --config "/home/pi/.gotty9001" cat &')
 # import time
+import pigpio
+pi = pigpio.pi()
 
 
 pins = []
@@ -43,6 +43,17 @@ def get_ip():
 
 def get_pin_idx(pin):
     return pin_names.index(pin)
+
+
+def blink_pin(pin):  # Not currently used
+    GPIO.setup((pin), GPIO.OUT)
+    while pins[get_pin_idx(pin)]['test']:
+        if GPIO.gpio_function(pin) == 0:
+            GPIO.output(pin, GPIO.HIGH)
+        sleep(1)
+        if GPIO.gpio_function(pin) == 0:
+            GPIO.output(pin, GPIO.LOW)
+        sleep(1)
 
 
 def get_pud(pin):
@@ -130,81 +141,69 @@ def untest_pin(pin):
 
 
 def set_pin_out(pin):
-    # GPIO.setup((pin), GPIO.OUT)  # CHANGE
-    pi.set_mode((pin), pigpio.OUTPUT)
+    GPIO.setup((pin), GPIO.OUT)
 
 
 def pin_out_hi(pin):
     set_pin_out(pin)
     untest_pin(pin)
-    # GPIO.output((pin), GPIO.HIGH)  # CHANGE
-    pi.write((pin), 1)
+    GPIO.output((pin), GPIO.HIGH)
 
 
 def pin_out_low(pin):
     set_pin_out(pin)
     untest_pin(pin)
-    # GPIO.output((pin), GPIO.LOW)  # CHANGE
-    pi.write((pin), 0)
+    GPIO.output((pin), GPIO.LOW)
 
 
 def pin_tog(pin):
     if not get_testing(pin):
         if read_pin(pin) == 0:
             set_pin_out(pin)
-            # GPIO.output((pin), GPIO.HIGH)  # CHANGE
-            pi.write((pin), 1)
+            GPIO.output((pin), GPIO.HIGH)
         elif read_pin(pin) == 1:
             set_pin_out(pin)
-            # GPIO.output((pin), GPIO.LOW)  # CHANGE
-            pi.write((pin), 0)
+            GPIO.output((pin), GPIO.LOW)
+
 # Inputs:
 
 
 def set_pin_in(pin):
     pud = get_pud(pin)
     if pud == 'down':
-        # GPIO.setup((pin), GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # CHANGE
-        pi.set_mode((pin), pigpio.INPUT), pi.set_pull_up_down((pin), pigpio.PUD_DOWN)
+        GPIO.setup((pin), GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     else:
-        # GPIO.setup((pin), GPIO.IN, pull_up_down=GPIO.PUD_UP)  # CHANGE
-        pi.set_mode((pin), pigpio.INPUT), pi.set_pull_up_down((pin), pigpio.PUD_UP)
+        GPIO.setup((pin), GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
 def read_pin(pin):
-    # return GPIO.input(pin)  # CHANGE
-    return pi.read(pin)
+    return GPIO.input(pin)
 
 # Usage:
 
 
 def pin_use(pin):
-    # return GPIO.gpio_function(pin)  # CHANGE
-    return pi.get_mode(pin)
-    # RPi.GPIO #            pigpio #
-    # 0 = GPIO.OUT          0 = pi.INPUT
-    # 1 = GPIO.IN           1 = pi.OUTPUT
-    # 40 = GPIO.SERIAL      2 = pi.ALT5 PWM
-    # 41 = GPIO.SPI         3 = pi.ALT4
-    # 42 = GPIO.I2C         4 = pi.ALT0 SPI
-    # 43 = GPIO.HARD_PWM    5 = pi.ALT1
-    # -1 = GPIO.UNKNOWN     6 = pi.ALT2
-    #                       7 = pi.ALT3
+    return GPIO.gpio_function(pin)
+    # 0 = GPIO.OUT
+    # 1 = GPIO.IN
+    # 40 = GPIO.SERIAL
+    # 41 = GPIO.SPI
+    # 42 = GPIO.I2C
+    # 43 = GPIO.HARD_PWM
+    # -1 = GPIO.UNKNOWN
 
 # pull_up_down
 
 
 def pud_dn(pin):
-    # GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # CHANGE
-    pi.set_mode((pin), pigpio.INPUT), pi.set_pull_up_down((pin), pigpio.PUD_DOWN)
+    GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     idx = get_pin_idx(pin)
     if pins[idx]['name'] not in [2, 3]:
         pins[idx]['pud'] = 'down'
 
 
 def pud_up(pin):
-    # GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # CHANGE
-    pi.set_mode((pin), pigpio.INPUT), pi.set_pull_up_down((pin), pigpio.PUD_UP)
+    GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     idx = get_pin_idx(pin)
     pins[idx]['pud'] = 'up'
 
@@ -299,19 +298,18 @@ def script_1():
 
     for pin in pin_names:
         if pin not in [2, 3]:
-            # GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # CHANGE
-            pi.set_mode((pin), pigpio.INPUT), pi.set_pull_up_down((pin), pigpio.PUD_DOWN)
+            GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
             pud_dn(pin)
         else:
-            # GPIO.setup(pin, GPIO.IN)  # CHANGE
-            pi.set_mode((pin), pigpio.INPUT)
+            GPIO.setup(pin, GPIO.IN)
             pud_up(pin)
         untest_pin(pin)
         set_used(pin)
         pin_out_low(pin)
         set_pin_in(pin)
     get_all_pins(init=True)
-    # sleep(0.25)
+
+    sleep(0.25)
     # clr_running(1)
 
 
@@ -327,11 +325,9 @@ def script_2():
     for pin in pin_names:
         untest_pin(pin)
         if pin not in [2, 3]:
-            # GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # CHANGE
-            pi.set_mode((pin), pigpio.INPUT), pi.set_pull_up_down((pin), pigpio.PUD_DOWN)
+            GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         else:
-            # GPIO.setup(pin, GPIO.IN)  # CHANGE
-            pi.set_mode((pin), pigpio.INPUT)
+            GPIO.setup(pin, GPIO.IN)
     get_all_pins(init=True)
 
     LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
@@ -382,19 +378,17 @@ def script_4():
         for pin in pin_names:
             untest_pin(pin)
             if pin not in [2, 3]:
-                # GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # CHANGE
-                pi.set_mode((pin), pigpio.INPUT), pi.set_pull_up_down((pin), pigpio.PUD_DOWN)
+                GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
             else:
-                # GPIO.setup(pin, GPIO.IN)
-                pi.set_mode((pin), pigpio.INPUT)
+                GPIO.setup(pin, GPIO.IN)
         get_all_pins(init=True)
 
-        used_Pins = [2, 3, 4, 5, 7, 8, 9, 10, 11, 13, 14, 15, 17, 18]
+        used_Pins = [2, 3, 4, 5, 7, 8, 9, 10, 11, 13, 14, 15, 17]
         for pin in used_Pins:
             set_used(pin)
             pud_up(pin)
 
-        Unused_Pins = [6, 12, 16, 19, 20, 21, 22, 23, 24, 25, 26, 27]
+        Unused_Pins = [6, 12, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
         for pin in Unused_Pins:
             set_not_used(pin)
             set_pin_in(pin)
@@ -402,31 +396,46 @@ def script_4():
         h = ()
         h2 = ()
         h3 = ()
-        pwmPin = 18
+        pwmPin = 5
+        ledPin = 4
         butPin = 17
         exitPin = 13
 
+        dc = 80  # duty cycle (0-100) for PWM pin
+
         # Pin Setup:
 
+        set_pin_out(ledPin)  # LED pin set as output
         set_pin_out(pwmPin)  # PWM pin set as output
-
+        pwm = GPIO.PWM(pwmPin, 5)  # Initialize PWM on pwmPin 100Hz frequency
         pud_up(butPin)  # Button pin set as input w/ pull-up
         pud_up(exitPin)
 
-        set_pin_out(pwmPin)
+        # Initial state for LEDs:
+        pin_out_low(ledPin)
+        pwm.start(dc)
+        set_pin_out(18)
         pi.hardware_PWM(18, 1, 500000)  # 2Hz 50% dutycycle
-
         h2 = pi.i2c_open(1, 0x53)  # open device at address 0x53 on bus 1
         h = pi.spi_open(1, 50000, 3)  # This one works!
         h3 = pi.serial_open("/dev/serial0", 9600)
-        pi.spi_write(h, b'a')
-        spi_data = pi.spi_read(h, 1)
+        # pi.spi_write(h, b'a')
+        # spi_data = pi.spi_read(h, 1)
 
         tty_message("Hardware PWM on pin 18")
 
         while get_running(4) and read_pin(exitPin):
-            pi.hardware_PWM(18, 1, 500000)
+            if read_pin(butPin) == 0:
+                pwm.ChangeDutyCycle(dc)
+                pin_out_low(ledPin)
+            else:
+                pwm.ChangeDutyCycle(100-dc)
+                pin_out_hi(ledPin)
+                sleep(0.1)
+                pin_out_low(ledPin)
+                sleep(0.1)
 
+        pwm.stop()  # stop PWM
         pi.hardware_PWM(18, 0, 500000)
         pi.spi_close(h)
         pi.i2c_close(h2)

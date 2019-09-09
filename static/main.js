@@ -53,7 +53,7 @@ let app = new Vue({
         }).catch(err => console.log(err))
     },
     setPin: function(pin, func) {
-        if (func == 1) {
+        if (func == 0) {
           api_root = 'gpin/'
         } else {
           api_root = 'gpout/'
