@@ -31,19 +31,27 @@
                     <input type="radio" v-bind:name="'GPIO'+pin.name" value='1' v-model="pin.func" v-on:change="setPin(pin.name, pin.func)">
                     <label for="out">Out</label></a>
                     {# This is column 3 stuff #}
-                    <a class='pud' v-if="pin.func==0"> {# 1 = Input #}
+                    <a class='pud' v-if="pin.func==0"> {# 0 = Input #}
                         <input type="radio" v-bind:name="'PUD'+pin.name" value='up' v-model="pin.pud" v-on:change="gpup(pin.name, pin.pud)">
                         <label for="up">Up</label>
                         <input type="radio" v-bind:name="'PUD'+pin.name" value='down' v-model="pin.pud" v-on:change="gpdn(pin.name, pin.pud)">
-                        <label for="down">Dn</label></a>
-
+                        <label for="down">Dn</label>
+                        <input type="radio" v-bind:name="'PUD'+pin.name" value='off' v-model="pin.pud" v-on:change="gpoff(pin.name, pin.pud)">
+                        <label for="off">Off</label></a>
 
 
                     <template> {# v-if="pin.func==1" -Show Alt functions when not set to input #}
                          <a class='col3 center' v-if="pin.func==1">GPIO OUT</a>
-                         <a class='col3 center col3serial' v-if="pin.func==40">SERIAL</a>
-                         <a class='col3 center col3spi' v-if="pin.func==4">SPI</a>
-                         <a class='col3 center col3i2c' v-if="pin.func==42">I2C</a>
+                         <a v-if="pin.func==4"></a>
+                           <a v-if="pin.name==7" class='col3 center col3spi'>SPI0 CS1</a>
+                           <a v-if="pin.name==8" class='col3 center col3spi'>SPI0 CS0</a>
+                           <a v-if="pin.name==9" class='col3 center col3spi'>SPI0 MISO</a>
+                           <a v-if="pin.name==10" class='col3 center col3spi'>SPI0 MOSI</a>
+                           <a v-if="pin.name==11" class='col3 center col3spi'>SPI0 SCLK</a>
+                           <a v-if="pin.name==14" class='col3 center col3serial'>SERIAL0 TX</a>
+                           <a v-if="pin.name==15" class='col3 center col3serial'>SERIAL0 RX</a>
+                           <a v-if="pin.name==2" class='col3 center col3i2c'>I2C1 SDA</a>
+                           <a v-if="pin.name==3" class='col3 center col3i2c'>I2C1 SCL</a>
                          <a class='col3 center col3pwm' v-if="pin.func==2">PWM</a>
                     </template>
 

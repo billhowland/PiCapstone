@@ -109,6 +109,14 @@ let app = new Vue({
           this.getAllPins()
        }).catch(err => console.log(err))
    },
+   gpoff: function(pin, off) {
+        const request = fetch('gpoff/' + pin)
+          .then(response => {
+          return response.json()
+       }).then(off => {
+          this.getAllPins()
+       }).catch(err => console.log(err))
+   },
    pinused: function(pin) {
         return pinData(pinused==True)
    },

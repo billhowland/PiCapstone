@@ -1,14 +1,13 @@
-from time import sleep
-# import RPi.GPIO as GPIO
-import socket
 import os
+os.system("sudo pigpiod")
+from time import sleep
+import socket
 import pigpio
 pi = pigpio.pi()
-os.system("sudo pigpiod")
 os.system('gotty --config "/home/pi/.gotty" bash &')  # permit writes with -w
 os.system('gotty --config "/home/pi/.gotty9001" cat &')
-# import time
-
+h3 = ()
+h3 = pi.serial_open("/dev/ttyAMA0", 9600, 0)  # pins 14, 15
 
 pins = []
 pin_info = []
@@ -75,10 +74,7 @@ def get_all_pins(init=False):
             used = True
             test = False
             testing = False
-            if pin not in [2, 3]:
-                pud = 'down'
-            else:
-                pud = 'up'
+            pud = 'off'
             pin_info.append({
                 'name': pin,
                 'func': func,
@@ -130,21 +126,18 @@ def untest_pin(pin):
 
 
 def set_pin_out(pin):
-    # GPIO.setup((pin), GPIO.OUT)  # CHANGE
     pi.set_mode((pin), pigpio.OUTPUT)
 
 
 def pin_out_hi(pin):
     set_pin_out(pin)
     untest_pin(pin)
-    # GPIO.output((pin), GPIO.HIGH)  # CHANGE
     pi.write((pin), 1)
 
 
 def pin_out_low(pin):
     set_pin_out(pin)
     untest_pin(pin)
-    # GPIO.output((pin), GPIO.LOW)  # CHANGE
     pi.write((pin), 0)
 
 
@@ -152,11 +145,9 @@ def pin_tog(pin):
     if not get_testing(pin):
         if read_pin(pin) == 0:
             set_pin_out(pin)
-            # GPIO.output((pin), GPIO.HIGH)  # CHANGE
             pi.write((pin), 1)
         elif read_pin(pin) == 1:
             set_pin_out(pin)
-            # GPIO.output((pin), GPIO.LOW)  # CHANGE
             pi.write((pin), 0)
 # Inputs:
 
@@ -164,22 +155,18 @@ def pin_tog(pin):
 def set_pin_in(pin):
     pud = get_pud(pin)
     if pud == 'down':
-        # GPIO.setup((pin), GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # CHANGE
         pi.set_mode((pin), pigpio.INPUT), pi.set_pull_up_down((pin), pigpio.PUD_DOWN)
     else:
-        # GPIO.setup((pin), GPIO.IN, pull_up_down=GPIO.PUD_UP)  # CHANGE
         pi.set_mode((pin), pigpio.INPUT), pi.set_pull_up_down((pin), pigpio.PUD_UP)
 
 
 def read_pin(pin):
-    # return GPIO.input(pin)  # CHANGE
     return pi.read(pin)
 
 # Usage:
 
 
 def pin_use(pin):
-    # return GPIO.gpio_function(pin)  # CHANGE
     return pi.get_mode(pin)
     # RPi.GPIO #            pigpio #
     # 0 = GPIO.OUT          0 = pi.INPUT
@@ -195,7 +182,6 @@ def pin_use(pin):
 
 
 def pud_dn(pin):
-    # GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # CHANGE
     pi.set_mode((pin), pigpio.INPUT), pi.set_pull_up_down((pin), pigpio.PUD_DOWN)
     idx = get_pin_idx(pin)
     if pins[idx]['name'] not in [2, 3]:
@@ -203,10 +189,15 @@ def pud_dn(pin):
 
 
 def pud_up(pin):
-    # GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # CHANGE
     pi.set_mode((pin), pigpio.INPUT), pi.set_pull_up_down((pin), pigpio.PUD_UP)
     idx = get_pin_idx(pin)
     pins[idx]['pud'] = 'up'
+
+
+def pud_off(pin):
+    pi.set_mode((pin), pigpio.INPUT), pi.set_pull_up_down((pin), pigpio.PUD_OFF)
+    idx = get_pin_idx(pin)
+    pins[idx]['pud'] = 'off'
 
 
 def tty_message(message):
@@ -216,7 +207,7 @@ def tty_message(message):
         if ttyname != "ptmx":
             tty = os.open("/dev/pts/" + ttyname, os.O_RDWR)
             os.write(tty, tty_msg)
-
+    pi.serial_write(h3, tty_msg)
 
 def get_scripts(init):
     global scripts
@@ -298,21 +289,9 @@ def script_1():
     sleep(0.25)
 
     for pin in pin_names:
-        if pin not in [2, 3]:
-            # GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # CHANGE
-            pi.set_mode((pin), pigpio.INPUT), pi.set_pull_up_down((pin), pigpio.PUD_DOWN)
-            pud_dn(pin)
-        else:
-            # GPIO.setup(pin, GPIO.IN)  # CHANGE
-            pi.set_mode((pin), pigpio.INPUT)
-            pud_up(pin)
         untest_pin(pin)
         set_used(pin)
-        pin_out_low(pin)
-        set_pin_in(pin)
     get_all_pins(init=True)
-    # sleep(0.25)
-    # clr_running(1)
 
 
 # --script 2----------------------------------------------------------------------------
@@ -326,12 +305,6 @@ def script_2():
 
     for pin in pin_names:
         untest_pin(pin)
-        if pin not in [2, 3]:
-            # GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # CHANGE
-            pi.set_mode((pin), pigpio.INPUT), pi.set_pull_up_down((pin), pigpio.PUD_DOWN)
-        else:
-            # GPIO.setup(pin, GPIO.IN)  # CHANGE
-            pi.set_mode((pin), pigpio.INPUT)
     get_all_pins(init=True)
 
     LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
@@ -344,13 +317,10 @@ def script_2():
         set_used(pin)
         pud_up(pin)
 
-    Unused_Pins = [19, 16, 20, 21, 2, 3]
+    Unused_Pins = [14, 15, 19, 16, 20, 21, 2, 3]
     for pin in Unused_Pins:
         set_not_used(pin)
-        set_pin_in(pin)
-
     sleep(0.25)
-    # clr_running(2)
 
 
 # --script 3----------------------------------------------------------------------------
@@ -381,34 +351,37 @@ def script_4():
         set_running(4)
         for pin in pin_names:
             untest_pin(pin)
-            if pin not in [2, 3]:
-                # GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # CHANGE
-                pi.set_mode((pin), pigpio.INPUT), pi.set_pull_up_down((pin), pigpio.PUD_DOWN)
-            else:
-                # GPIO.setup(pin, GPIO.IN)
-                pi.set_mode((pin), pigpio.INPUT)
         get_all_pins(init=True)
 
-        used_Pins = [2, 3, 4, 5, 7, 8, 9, 10, 11, 13, 14, 15, 17, 18]
+        used_Pins = [2, 3, 7, 8, 9, 10, 11, 13, 14, 15, 17, 18]
         for pin in used_Pins:
             set_used(pin)
-            pud_up(pin)
 
-        Unused_Pins = [6, 12, 16, 19, 20, 21, 22, 23, 24, 25, 26, 27]
+        spi_Pins = [7, 8, 9, 10, 11]
+        for pin in spi_Pins:
+            pi.set_mode((pin), pigpio.ALT0)
+            # pud_off(pin)
+
+        # ser_Pins = [14, 15]
+        # for pin in ser_Pins:
+        #     pi.set_mode((pin), pigpio.ALT0)
+            # pud_off(pin)
+
+        Unused_Pins = [4, 5, 6, 12, 16, 19, 20, 21, 22, 23, 24, 25, 26, 27]
         for pin in Unused_Pins:
             set_not_used(pin)
-            set_pin_in(pin)
+            # set_pin_in(pin)
 
         h = ()
         h2 = ()
-        h3 = ()
+        # h3 = ()
         pwmPin = 18
         butPin = 17
         exitPin = 13
 
         # Pin Setup:
-
-        set_pin_out(pwmPin)  # PWM pin set as output
+        # pi.set_mode((18), pigpio.ALT5)
+        # set_pin_out(pwmPin)  # PWM pin set as output
 
         pud_up(butPin)  # Button pin set as input w/ pull-up
         pud_up(exitPin)
@@ -416,9 +389,10 @@ def script_4():
         set_pin_out(pwmPin)
         pi.hardware_PWM(18, 1, 500000)  # 2Hz 50% dutycycle
 
-        h2 = pi.i2c_open(1, 0x53)  # open device at address 0x53 on bus 1
-        h = pi.spi_open(1, 50000, 3)  # This one works!
-        h3 = pi.serial_open("/dev/serial0", 9600)
+        h2 = pi.i2c_open(1, 0x53)  # open device at address 0x53 on bus 1, pins 2 & 3
+        h = pi.spi_open(1, 50000, 3)  # This one works, pins 7, 8, 9, 10, 11
+        # h3 = pi.serial_open("/dev/ttyAMA0", 9600, 0)  # pins 14, 15
+        # pi.serial_write(h3, "this is a test and only a test")
         pi.spi_write(h, b'a')
         spi_data = pi.spi_read(h, 1)
 
@@ -430,10 +404,9 @@ def script_4():
         pi.hardware_PWM(18, 0, 500000)
         pi.spi_close(h)
         pi.i2c_close(h2)
-        pi.serial_close(h3)
+        # pi.serial_close(h3)
         tty_message("Script terminated.")
-        script_2()
-        #    GPIO.cleanup() # cleanup all GPIO
+        sleep(.25)
         clr_running(4)
 
 # --script 5----------------------------------------------------------------------------

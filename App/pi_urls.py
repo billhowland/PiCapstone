@@ -12,6 +12,7 @@ urlpatterns = [
     path('gpuse/<int:pin>', views.gpuse, name='gpuse'),
     path('gpup/<int:pin>', views.gpup, name='gpup'),
     path('gpdn/<int:pin>', views.gpdn, name='gpdn'),
+    path('gpoff/<int:pin>', views.gpoff, name='gpoff'),
     path('gpused/<int:pin>', views.gpused, name='gpused'),
     path('gpnot_used/<int:pin>', views.gpnot_used, name='gpnot_used'),
     path('get_all_pins', views.get_all_pins, name='get_all_pins'),
