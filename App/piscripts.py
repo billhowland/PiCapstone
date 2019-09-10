@@ -6,8 +6,7 @@ import pigpio
 pi = pigpio.pi()
 os.system('gotty --config "/home/pi/.gotty" bash &')  # permit writes with -w
 os.system('gotty --config "/home/pi/.gotty9001" cat &')
-h3 = ()
-h3 = pi.serial_open("/dev/ttyAMA0", 9600, 0)  # pins 14, 15
+
 
 pins = []
 pin_info = []
@@ -15,9 +14,10 @@ scripts = []
 script_info = []
 # pin order on display is set by the list order here:
 # pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
-pin_names = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
+# pin_names = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
+pin_names = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 17, 18, 22, 23, 24, 25, 26, 27, 2, 3, 14, 15, 16, 19, 20, 21]
 script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
-script_names = ["Default Configuration", "My Hat Configuration", "Test Hat LEDs", "PWM Test", "Strobe", "Script 6",
+script_names = ["Show Full Configuration", "Hat Configuration", "Test Hat LEDs", "PWM Test", "Strobe", "Script 6",
                 "Script 7", "Script 8", "Script 9", "Script 10", "Script 11", "Script 12", "Script 13",
                 "Script 14", "Script 15", "Script 16", "Script 17", "Script 18", "Script 19", "Script 20"]
 script_urls = ["script1", "script2", "script3", "script4", "script5",
@@ -171,9 +171,9 @@ def pin_use(pin):
     # RPi.GPIO #            pigpio #
     # 0 = GPIO.OUT          0 = pi.INPUT
     # 1 = GPIO.IN           1 = pi.OUTPUT
-    # 40 = GPIO.SERIAL      2 = pi.ALT5 PWM
+    # 40 = GPIO.SERIAL      2 = pi.ALT5
     # 41 = GPIO.SPI         3 = pi.ALT4
-    # 42 = GPIO.I2C         4 = pi.ALT0 SPI
+    # 42 = GPIO.I2C         4 = pi.ALT0
     # 43 = GPIO.HARD_PWM    5 = pi.ALT1
     # -1 = GPIO.UNKNOWN     6 = pi.ALT2
     #                       7 = pi.ALT3
@@ -207,7 +207,9 @@ def tty_message(message):
         if ttyname != "ptmx":
             tty = os.open("/dev/pts/" + ttyname, os.O_RDWR)
             os.write(tty, tty_msg)
+    h3 = pi.serial_open("/dev/ttyAMA0", 115200, 0)  # pins 14, 15
     pi.serial_write(h3, tty_msg)
+    pi.serial_close(h3)
 
 def get_scripts(init):
     global scripts
@@ -294,7 +296,7 @@ def script_1():
     get_all_pins(init=True)
 
 
-# --script 2----------------------------------------------------------------------------
+# --script 2-My Hat Configuration-------------------------------------------------------
 
 
 def script_2():
@@ -316,6 +318,11 @@ def script_2():
     for pin in Pushbutton_Pins:
         set_used(pin)
         pud_up(pin)
+
+    # spi_Pins = [16, 19, 20, 21]  # SPI1
+    # for pin in spi_Pins:
+    #     pi.set_mode((pin), pigpio.ALT0)
+
 
     Unused_Pins = [14, 15, 19, 16, 20, 21, 2, 3]
     for pin in Unused_Pins:
@@ -341,7 +348,7 @@ def script_3():
     clr_running(3)
     tty_message("Script terminated.")
 
-# --script 4----------------------------------------------------------------------------
+# --script 4 PWM Test-------------------------------------------------------------------
 
 
 def script_4():
@@ -353,28 +360,17 @@ def script_4():
             untest_pin(pin)
         get_all_pins(init=True)
 
-        used_Pins = [2, 3, 7, 8, 9, 10, 11, 13, 14, 15, 17, 18]
+        used_Pins = [13, 17, 18]
         for pin in used_Pins:
             set_used(pin)
 
-        spi_Pins = [7, 8, 9, 10, 11]
-        for pin in spi_Pins:
-            pi.set_mode((pin), pigpio.ALT0)
-            # pud_off(pin)
 
-        # ser_Pins = [14, 15]
-        # for pin in ser_Pins:
-        #     pi.set_mode((pin), pigpio.ALT0)
-            # pud_off(pin)
-
-        Unused_Pins = [4, 5, 6, 12, 16, 19, 20, 21, 22, 23, 24, 25, 26, 27]
+        Unused_Pins = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 19, 20, 21,  22, 23, 24, 25, 26, 27]
         for pin in Unused_Pins:
             set_not_used(pin)
-            # set_pin_in(pin)
 
         h = ()
-        h2 = ()
-        # h3 = ()
+        # h2 = ()
         pwmPin = 18
         butPin = 17
         exitPin = 13
@@ -389,25 +385,26 @@ def script_4():
         set_pin_out(pwmPin)
         pi.hardware_PWM(18, 1, 500000)  # 2Hz 50% dutycycle
 
-        h2 = pi.i2c_open(1, 0x53)  # open device at address 0x53 on bus 1, pins 2 & 3
-        h = pi.spi_open(1, 50000, 3)  # This one works, pins 7, 8, 9, 10, 11
-        # h3 = pi.serial_open("/dev/ttyAMA0", 9600, 0)  # pins 14, 15
-        # pi.serial_write(h3, "this is a test and only a test")
-        pi.spi_write(h, b'a')
-        spi_data = pi.spi_read(h, 1)
+        # h2 = pi.i2c_open(1, 0x53)  # open device at address 0x53 on bus 1, pins 2 & 3
+        # h = pi.spi_open(1, 50000, 3)  # This one works, pins 7, 8, 9, 10, 11
+        # pi.spi_write(h, b'a')
+        # spi_data = pi.spi_read(h, 1)
 
         tty_message("Hardware PWM on pin 18")
+        tty_message("Press GPIO13 to terminate")
+        tty_message("Press GPIO17 to change duty cycle")
 
         while get_running(4) and read_pin(exitPin):
             pi.hardware_PWM(18, 1, 500000)
 
         pi.hardware_PWM(18, 0, 500000)
-        pi.spi_close(h)
-        pi.i2c_close(h2)
-        # pi.serial_close(h3)
+        # pi.spi_close(h)
+        # pi.i2c_close(h2)
+        pud_up(pwmPin)
         tty_message("Script terminated.")
         sleep(.25)
         clr_running(4)
+        script_2()
 
 # --script 5----------------------------------------------------------------------------
 

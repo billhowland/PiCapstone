@@ -41,18 +41,21 @@
 
 
                     <template> {# v-if="pin.func==1" -Show Alt functions when not set to input #}
-                         <a class='col3 center' v-if="pin.func==1">GPIO OUT</a>
-                         <a v-if="pin.func==4"></a>
-                           <a v-if="pin.name==7" class='col3 center col3spi'>SPI0 CS1</a>
-                           <a v-if="pin.name==8" class='col3 center col3spi'>SPI0 CS0</a>
-                           <a v-if="pin.name==9" class='col3 center col3spi'>SPI0 MISO</a>
-                           <a v-if="pin.name==10" class='col3 center col3spi'>SPI0 MOSI</a>
-                           <a v-if="pin.name==11" class='col3 center col3spi'>SPI0 SCLK</a>
-                           <a v-if="pin.name==14" class='col3 center col3serial'>SERIAL0 TX</a>
-                           <a v-if="pin.name==15" class='col3 center col3serial'>SERIAL0 RX</a>
-                           <a v-if="pin.name==2" class='col3 center col3i2c'>I2C1 SDA</a>
-                           <a v-if="pin.name==3" class='col3 center col3i2c'>I2C1 SCL</a>
-                         <a class='col3 center col3pwm' v-if="pin.func==2">PWM</a>
+                        <a class='col3 center' v-if="pin.func==1">GPIO OUT</a>
+                        <a v-if="pin.name==7 && pin.func==4" class='col3 center col3spi'>SPI0 CS1</a>
+                        <a v-if="pin.name==8 && pin.func==4" class='col3 center col3spi'>SPI0 CS0</a>
+                        <a v-if="pin.name==9 && pin.func==4" class='col3 center col3spi'>SPI0 MISO</a>
+                        <a v-if="pin.name==10 && pin.func==4" class='col3 center col3spi'>SPI0 MOSI</a>
+                        <a v-if="pin.name==11 && pin.func==4" class='col3 center col3spi'>SPI0 SCLK</a>
+                        <a v-if="pin.name==16 && pin.func==4" class='col3 center col3spi'>SPI1 CS0</a>
+                        <a v-if="pin.name==19 && pin.func==4" class='col3 center col3spi'>SPI1 MISO</a>
+                        <a v-if="pin.name==20 && pin.func==4" class='col3 center col3spi'>SPI1 MOSI</a>
+                        <a v-if="pin.name==21 && pin.func==4" class='col3 center col3spi'>SPI1 SCLK</a>
+                        <a v-if="pin.name==14 && pin.func==4" class='col3 center col3serial'>SERIAL0 TX</a>
+                        <a v-if="pin.name==15 && pin.func==4" class='col3 center col3serial'>SERIAL0 RX</a>
+                        <a v-if="pin.name==2 && pin.func==4" class='col3 center col3i2c'>I2C1 SDA</a>
+                        <a v-if="pin.name==3 && pin.func==4" class='col3 center col3i2c'>I2C1 SCL</a>
+                        <a v-if="pin.func==2"class='col3 center col3pwm'>PWM</a>
                     </template>
 
 
