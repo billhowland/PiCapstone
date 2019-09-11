@@ -368,7 +368,7 @@ def script_3():
     global pins
     set_running(3)
     script_2()
-    tty_message("All pins to 'Test' mode at 250ms interval.")
+    tty_message("Script 3: all pins to 'Test' mode at 250ms interval.")
     LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
     for pin in LED_Pins:
         set_used(pin)
@@ -386,6 +386,7 @@ def script_4():
     if get_running(4):
         clr_running(4)
     else:
+        tty_message("Script 4: PWM test.")
         set_running(4)
         for pin in pin_names:
             untest_pin(pin)
@@ -446,7 +447,7 @@ def script_5():
     else:
         set_running(5)
         script_2()
-        tty_message("One LED at a time...")
+        tty_message("Script 5: one LED at a time...")
         LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
         while get_running(5):
             for pin in LED_Pins:
@@ -463,17 +464,38 @@ def script_5():
 
 
 def script_6():
-    set_running(6)
-    tty_message("Script Not Implemented.")
-    sleep(.25)
-    clr_running(6)
+    if get_running(6):
+        clr_running(6)
+    else:
+        set_running(6)
+        script_2()
+        tty_message("Script 6: pigpio wave test.")
+        LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
+        while get_running(6):
+            for pin in LED_Pins:
+                set_used(pin)
+                set_pin_out(pin)
+                tty_message("each pin")
+                flash_500=[]  # flash every 500 ms
+                flash_500.append(pigpio.pulse(1<<(pin), 0, 500000))
+                pi.wave_clear()
+                pi.wave_add_generic(flash_500)  # 500 ms flashes
+                f500 = pi.wave_create()  # create and save id
+                pi.wave_send_repeat(f500)
+                # sleep(4)
+
+        pi.wave_tx_stop()  # stop waveform
+        pi.wave_clear()  # clear all waveforms
+        sleep(.25)
+        clr_running(6)
+        tty_message("Script terminated.")
 
 # --script 7----------------------------------------------------------------------------
 
 
 def script_7():
     set_running(7)
-    tty_message("Script Not Implemented.")
+    tty_message("Script 7 Not Implemented.")
     sleep(.25)
     clr_running(7)
 
@@ -483,7 +505,7 @@ def script_7():
 
 def script_8():
     set_running(8)
-    tty_message("Script Not Implemented.")
+    tty_message("Script 8 Not Implemented.")
     sleep(.25)
     clr_running(8)
 
@@ -493,7 +515,7 @@ def script_8():
 
 def script_9():
     set_running(9)
-    tty_message("Script Not Implemented.")
+    tty_message("Script 9 Not Implemented.")
     sleep(.25)
     clr_running(9)
 
@@ -503,7 +525,7 @@ def script_9():
 
 def script_10():
     set_running(10)
-    tty_message("Script Not Implemented.")
+    tty_message("Script 10 Not Implemented.")
     sleep(.25)
     clr_running(10)
 
@@ -513,7 +535,7 @@ def script_10():
 
 def script_11():
     set_running(11)
-    tty_message("Script Not Implemented.")
+    tty_message("Script 11 Not Implemented.")
     sleep(.25)
     clr_running(11)
 
@@ -523,7 +545,7 @@ def script_11():
 
 def script_12():
     set_running(12)
-    tty_message("Script Not Implemented.")
+    tty_message("Script 12 Not Implemented.")
     sleep(.25)
     clr_running(12)
 
@@ -533,7 +555,7 @@ def script_12():
 
 def script_13():
     set_running(13)
-    tty_message("Script Not Implemented.")
+    tty_message("Script 13 Not Implemented.")
     sleep(.25)
     clr_running(13)
 
@@ -543,7 +565,7 @@ def script_13():
 
 def script_14():
     set_running(14)
-    tty_message("Script Not Implemented.")
+    tty_message("Script 14 Not Implemented.")
     sleep(.25)
     clr_running(14)
 
@@ -553,7 +575,7 @@ def script_14():
 
 def script_15():
     set_running(15)
-    tty_message("Script Not Implemented.")
+    tty_message("Script 15 Not Implemented.")
     sleep(.25)
     clr_running(15)
 
@@ -563,7 +585,7 @@ def script_15():
 
 def script_16():
     set_running(16)
-    tty_message("Script Not Implemented.")
+    tty_message("Script 16 Not Implemented.")
     sleep(.25)
     clr_running(16)
 
@@ -573,7 +595,7 @@ def script_16():
 
 def script_17():
     set_running(17)
-    tty_message("Script Not Implemented.")
+    tty_message("Script 17 Not Implemented.")
     sleep(.25)
     clr_running(17)
 
@@ -583,7 +605,7 @@ def script_17():
 
 def script_18():
     set_running(18)
-    tty_message("Script Not Implemented.")
+    tty_message("Script 18 Not Implemented.")
     sleep(.25)
     clr_running(18)
 
@@ -593,7 +615,7 @@ def script_18():
 
 def script_19():
     set_running(19)
-    tty_message("Script Not Implemented.")
+    tty_message("Script 19 Not Implemented.")
     sleep(.25)
     clr_running(19)
 
@@ -603,6 +625,6 @@ def script_19():
 
 def script_20():
     set_running(20)
-    tty_message("Script Not Implemented.")
+    tty_message("Script 20 Not Implemented.")
     sleep(.25)
     clr_running(20)
