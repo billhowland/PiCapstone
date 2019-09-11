@@ -17,7 +17,7 @@ script_info = []
 # pin_names = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
 pin_names = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 17, 18, 22, 23, 24, 25, 26, 27, 2, 3, 14, 15, 16, 19, 20, 21]
 script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
-script_names = ["Show Full Configuration", "Hat Configuration", "Test Hat LEDs", "PWM Test", "Strobe", "Script 6",
+script_names = ["Show Full Configuration", "Hat Configuration", "Test Hat LEDs", "PWM Test", "Strobe", "Wave Test",
                 "Script 7", "Script 8", "Script 9", "Script 10", "Script 11", "Script 12", "Script 13",
                 "Script 14", "Script 15", "Script 16", "Script 17", "Script 18", "Script 19", "Script 20"]
 script_urls = ["script1", "script2", "script3", "script4", "script5",
@@ -280,6 +280,37 @@ def do_script(num):
         script_4()
     elif num == 5:
         script_5()
+    elif num == 6:
+        script_6()
+    elif num == 7:
+        script_7()
+    elif num == 8:
+        script_8()
+    elif num == 9:
+        script_9()
+    elif num == 10:
+        script_10()
+    elif num == 11:
+        script_11()
+    elif num == 12:
+        script_12()
+    elif num == 13:
+        script_13()
+    elif num == 14:
+        script_14()
+    elif num == 15:
+        script_15()
+    elif num == 16:
+        script_16()
+    elif num == 17:
+        script_17()
+    elif num == 18:
+        script_18()
+    elif num == 19:
+        script_19()
+    elif num == 20:
+        script_20()
+
 
 # --script 1----------------------------------------------------------------------------
 
@@ -427,3 +458,151 @@ def script_5():
 
         clr_running(5)
         tty_message("Script terminated.")
+
+# --script 6----------------------------------------------------------------------------
+
+
+def script_6():
+    set_running(6)
+    tty_message("Script Not Implemented.")
+    sleep(.25)
+    clr_running(6)
+
+# --script 7----------------------------------------------------------------------------
+
+
+def script_7():
+    set_running(7)
+    tty_message("Script Not Implemented.")
+    sleep(.25)
+    clr_running(7)
+
+
+# --script 8----------------------------------------------------------------------------
+
+
+def script_8():
+    set_running(8)
+    tty_message("Script Not Implemented.")
+    sleep(.25)
+    clr_running(8)
+
+
+# --script 9----------------------------------------------------------------------------
+
+
+def script_9():
+    set_running(9)
+    tty_message("Script Not Implemented.")
+    sleep(.25)
+    clr_running(9)
+
+
+# --script 10----------------------------------------------------------------------------
+
+
+def script_10():
+    set_running(10)
+    tty_message("Script Not Implemented.")
+    sleep(.25)
+    clr_running(10)
+
+
+# --script 11----------------------------------------------------------------------------
+
+
+def script_11():
+    set_running(11)
+    tty_message("Script Not Implemented.")
+    sleep(.25)
+    clr_running(11)
+
+
+# --script 12---------------------------------------------------------------------------
+
+
+def script_12():
+    set_running(12)
+    tty_message("Script Not Implemented.")
+    sleep(.25)
+    clr_running(12)
+
+
+# --script 13---------------------------------------------------------------------------
+
+
+def script_13():
+    set_running(13)
+    tty_message("Script Not Implemented.")
+    sleep(.25)
+    clr_running(13)
+
+
+# --script 14---------------------------------------------------------------------------
+
+
+def script_14():
+    set_running(14)
+    tty_message("Script Not Implemented.")
+    sleep(.25)
+    clr_running(14)
+
+
+# --script 15---------------------------------------------------------------------------
+
+
+def script_15():
+    set_running(15)
+    tty_message("Script Not Implemented.")
+    sleep(.25)
+    clr_running(15)
+
+
+# --script 16---------------------------------------------------------------------------
+
+
+def script_16():
+    set_running(16)
+    tty_message("Script Not Implemented.")
+    sleep(.25)
+    clr_running(16)
+
+
+# --script 17---------------------------------------------------------------------------
+
+
+def script_17():
+    set_running(17)
+    tty_message("Script Not Implemented.")
+    sleep(.25)
+    clr_running(17)
+
+
+# --script 18---------------------------------------------------------------------------
+
+
+def script_18():
+    set_running(18)
+    tty_message("Script Not Implemented.")
+    sleep(.25)
+    clr_running(18)
+
+
+# --script 19---------------------------------------------------------------------------
+
+
+def script_19():
+    set_running(19)
+    tty_message("Script Not Implemented.")
+    sleep(.25)
+    clr_running(19)
+
+
+# --script 20---------------------------------------------------------------------------
+
+
+def script_20():
+    set_running(20)
+    tty_message("Script Not Implemented.")
+    sleep(.25)
+    clr_running(20)
