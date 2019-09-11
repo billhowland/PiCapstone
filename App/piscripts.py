@@ -211,6 +211,7 @@ def tty_message(message):
     pi.serial_write(h3, tty_msg)
     pi.serial_close(h3)
 
+
 def get_scripts(init):
     global scripts
     script_info = []
@@ -326,6 +327,10 @@ def script_1():
         set_used(pin)
     get_all_pins(init=True)
 
+    LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
+    for pin in LED_Pins:
+        pin_out_low(pin)
+
 
 # --script 2-My Hat Configuration-------------------------------------------------------
 
@@ -354,7 +359,6 @@ def script_2():
     # for pin in spi_Pins:
     #     pi.set_mode((pin), pigpio.ALT0)
 
-
     Unused_Pins = [14, 15, 19, 16, 20, 21, 2, 3]
     for pin in Unused_Pins:
         set_not_used(pin)
@@ -367,7 +371,7 @@ def script_2():
 def script_3():
     global pins
     set_running(3)
-    script_2()
+
     tty_message("Script 3: all pins to 'Test' mode at 250ms interval.")
     LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
     for pin in LED_Pins:
@@ -396,12 +400,11 @@ def script_4():
         for pin in used_Pins:
             set_used(pin)
 
-
         Unused_Pins = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 19, 20, 21,  22, 23, 24, 25, 26, 27]
         for pin in Unused_Pins:
             set_not_used(pin)
 
-        h = ()
+        # h = ()
         # h2 = ()
         pwmPin = 18
         butPin = 17
@@ -471,21 +474,22 @@ def script_6():
         script_2()
         tty_message("Script 6: pigpio wave test.")
         LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
-        while get_running(6):
-            for pin in LED_Pins:
-                set_used(pin)
-                set_pin_out(pin)
-                tty_message("each pin")
-                flash_500=[]  # flash every 500 ms
-                flash_500.append(pigpio.pulse(1<<(pin), 0, 500000))
-                pi.wave_clear()
-                pi.wave_add_generic(flash_500)  # 500 ms flashes
-                f500 = pi.wave_create()  # create and save id
-                pi.wave_send_repeat(f500)
-                # sleep(4)
+        for pin in LED_Pins:
+            set_used(pin)
+            set_pin_out(pin)
 
-        pi.wave_tx_stop()  # stop waveform
-        pi.wave_clear()  # clear all waveforms
+            # tty_message("each pin")
+            # flash_500 = []  # flash every 500 ms
+            # flash_500.append(pigpio.pulse(1 << (pin), 0, 500000))
+            # pi.wave_clear()
+            # pi.wave_add_generic(flash_500)  # 500 ms flashes
+            # f500 = pi.wave_create()  # create and save id
+
+        # while get_running(6):
+            # pi.wave_send_once(f500)
+
+        # pi.wave_tx_stop()  # stop waveform
+        # pi.wave_clear()  # clear all waveforms
         sleep(.25)
         clr_running(6)
         tty_message("Script terminated.")
