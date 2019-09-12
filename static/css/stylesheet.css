@@ -27,7 +27,7 @@ background-size: 100% auto;
 #io_select {
 	display: grid;
 	grid-template-areas: "name set pud inout";
-	grid-template-columns: 60px 110px 160px 205px;
+	grid-template-columns: 65px 110px 160px 205px;
 	/* gap: 0; */
 }
 
@@ -91,13 +91,33 @@ background-size: 100% auto;
 }
 
 .ioset{
+	font-size: 15px;
 	box-sizing: border-box;
 	grid-area: set;
+	width: 100%;
+	text-align: center;
+	color: white;
 	justify-self: center;
 	align-self: stretch;
 	align-items: stretch;
 	justify-content: center;
-  background-color: darkgray;
+  background-color: #050197;
+	border-style: outset;
+	border-color: darkgray;
+}
+
+.iosetb{
+	font-size: 15px;
+	box-sizing: border-box;
+	grid-area: set;
+	width: 100%;
+	text-align: center;
+	color: white;
+	justify-self: center;
+	align-self: stretch;
+	align-items: stretch;
+	justify-content: center;
+  background-color: #8a9100;
 	border-style: outset;
 	border-color: darkgray;
 }
@@ -160,7 +180,7 @@ background-size: 100% auto;
 	box-sizing: border-box;
 	grid-area: inout;
 	justify-self: center;
-	/* align-self: center; */
+
 	align-items: center;
   background-color: red;
 	color: black;
@@ -174,7 +194,7 @@ background-size: 100% auto;
 	box-sizing: border-box;
 	grid-area: inout;
 	justify-self: center;
-	/* align-self: center; */
+
 	align-items: center;
   background-color: black;
 	color: white;
@@ -188,7 +208,7 @@ background-size: 100% auto;
 	box-sizing: border-box;
 	grid-area: inout;
 	justify-self: center;
-	/* align-self: center; */
+
 	align-items: center;
   background-color: white;
 	color: #026201;

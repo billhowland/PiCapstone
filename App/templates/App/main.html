@@ -30,8 +30,8 @@
                     <label for="in">In</label>
                     <input type="radio" v-bind:name="'GPIO'+pin.name" value='1' v-model="pin.func" v-on:change="setPin(pin.name, pin.func)">
                     <label for="out">Out</label>
-                    <a class='set' v-if="pin.func==2"></a>
-                    <a class='set' v-if="pin.func==4"></a></a>
+                    <a class='iosetb' v-if="pin.func==2">ALT 5
+                    <a class='ioset' v-if="pin.func==4">ALT 0</a>
                     {# This is column 3 stuff #}
                     <a class='pud' v-if="pin.func==0"> {# 0 = Input #}
                         <input type="radio" v-bind:name="'PUD'+pin.name" value='up' v-model="pin.pud" v-on:change="gpup(pin.name, pin.pud)">

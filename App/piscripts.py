@@ -17,7 +17,7 @@ script_info = []
 # pin_names = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
 pin_names = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 17, 18, 22, 23, 24, 25, 26, 27, 2, 3, 14, 15, 16, 19, 20, 21]
 script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
-script_names = ["Show Full Configuration", "Hat Configuration", "Test Hat LEDs", "PWM Test", "Strobe", "Wave Test",
+script_names = ["Show Full Configuration", "GPIO Configuration", "Test Hat LEDs", "PWM Test", "Strobe", "Wave Test",
                 "Script 7", "Script 8", "Script 9", "Script 10", "Script 11", "Script 12", "Script 13",
                 "Script 14", "Script 15", "Script 16", "Script 17", "Script 18", "Script 19", "Script 20"]
 script_urls = ["script1", "script2", "script3", "script4", "script5",

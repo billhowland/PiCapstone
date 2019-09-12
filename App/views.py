@@ -19,6 +19,12 @@ def main(request):
     return render(request, 'App/main.html', {'IP': IP, 'IPB': IPB, 'IPX': IPX})
 
 
+@login_required
+def addons(request):
+    IPY = ' {}:8080'.format(get_ip())
+    return render(request, 'App/addons.html', {'IPY': IPY})
+
+
 def gptest(request, pin):
     test_pin(pin)
     test = 2  # was out_lvl = ("Test")
