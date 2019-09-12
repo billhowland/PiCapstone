@@ -1,8 +1,8 @@
 import os
-os.system("sudo pigpiod")
 from time import sleep
 import socket
 import pigpio
+os.system("sudo pigpiod")
 pi = pigpio.pi()
 os.system('gotty --config "/home/pi/.gotty" bash &')  # permit writes with -w
 os.system('gotty --config "/home/pi/.gotty9001" cat &')
@@ -331,6 +331,12 @@ def script_1():
     for pin in LED_Pins:
         pin_out_low(pin)
 
+    Pushbutton_Pins = [18, 17, 23, 22, 27, 24, 25, 13, 26]
+    for pin in Pushbutton_Pins:
+        set_used(pin)
+        pud_up(pin)
+
+    sleep(0.25)
 
 # --script 2-My Hat Configuration-------------------------------------------------------
 
@@ -343,6 +349,7 @@ def script_2():
 
     for pin in pin_names:
         untest_pin(pin)
+        set_not_used(pin)
     get_all_pins(init=True)
 
     LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
@@ -355,13 +362,6 @@ def script_2():
         set_used(pin)
         pud_up(pin)
 
-    # spi_Pins = [16, 19, 20, 21]  # SPI1
-    # for pin in spi_Pins:
-    #     pi.set_mode((pin), pigpio.ALT0)
-
-    Unused_Pins = [14, 15, 19, 16, 20, 21, 2, 3]
-    for pin in Unused_Pins:
-        set_not_used(pin)
     sleep(0.25)
 
 
@@ -396,20 +396,20 @@ def script_4():
             untest_pin(pin)
         get_all_pins(init=True)
 
-        used_Pins = [13, 17, 18]
-        for pin in used_Pins:
-            set_used(pin)
-
-        Unused_Pins = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 19, 20, 21,  22, 23, 24, 25, 26, 27]
-        for pin in Unused_Pins:
-            set_not_used(pin)
-
-        # h = ()
-        # h2 = ()
-        pwmPin = 18
+        pwmPina = 12
+        pwmPinb = 18
         butPin = 17
         exitPin = 13
 
+        for pin in pin_names:
+            set_not_used(pin)
+
+        used_Pins = [(pwmPina), (pwmPinb), (butPin), (exitPin)]
+        for pin in used_Pins:
+            set_used(pin)
+
+        # h = ()
+        # h2 = ()
         # Pin Setup:
         # pi.set_mode((18), pigpio.ALT5)
         # set_pin_out(pwmPin)  # PWM pin set as output
@@ -417,25 +417,29 @@ def script_4():
         pud_up(butPin)  # Button pin set as input w/ pull-up
         pud_up(exitPin)
 
-        set_pin_out(pwmPin)
-        pi.hardware_PWM(18, 1, 500000)  # 2Hz 50% dutycycle
-
+        set_pin_out(pwmPina)
+        pi.hardware_PWM((pwmPina), 1, 500000)  # 2Hz 50% dutycycle
+        sleep(.125)
+        set_pin_out(pwmPinb)
+        pi.hardware_PWM((pwmPinb), 1, 500000)
         # h2 = pi.i2c_open(1, 0x53)  # open device at address 0x53 on bus 1, pins 2 & 3
         # h = pi.spi_open(1, 50000, 3)  # This one works, pins 7, 8, 9, 10, 11
         # pi.spi_write(h, b'a')
         # spi_data = pi.spi_read(h, 1)
 
-        tty_message("Hardware PWM on pin 18")
+        tty_message("Hardware PWM on pins 12, 18")
         tty_message("Press GPIO13 to terminate")
         tty_message("Press GPIO17 to change duty cycle")
 
         while get_running(4) and read_pin(exitPin):
-            pi.hardware_PWM(18, 1, 500000)
+            pass
 
-        pi.hardware_PWM(18, 0, 500000)
+        pi.hardware_PWM((pwmPina), 0, 500000)
+        pi.hardware_PWM((pwmPinb), 0, 500000)
         # pi.spi_close(h)
         # pi.i2c_close(h2)
-        pud_up(pwmPin)
+        pud_up(pwmPina)
+        pud_up(pwmPina)
         tty_message("Script terminated.")
         sleep(.25)
         clr_running(4)
