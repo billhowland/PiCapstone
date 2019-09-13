@@ -1,8 +1,9 @@
 import os
 from time import sleep
 import socket
-import pigpio
+# Daemon must be started FIRST!:
 os.system("sudo pigpiod")
+import pigpio
 pi = pigpio.pi()
 os.system('gotty --config "/home/pi/.gotty" bash &')  # permit writes with -w
 os.system('gotty --config "/home/pi/.gotty9001" cat &')
@@ -17,9 +18,9 @@ script_info = []
 # pin_names = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
 pin_names = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 17, 18, 22, 23, 24, 25, 26, 27, 2, 3, 14, 15, 16, 19, 20, 21]
 script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
-script_names = ["Show Full Configuration", "GPIO Configuration", "Test Hat LEDs", "PWM Test", "Strobe", "Wave Test",
-                "Script 7", "Script 8", "Script 9", "Script 10", "Script 11", "Script 12", "Script 13",
-                "Script 14", "Script 15", "Script 16", "Script 17", "Script 18", "Script 19", "Script 20"]
+script_names = ["Show Full Configuration", "GPIO Configuration", "Flash LEDs", "Hardware PWM Test", "Strobe LEDs", "Wave Test",
+                "Software PWM LEDs", "Script 8", "Script 9", "Script 10", "Script 11", "Script 12", "Script 13",
+                "Script 14", "Script 15", "Script 16", "Script 17", "Script 18", "Script 19", "More Options"]
 script_urls = ["script1", "script2", "script3", "script4", "script5",
                "script6", "script7", "script8", "script9", "script10", "script11",
                "script12", "script13", "script14", "script15", "script16", "script17", "script18", "script19", "script20"]
@@ -365,20 +366,21 @@ def script_2():
     sleep(0.25)
 
 
-# --script 3----------------------------------------------------------------------------
+# --script 3-All LEDs to Flash Mode---------------------------------------------------------------------------
 
 
 def script_3():
     global pins
     set_running(3)
 
-    tty_message("Script 3: all pins to 'Test' mode at 250ms interval.")
+    tty_message("Script 3: all pins to 'Test' mode at 750ms interval.")
     LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
     for pin in LED_Pins:
         set_used(pin)
-        pin_out_hi(pin)
+        # pi.set_PWM_frequency((pin), 10)
+        # pi.set_PWM_dutycycle((pin), 128) # PWM 1/2 on
         test_pin(pin)
-        sleep(.25)
+        sleep(.75)
 
     clr_running(3)
     tty_message("Script terminated.")
@@ -398,13 +400,16 @@ def script_4():
 
         pwmPina = 12
         pwmPinb = 18
+        pwmPinc = 13
+        pwmPind = 19
+
         butPin = 17
-        exitPin = 13
+        exitPin = 25
 
         for pin in pin_names:
             set_not_used(pin)
 
-        used_Pins = [(pwmPina), (pwmPinb), (butPin), (exitPin)]
+        used_Pins = [(pwmPina), (pwmPinb), (pwmPinc), (pwmPind), (butPin), (exitPin)]
         for pin in used_Pins:
             set_used(pin)
 
@@ -420,26 +425,33 @@ def script_4():
         set_pin_out(pwmPina)
         pi.hardware_PWM((pwmPina), 1, 500000)  # 2Hz 50% dutycycle
         sleep(.125)
+        set_pin_out(pwmPinc)
+        pi.hardware_PWM((pwmPinc), 2, 500000)  # 2Hz 50% dutycycle
+
         set_pin_out(pwmPinb)
-        pi.hardware_PWM((pwmPinb), 1, 500000)
+        pi.set_mode((pwmPinb), pigpio.ALT5)
+        set_pin_out(pwmPind)
+        pi.set_mode((pwmPind), pigpio.ALT5)
         # h2 = pi.i2c_open(1, 0x53)  # open device at address 0x53 on bus 1, pins 2 & 3
         # h = pi.spi_open(1, 50000, 3)  # This one works, pins 7, 8, 9, 10, 11
         # pi.spi_write(h, b'a')
         # spi_data = pi.spi_read(h, 1)
 
-        tty_message("Hardware PWM on pins 12, 18")
-        tty_message("Press GPIO13 to terminate")
+        tty_message("Hardware PWM on pins 12, 13, 18, 19")
+        tty_message("Press GPIO 25 to terminate")
         tty_message("Press GPIO17 to change duty cycle")
 
         while get_running(4) and read_pin(exitPin):
             pass
 
         pi.hardware_PWM((pwmPina), 0, 500000)
-        pi.hardware_PWM((pwmPinb), 0, 500000)
+        pi.hardware_PWM((pwmPinc), 0, 500000)
         # pi.spi_close(h)
         # pi.i2c_close(h2)
-        pud_up(pwmPina)
-        pud_up(pwmPina)
+        pud_up(pwmPinb)
+        pud_up(pwmPinc)
+        pin_out_low(pwmPina)
+        pi.set_mode((19), pigpio.ALT0)
         tty_message("Script terminated.")
         sleep(.25)
         clr_running(4)
@@ -502,10 +514,20 @@ def script_6():
 
 
 def script_7():
+    global pins
     set_running(7)
-    tty_message("Script 7 Not Implemented.")
-    sleep(.25)
+
+    tty_message("Script 7: Software PWM at 20Hz.")
+    LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
+    for pin in LED_Pins:
+        set_used(pin)
+        pi.set_PWM_frequency((pin), 20)
+        pi.set_PWM_dutycycle((pin), 128) # PWM 1/2 on
+        # test_pin(pin)
+        sleep(.75)
+
     clr_running(7)
+    tty_message("Script terminated.")
 
 
 # --script 8----------------------------------------------------------------------------
