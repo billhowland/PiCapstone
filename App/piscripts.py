@@ -489,23 +489,21 @@ def script_6():
         set_running(6)
         script_2()
         tty_message("Script 6: pigpio wave test.")
+        flash_500 = []  # flash every 500 ms
         LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
         for pin in LED_Pins:
             set_used(pin)
             set_pin_out(pin)
+            flash_500.append(pigpio.pulse(1 << (pin), 0, 500000))
+        pi.wave_clear()
+        pi.wave_add_generic(flash_500)  # 500 ms flashes
+        f500 = pi.wave_create()  # create and save id
 
-            # tty_message("each pin")
-            # flash_500 = []  # flash every 500 ms
-            # flash_500.append(pigpio.pulse(1 << (pin), 0, 500000))
-            # pi.wave_clear()
-            # pi.wave_add_generic(flash_500)  # 500 ms flashes
-            # f500 = pi.wave_create()  # create and save id
+        while get_running(6):
+            pi.wave_send_repeat(f500)
 
-        # while get_running(6):
-            # pi.wave_send_once(f500)
-
-        # pi.wave_tx_stop()  # stop waveform
-        # pi.wave_clear()  # clear all waveforms
+        pi.wave_tx_stop()  # stop waveform
+        pi.wave_clear()  # clear all waveforms
         sleep(.25)
         clr_running(6)
         tty_message("Script terminated.")
