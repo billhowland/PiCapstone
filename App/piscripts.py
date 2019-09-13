@@ -498,9 +498,11 @@ def script_6():
         pi.wave_clear()
         pi.wave_add_generic(flash_500)  # 500 ms flashes
         f500 = pi.wave_create()  # create and save id
+        tty_message(str(f500))  # returning 0
 
         while get_running(6):
-            pi.wave_send_repeat(f500)
+            # pi.wave_send_once(f500)
+            pass
 
         pi.wave_tx_stop()  # stop waveform
         pi.wave_clear()  # clear all waveforms
