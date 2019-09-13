@@ -519,11 +519,15 @@ def script_7():
 
     tty_message("Script 7: Software PWM at 20Hz.")
     LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
+    dc = 1
     for pin in LED_Pins:
         set_used(pin)
-        pi.set_PWM_frequency((pin), 20)
-        pi.set_PWM_dutycycle((pin), 128) # PWM 1/2 on
-        # test_pin(pin)
+        pi.set_PWM_frequency((pin), 10)
+
+        pi.set_PWM_dutycycle((pin), (dc)) # PWM 1/2 on
+        dc = dc + 31
+        if (dc == 256):
+            dc = 255
         sleep(.75)
 
     clr_running(7)
