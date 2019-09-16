@@ -405,6 +405,7 @@ def script_4():
 
         butPin = 17
         exitPin = 25
+        d_cycle = 500000  # 50%
 
         for pin in pin_names:
             set_not_used(pin)
@@ -423,10 +424,10 @@ def script_4():
         pud_up(exitPin)
 
         set_pin_out(pwmPina)
-        pi.hardware_PWM((pwmPina), 1, 500000)  # 2Hz 50% dutycycle
+        pi.hardware_PWM((pwmPina), 1, d_cycle)  # 2Hz
         sleep(.125)
         set_pin_out(pwmPinc)
-        pi.hardware_PWM((pwmPinc), 2, 500000)  # 2Hz 50% dutycycle
+        pi.hardware_PWM((pwmPinc), 2, d_cycle)  # 4Hz
 
         set_pin_out(pwmPinb)
         pi.set_mode((pwmPinb), pigpio.ALT5)
@@ -439,7 +440,7 @@ def script_4():
 
         tty_message("Hardware PWM on pins 12, 13, 18, 19")
         tty_message("Press GPIO 25 to terminate")
-        tty_message("Press GPIO17 to change duty cycle")
+        tty_message("Press GPIO 17 to change duty cycle")
 
         while get_running(4) and read_pin(exitPin):
             pass
@@ -524,7 +525,7 @@ def script_7():
         set_used(pin)
         pi.set_PWM_frequency((pin), 10)
 
-        pi.set_PWM_dutycycle((pin), (dc)) # PWM 1/2 on
+        pi.set_PWM_dutycycle((pin), (dc))  # PWM 1/2 on
         dc = dc + 31
         if (dc == 256):
             dc = 255
@@ -659,6 +660,6 @@ def script_19():
 
 def script_20():
     set_running(20)
-    tty_message("Script 20 Not Implemented.")
+    tty_message("Haha Just Kidding! No options yet.")
     sleep(.25)
     clr_running(20)
