@@ -490,11 +490,11 @@ def script_6():
         script_2()
         tty_message("Script 6: pigpio wave test.")
         flash_500 = []  # flash every 500 ms
-        LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
+        LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6]
         for pin in LED_Pins:
             set_used(pin)
             set_pin_out(pin)
-            flash_500.append(pigpio.pulse(1 << (pin), 0, 500000))
+            flash_500.append(pigpio.pulse(1 << (pin), 0,  500000))
         pi.wave_clear()
         pi.wave_add_generic(flash_500)  # 500 ms flashes
         f500 = pi.wave_create()  # create and save id
