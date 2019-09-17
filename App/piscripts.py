@@ -19,7 +19,7 @@ script_info = []
 pin_names = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 17, 18, 22, 23, 24, 25, 26, 27, 2, 3, 14, 15, 16, 19, 20, 21]
 script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 script_names = ["Show Full Configuration", "GPIO Configuration", "Flash LEDs", "Hardware PWM Test", "Strobe LEDs", "Wave Test",
-                "Software PWM LEDs", "Script 8", "Script 9", "Script 10", "Script 11", "Script 12", "Script 13",
+                "Software PWM LEDs", "Official PIGPIO Wave", "Script 9", "Script 10", "Script 11", "Script 12", "Script 13",
                 "Script 14", "Script 15", "Script 16", "Script 17", "Script 18", "Script 19", "More Options"]
 script_urls = ["script1", "script2", "script3", "script4", "script5",
                "script6", "script7", "script8", "script9", "script10", "script11",
@@ -405,7 +405,6 @@ def script_4():
 
         butPin = 17
         exitPin = 25
-        d_cycle = 500000  # 50%
 
         for pin in pin_names:
             set_not_used(pin)
@@ -424,10 +423,10 @@ def script_4():
         pud_up(exitPin)
 
         set_pin_out(pwmPina)
-        pi.hardware_PWM((pwmPina), 1, d_cycle)  # 2Hz
+        pi.hardware_PWM((pwmPina), 1, 500000)  # 2Hz 50% dutycycle
         sleep(.125)
         set_pin_out(pwmPinc)
-        pi.hardware_PWM((pwmPinc), 2, d_cycle)  # 4Hz
+        pi.hardware_PWM((pwmPinc), 2, 500000)  # 2Hz 50% dutycycle
 
         set_pin_out(pwmPinb)
         pi.set_mode((pwmPinb), pigpio.ALT5)
@@ -502,7 +501,7 @@ def script_6():
         tty_message(str(f500))  # returning 0
 
         while get_running(6):
-            # pi.wave_send_once(f500)
+            # pi.wave_send_repeat(f500)
             pass
 
         pi.wave_tx_stop()  # stop waveform
@@ -525,7 +524,7 @@ def script_7():
         set_used(pin)
         pi.set_PWM_frequency((pin), 10)
 
-        pi.set_PWM_dutycycle((pin), (dc))  # PWM 1/2 on
+        pi.set_PWM_dutycycle((pin), (dc)) # PWM 1/2 on
         dc = dc + 31
         if (dc == 256):
             dc = 255
@@ -540,8 +539,45 @@ def script_7():
 
 def script_8():
     set_running(8)
-    tty_message("Script 8 Not Implemented.")
+    tty_message("Script 8: Another Wave Test")
     sleep(.25)
+
+    G1=4
+    G2=5
+
+    pi.set_mode(G1, pigpio.OUTPUT)
+    pi.set_mode(G2, pigpio.OUTPUT)
+
+    flash_500=[] # flash every 500 ms
+    flash_100=[] # flash every 100 ms
+
+    #                              ON     OFF  DELAY
+
+    flash_500.append(pigpio.pulse(1<<G1, 1<<G2, 500000))
+    flash_500.append(pigpio.pulse(1<<G2, 1<<G1, 500000))
+
+    flash_100.append(pigpio.pulse(1<<G1, 1<<G2, 100000))
+    flash_100.append(pigpio.pulse(1<<G2, 1<<G1, 100000))
+
+    pi.wave_clear() # clear any existing waveforms
+
+    pi.wave_add_generic(flash_500) # 500 ms flashes
+    f500 = pi.wave_create() # create and save id
+    tty_message(str(flash_500))
+
+    pi.wave_add_generic(flash_100) # 100 ms flashes
+    f100 = pi.wave_create() # create and save id
+    tty_message(str(flash_100))
+
+    pi.wave_send_repeat(f500)
+    sleep(4)
+    pi.wave_send_repeat(f100)
+    sleep(4)
+    pi.wave_send_repeat(f500)
+    sleep(4)
+
+    pi.wave_tx_stop() # stop waveform
+    pi.wave_clear() # clear all waveforms
     clr_running(8)
 
 
@@ -660,6 +696,6 @@ def script_19():
 
 def script_20():
     set_running(20)
-    tty_message("Haha Just Kidding! No options yet.")
+    tty_message("Script 20 Not Implemented.")
     sleep(.25)
     clr_running(20)
