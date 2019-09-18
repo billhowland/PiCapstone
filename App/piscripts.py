@@ -448,6 +448,7 @@ def script_4():
         pi.hardware_PWM((pwmPinc), 0, 500000)
         # pi.spi_close(h)
         # pi.i2c_close(h2)
+
         pud_up(pwmPinb)
         pud_up(pwmPinc)
         pin_out_low(pwmPina)
@@ -467,14 +468,20 @@ def script_5():
         set_running(5)
         script_2()
         tty_message("Script 5: one LED at a time...")
+        tty_message("Back -n- Forth...")
         LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
         while get_running(5):
             for pin in LED_Pins:
                 set_used(pin)
                 pin_out_hi(pin)
-                sleep(.25)
+                sleep(.05)
                 pin_out_low(pin)
                 # sleep(.1)
+            for pin in reversed(LED_Pins):
+                set_used(pin)
+                pin_out_hi(pin)
+                sleep(.05)
+                pin_out_low(pin)
 
         clr_running(5)
         tty_message("Script terminated.")
@@ -515,21 +522,37 @@ def script_6():
 
 def script_7():
     global pins
-    set_running(7)
+    if get_running(7):
+        clr_running(7)
+    else:
+        set_running(7)
 
-    tty_message("Script 7: Software PWM at 20Hz.")
-    LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
-    dc = 1
+        tty_message("Script 7: Software PWM at 20Hz.")
+        tty_message("Back -n- Forth...")
+        LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
+
+        while get_running(7):
+            dc = 1
+            for pin in LED_Pins:
+                set_used(pin)
+                pi.set_PWM_frequency((pin), 10)
+                pi.set_PWM_dutycycle((pin), (dc)) # PWM 1/2 on
+                dc = dc + 31
+                if (dc == 256):
+                    dc = 255
+                sleep(.15)
+            dc = 1
+            for pin in reversed(LED_Pins):
+                set_used(pin)
+                pi.set_PWM_frequency((pin), 10)
+                pi.set_PWM_dutycycle((pin), (dc)) # PWM 1/2 on
+                dc = dc + 31
+                if (dc == 256):
+                    dc = 255
+                sleep(.15)
+
     for pin in LED_Pins:
-        set_used(pin)
-        pi.set_PWM_frequency((pin), 10)
-
-        pi.set_PWM_dutycycle((pin), (dc)) # PWM 1/2 on
-        dc = dc + 31
-        if (dc == 256):
-            dc = 255
-        sleep(.75)
-
+        pin_out_low(pin)
     clr_running(7)
     tty_message("Script terminated.")
 
@@ -539,7 +562,7 @@ def script_7():
 
 def script_8():
     set_running(8)
-    tty_message("Script 8: Another Wave Test")
+    tty_message("Script 8: PIGPIO Wave Test")
     sleep(.25)
 
     G1=4
