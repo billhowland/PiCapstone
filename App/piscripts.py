@@ -517,10 +517,10 @@ def script_6():
             # pass
 
         pi.wave_send_repeat(f500)
-        sleep(1.8)
+        sleep(.1)
 
-        pi.wave_tx_stop()  # stop waveform
-        pi.wave_clear()  # clear all waveforms
+        # pi.wave_tx_stop()  # stop waveform
+        # pi.wave_clear()  # clear all waveforms
         sleep(.25)
         clr_running(6)
         tty_message("Script terminated.")
