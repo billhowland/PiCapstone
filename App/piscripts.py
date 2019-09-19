@@ -347,6 +347,8 @@ def script_2():
     set_running(2)
     clr_running(1)
     sleep(0.25)
+    pi.wave_tx_stop()  # stop waveform
+    pi.wave_clear()  # clear all waveforms
 
     for pin in pin_names:
         untest_pin(pin)
@@ -495,23 +497,27 @@ def script_6():
     else:
         set_running(6)
         script_2()
-        tty_message("Script 6: broken wave test.")
+        tty_message("Script 6: wave test.")
         flash_500 = []  # flash every 500 ms
-        LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6]
+        LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
         for pin in LED_Pins:
             set_used(pin)
             set_pin_out(pin)
-            flash_500.append(pigpio.pulse(1 << (pin), 0,  500000))
-            flash_500.append(pigpio.pulse(0, 1 << (pin),  500000))
+            # create a new flash function
+            flash_500.append(pigpio.pulse(1 << (pin), 0,  100000))
+            flash_500.append(pigpio.pulse(0, 1 << (pin),  100000))
         pi.wave_clear()
         pi.wave_add_generic(flash_500)  # 500 ms flashes
         f500 = pi.wave_create()  # create and save id
         tty_message(str(f500))  # returning 0
 
-        while get_running(6):
-            pi.wave_send_repeat(f500)
-            sleep(.5)
+        # while get_running(6):
+        #     pi.wave_send_repeat(f500)
+        #     sleep(1.8)
             # pass
+
+        pi.wave_send_repeat(f500)
+        sleep(1.8)
 
         pi.wave_tx_stop()  # stop waveform
         pi.wave_clear()  # clear all waveforms
