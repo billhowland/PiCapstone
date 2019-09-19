@@ -16,7 +16,8 @@ script_info = []
 # pin order on display is set by the list order here:
 # pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
 # pin_names = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
-pin_names = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 17, 18, 22, 23, 24, 25, 26, 27, 2, 3, 14, 15, 16, 19, 20, 21]
+# pin_names = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 17, 18, 22, 23, 24, 25, 26, 27, 2, 3, 14, 15, 16, 19, 20, 21]
+pin_names = [4, 10, 9, 8, 11, 7, 5, 6, 12, 13, 17, 18, 22, 23, 24, 25, 26, 27, 2, 3, 14, 15, 16, 19, 20, 21]
 script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 script_names = ["Show Full Configuration", "GPIO Configuration", "Flash LEDs", "Hardware PWM Test", "Strobe LEDs", "Wave Test",
                 "Software PWM LEDs", "Official PIGPIO Wave", "Script 9", "Script 10", "Script 11", "Script 12", "Script 13",
@@ -109,6 +110,7 @@ def get_all_pins(init=False):
 def test_pin(pin):  # sets the test flag...
     idx = get_pin_idx(pin)
     pins[idx]['test'] = True
+    # blink_pin(pin)
 
 
 def get_test(pin):
@@ -150,6 +152,21 @@ def pin_tog(pin):
         elif read_pin(pin) == 1:
             set_pin_out(pin)
             pi.write((pin), 0)
+
+
+def blink_pin(pin):  # Only blinks one pin at a time because each new wave terminates the previous
+    flash_pin = []
+    set_used(pin)
+    set_pin_out(pin)
+    flash_pin.append(pigpio.pulse(1 << (pin), 0,  100000))
+    flash_pin.append(pigpio.pulse(0, 1 << (pin),  100000))
+    # pi.wave_clear()
+    pi.wave_add_generic(flash_pin)  # 500 ms flashes
+    f500 = pi.wave_create()  # create and save id
+    tty_message(str(f500))
+    pi.wave_send_repeat(f500)
+    sleep(.1)
+
 # Inputs:
 
 
@@ -203,7 +220,7 @@ def pud_off(pin):
 
 def tty_message(message):
     (_, _, ttynames) = next(os.walk("/dev/pts"))
-    tty_msg = str.encode("\r\n" + "Msg:> " + message + "\r\n")
+    tty_msg = str.encode("\r\n" + "-> " + message + " <-\r\n")
     for ttyname in ttynames:
         if ttyname != "ptmx":
             tty = os.open("/dev/pts/" + ttyname, os.O_RDWR)
@@ -476,13 +493,13 @@ def script_5():
             for pin in LED_Pins:
                 set_used(pin)
                 pin_out_hi(pin)
-                sleep(.05)
+                sleep(.04)
                 pin_out_low(pin)
                 # sleep(.1)
             for pin in reversed(LED_Pins):
                 set_used(pin)
                 pin_out_hi(pin)
-                sleep(.05)
+                sleep(.04)
                 pin_out_low(pin)
 
         clr_running(5)
@@ -504,23 +521,19 @@ def script_6():
             set_used(pin)
             set_pin_out(pin)
             # create a new flash function
-            flash_500.append(pigpio.pulse(1 << (pin), 0,  100000))
-            flash_500.append(pigpio.pulse(0, 1 << (pin),  100000))
+            flash_500.append(pigpio.pulse(1 << (pin), 0,  10000))
+            flash_500.append(pigpio.pulse(0, 1 << (pin),  10000))
         pi.wave_clear()
         pi.wave_add_generic(flash_500)  # 500 ms flashes
         f500 = pi.wave_create()  # create and save id
         tty_message(str(f500))  # returning 0
 
-        # while get_running(6):
-        #     pi.wave_send_repeat(f500)
-        #     sleep(1.8)
-            # pass
+        while get_running(6):
+            pi.wave_send_repeat(f500)
+            sleep(.18)
 
-        pi.wave_send_repeat(f500)
-        sleep(.1)
-
-        # pi.wave_tx_stop()  # stop waveform
-        # pi.wave_clear()  # clear all waveforms
+        pi.wave_tx_stop()  # stop waveform
+        pi.wave_clear()  # clear all waveforms
         sleep(.25)
         clr_running(6)
         tty_message("Script terminated.")
@@ -579,9 +592,6 @@ def script_8():
     set_pin_out(G1)
     set_pin_out(G2)
 
-    # pi.set_mode(G1, pigpio.OUTPUT)
-    # pi.set_mode(G2, pigpio.OUTPUT)
-
     flash_500 = []  # flash every 500 ms
     flash_100 = []  # flash every 100 ms
 
@@ -597,11 +607,11 @@ def script_8():
 
     pi.wave_add_generic(flash_500)  # 500 ms flashes
     f500 = pi.wave_create()  # create and save id
-    tty_message(str(flash_500))
+    # tty_message(str(flash_500))
 
     pi.wave_add_generic(flash_100)  # 100 ms flashes
     f100 = pi.wave_create()  # create and save id
-    tty_message(str(flash_100))
+    # tty_message(str(flash_100))
 
     pi.wave_send_repeat(f500)
     sleep(4)

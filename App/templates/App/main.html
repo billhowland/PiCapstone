@@ -128,7 +128,9 @@
             </template>
             <template v-if='"{{request.user.username}}"=="pi"'>
               <iframe class="pyterm" src="{{IPB}}"></iframe>
-    	      	<!-- <img class="img" src="/static/css/rp2_pinout.png" alt="RaspPi IO Port" /> -->
+    	      </template>
+            <template v-if='"{{request.user.username}}"=="ex"'>
+              <img class="img" src="/static/css/rp2_pinout.png" alt="RaspPi IO Port" />
     	      </template>
           </div>
 <!-- ----------------------------------------------------------------------------------------------- -->
