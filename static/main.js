@@ -43,7 +43,9 @@ let app = new Vue({
     scrrunning: function(script) {
          return scriptData(scrrunning==True)
     },
+
   // leftcol pin-related methods:
+
     getAllPins: function() {
       const request = fetch('get_all_pins') // Calls get_all_pins in views.py
         .then(response => {

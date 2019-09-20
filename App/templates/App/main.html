@@ -10,14 +10,12 @@
 
       </div>
       <div id='app'>
-      <!-- <div class="header">
-        <h1>Raspberry Pi I/O</h1>
-      </div> -->
+
       <a class="user">User: {{request.user.username}}</a>
       <h1 class="header">Raspberry Pi I/O Controller</h1>
       <a class="ipadd">IP: {{IPX}}</a>
       <a id='logout' href="{% url 'logout' %}"><button class='btn'>Logout</button></a>
-      <!-- <a class="ipadd">IP: {{IPX}}</a> -->
+
         {# ---These here call stuff in main.js-------------------------------------------------------------------------------------------------- #}
 <!-- ----------------------------------------------------------------------------------------------- -->
         	<div class="leftcol">
@@ -123,15 +121,20 @@
           </div>
 <!-- ----------------------------------------------------------------------------------------------- -->
           <div class="rightcol">
-            <template v-if='"{{request.user.username}}"=="bill"'>
-              <iframe class="pyterm" src="{{IP}}"></iframe>
-            </template>
-            <template v-if='"{{request.user.username}}"=="pi"'>
-              <iframe class="pyterm" src="{{IPB}}"></iframe>
+            <template v-if="scripts[19].running==true">
+              -TEST-
     	      </template>
-            <template v-if='"{{request.user.username}}"=="ex"'>
-              <img class="img" src="/static/css/rp2_pinout.png" alt="RaspPi IO Port" />
-    	      </template>
+            <a v-else>
+              <template v-if='"{{request.user.username}}"=="bill"'>
+                <iframe class="pyterm" src="{{IP}}"></iframe>
+              </template>
+              <template v-if='"{{request.user.username}}"=="pi"'>
+                <iframe class="pyterm" src="{{IPB}}"></iframe>
+    	        </template>
+              <template v-if='"{{request.user.username}}"=="ex"'>
+                <img class="img" src="/static/css/rp2_pinout_full.png" alt="RaspPi IO Port" />
+    	        </template>
+            </a>
           </div>
 <!-- ----------------------------------------------------------------------------------------------- -->
         </div>
