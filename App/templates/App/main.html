@@ -120,20 +120,28 @@
             </div>
           </div>
 <!-- ----------------------------------------------------------------------------------------------- -->
-          <div class="rightcol">
+          <div>
             <template v-if="scripts[19].running==true">
-              -TEST-
-    	      </template>
+              <div class="optcol">
+                <div class="radio">
+                  <div class='grid' id='pwm_select'>
+                    -TEST-
+                  </div>
+                </div>
+              </div>
+            </template>
             <a v-else>
-              <template v-if='"{{request.user.username}}"=="bill"'>
-                <iframe class="pyterm" src="{{IP}}"></iframe>
-              </template>
-              <template v-if='"{{request.user.username}}"=="pi"'>
-                <iframe class="pyterm" src="{{IPB}}"></iframe>
-    	        </template>
-              <template v-if='"{{request.user.username}}"=="ex"'>
-                <img class="img" src="/static/css/rp2_pinout_full.png" alt="RaspPi IO Port" />
-    	        </template>
+              <div class="rightcol">
+                <template v-if='"{{request.user.username}}"=="bill"'>
+                  <iframe class="pyterm" src="{{IP}}"></iframe>
+                </template>
+                <template v-if='"{{request.user.username}}"=="pi"'>
+                  <iframe class="pyterm" src="{{IPB}}"></iframe>
+    	          </template>
+                <template v-if='"{{request.user.username}}"=="ex"'>
+                  <img class="img" src="/static/css/rp2_pinout_full.png" alt="RaspPi IO Port" />
+    	          </template>
+              </div>
             </a>
           </div>
 <!-- ----------------------------------------------------------------------------------------------- -->

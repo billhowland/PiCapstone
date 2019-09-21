@@ -31,6 +31,13 @@ background-size: 100% auto;
 	/* gap: 0; */
 }
 
+#pwm_select {
+	display: grid;
+	grid-template-areas: "name set pud inout";
+	grid-template-columns: 65px 110px 160px 105px;
+	/* gap: 0; */
+}
+
 #script_select {
 	display: grid;
 	grid-template-areas: "scriptbtn scr-running";
@@ -268,6 +275,16 @@ background-size: 100% auto;
 .centercol {
 
 	grid-area: center-col;
+	border-style: ridge;
+	border-width: 10px;
+	border-color: darkgray;
+	background: lightgray;
+
+}
+
+.optcol {
+	font-size: 12px;
+	grid-area: left-col;
 	border-style: ridge;
 	border-width: 10px;
 	border-color: darkgray;
