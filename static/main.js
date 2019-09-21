@@ -32,13 +32,13 @@ let app = new Vue({
           return response.json()
         }).then(scriptData => {
           this.scripts = scriptData
-        }).catch(err => console.log(err)) // unexpected character in JSON
+        }).catch(err => console.log(err))
     },
     runscript: function(num) { // was (url)
          const request = fetch('run_script/' + num) // was (url)
-           .then(response => {
-           return response.json()
-         })
+         //   .then(response => {
+         //   return response.json()
+         // })
     },
     scrrunning: function(script) {
          return scriptData(scrrunning==True)
