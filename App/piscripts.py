@@ -743,8 +743,4 @@ def script_20():
         clr_running(20)
     else:
         set_running(20)
-    while get_running(20):
-        pass
-
     sleep(.25)
-    clr_running(20)

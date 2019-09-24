@@ -16,11 +16,11 @@
       <a class="ipadd">IP: {{IPX}}</a>
       <a id='logout' href="{% url 'logout' %}"><button class='btn'>Logout</button></a>
 
-        {# ---These here call stuff in main.js-------------------------------------------------------------------------------------------------- #}
+        {# ---These here call stuff in main.js----------------------------------------------------------------------------------- #}
 <!-- ----------------------------------------------------------------------------------------------- -->
         	<div class="leftcol">
             <div class="radio">
-              <div class='pin' v-for="pin in pins" v-bind:key='pin.name'>
+              <div v-for="pin in pins" v-bind:key='pin.name'>
                 <div class='grid' id='io_select'>
                     <a class='name'>GPIO ${pin.name}</a>
                     <a class='set'>
@@ -42,30 +42,30 @@
 
                     <template> {# v-if="pin.func==1" -Show Alt functions when not set to input #}
                         <a class='col3 center' v-if="pin.func==1">GPIO OUT</a>
-                        <a v-if="pin.name==7 && pin.func==4" class='col3 center col3spi'>SPI0 CS1</a>
-                        <a v-if="pin.name==8 && pin.func==4" class='col3 center col3spi'>SPI0 CS0</a>
-                        <a v-if="pin.name==9 && pin.func==4" class='col3 center col3spi'>SPI0 MISO</a>
-                        <a v-if="pin.name==10 && pin.func==4" class='col3 center col3spi'>SPI0 MOSI</a>
-                        <a v-if="pin.name==11 && pin.func==4" class='col3 center col3spi'>SPI0 SCLK</a>
-                        <a v-if="pin.name==16 && pin.func==4" class='col3 center col3spi'>SPI1 CS0</a>
-                        <a v-if="pin.name==19 && pin.func==4" class='col3 center col3spi'>SPI1 MISO</a>
-                        <a v-if="pin.name==20 && pin.func==4" class='col3 center col3spi'>SPI1 MOSI</a>
-                        <a v-if="pin.name==21 && pin.func==4" class='col3 center col3spi'>SPI1 SCLK</a>
-                        <a v-if="pin.name==14 && pin.func==4" class='col3 center col3serial'>SERIAL0 TX</a>
-                        <a v-if="pin.name==15 && pin.func==4" class='col3 center col3serial'>SERIAL0 RX</a>
-                        <a v-if="pin.name==2 && pin.func==4" class='col3 center col3i2c'>I2C1 SDA</a>
-                        <a v-if="pin.name==3 && pin.func==4" class='col3 center col3i2c'>I2C1 SCL</a>
-                        <a v-if="pin.name==12 && pin.func==4" class='col3 center col3pwm'>PWM0</a>
-                        <a v-if="pin.name==13 && pin.func==4" class='col3 center col3pwm'>PWM1</a>
-                        <a v-if="pin.name==18 && pin.func==2"class='col3 center col3pwm'>PWM0</a>
-                        <a v-if="pin.name==19 && pin.func==2"class='col3 center col3pwm'>PWM1</a>
+                        <a v-show="pin.name==7 && pin.func==4" class='col3 center col3spi'>SPI0 CS1</a>
+                        <a v-show="pin.name==8 && pin.func==4" class='col3 center col3spi'>SPI0 CS0</a>
+                        <a v-show="pin.name==9 && pin.func==4" class='col3 center col3spi'>SPI0 MISO</a>
+                        <a v-show="pin.name==10 && pin.func==4" class='col3 center col3spi'>SPI0 MOSI</a>
+                        <a v-show="pin.name==11 && pin.func==4" class='col3 center col3spi'>SPI0 SCLK</a>
+                        <a v-show="pin.name==16 && pin.func==4" class='col3 center col3spi'>SPI1 CS0</a>
+                        <a v-show="pin.name==19 && pin.func==4" class='col3 center col3spi'>SPI1 MISO</a>
+                        <a v-show="pin.name==20 && pin.func==4" class='col3 center col3spi'>SPI1 MOSI</a>
+                        <a v-show="pin.name==21 && pin.func==4" class='col3 center col3spi'>SPI1 SCLK</a>
+                        <a v-show="pin.name==14 && pin.func==4" class='col3 center col3serial'>SERIAL0 TX</a>
+                        <a v-show="pin.name==15 && pin.func==4" class='col3 center col3serial'>SERIAL0 RX</a>
+                        <a v-show="pin.name==2 && pin.func==4" class='col3 center col3i2c'>I2C1 SDA</a>
+                        <a v-show="pin.name==3 && pin.func==4" class='col3 center col3i2c'>I2C1 SCL</a>
+                        <a v-show="pin.name==12 && pin.func==4" class='col3 center col3pwm'>PWM0</a>
+                        <a v-show="pin.name==13 && pin.func==4" class='col3 center col3pwm'>PWM1</a>
+                        <a v-show="pin.name==18 && pin.func==2"class='col3 center col3pwm'>PWM0</a>
+                        <a v-show="pin.name==19 && pin.func==2"class='col3 center col3pwm'>PWM1</a>
                     </template>
 
 
                     {# This is column 4 stuff #}
                   	<template>
-                         <a v-if="pin.func==0 && pin.in_lvl==1" class='linh center'>***HIGH***</a>
-                         <a v-if="pin.func==0 && pin.in_lvl==0" class='linl center'>---LOW---</a>
+                         <a v-show="pin.func==0 && pin.in_lvl==1" class='linh center'>***HIGH***</a>
+                         <a v-show="pin.func==0 && pin.in_lvl==0" class='linl center'>---LOW---</a>
                     </template>
 
                   	<a class='lout' v-if="pin.func==1"> {# 0 = Output #}
@@ -79,30 +79,31 @@
                     </a>
 
                     <template>
-                         <a v-if="pin.name==18 && pin.func==2 && pin.in_lvl==1" class='linh center'>***HIGH***</a>
-                         <a v-if="pin.name==18 && pin.func==2 && pin.in_lvl==0" class='linl center'>---LOW---</a>
-                         <a v-if="pin.name==19 && pin.func==2 && pin.in_lvl==1" class='linh center'>***HIGH***</a>
-                         <a v-if="pin.name==19 && pin.func==2 && pin.in_lvl==0" class='linl center'>---LOW---</a>
-                         <a v-if="pin.name==12 && pin.func==4 && pin.in_lvl==1" class='linh center'>***HIGH***</a>
-                         <a v-if="pin.name==12 && pin.func==4 && pin.in_lvl==0" class='linl center'>---LOW---</a>
-                         <a v-if="pin.name==13 && pin.func==4 && pin.in_lvl==1" class='linh center'>***HIGH***</a>
-                         <a v-if="pin.name==13 && pin.func==4 && pin.in_lvl==0" class='linl center'>---LOW---</a>
+                        <!-- computed properties -->
+                         <a v-show="pin.name==18 && pin.func==2 && pin.in_lvl==1" class='linh center'>***HIGH***</a>
+                         <a v-show="pin.name==18 && pin.func==2 && pin.in_lvl==0" class='linl center'>---LOW---</a>
+                         <a v-show="pin.name==19 && pin.func==2 && pin.in_lvl==1" class='linh center'>***HIGH***</a>
+                         <a v-show="pin.name==19 && pin.func==2 && pin.in_lvl==0" class='linl center'>---LOW---</a>
+                         <a v-show="pin.name==12 && pin.func==4 && pin.in_lvl==1" class='linh center'>***HIGH***</a>
+                         <a v-show="pin.name==12 && pin.func==4 && pin.in_lvl==0" class='linl center'>---LOW---</a>
+                         <a v-show="pin.name==13 && pin.func==4 && pin.in_lvl==1" class='linh center'>***HIGH***</a>
+                         <a v-show="pin.name==13 && pin.func==4 && pin.in_lvl==0" class='linl center'>---LOW---</a>
                     </template>
 
                     <template>
-                         <a v-if="pin.name==7 && pin.func==4" class='lina center' >-- SPI Bus 0, CS1 --</a> {# 4 = ALT0 #}
-                         <a v-if="pin.name==8 && pin.func==4" class='lina center' >-- SPI Bus 0, CS0 --</a>
-                         <a v-if="pin.name==9 && pin.func==4" class='lina center' >-- SPI Bus 0, MISO --</a>
-                         <a v-if="pin.name==10 && pin.func==4" class='lina center' >-- SPI Bus 0, MOSI --</a>
-                         <a v-if="pin.name==11 && pin.func==4" class='lina center' >-- SPI Bus 0, SCLK --</a>
-                         <a v-if="pin.name==16 && pin.func==4" class='lina center' >-- SPI Bus 1, CS0 --</a>
-                         <a v-if="pin.name==19 && pin.func==4" class='lina center' >-- SPI Bus 1, MISO --</a>
-                         <a v-if="pin.name==20 && pin.func==4" class='lina center' >-- SPI Bus 1, MOSI --</a>
-                         <a v-if="pin.name==21 && pin.func==4" class='lina center' >-- SPI Bus 1, SCLK --</a>
-                         <a v-if="pin.name==14 && pin.func==4" class='lina center' >-- RS232 Tx on J3 Pin 2 --</a>
-                         <a v-if="pin.name==15 && pin.func==4" class='lina center' >-- RS232 Rx on J3 Pin 3 --</a>
-                         <a v-if="pin.name==2 && pin.func==4" class='lina center' >-- I2C Data on J1 Pin 2 --</a>
-                         <a v-if="pin.name==3 && pin.func==4" class='lina center' >-- I2C Clock on J1 Pin 3 --</a>
+                         <a v-show="pin.name==7 && pin.func==4" class='lina center' >-- SPI Bus 0, CS1 --</a> {# 4 = ALT0 #}
+                         <a v-show="pin.name==8 && pin.func==4" class='lina center' >-- SPI Bus 0, CS0 --</a>
+                         <a v-show="pin.name==9 && pin.func==4" class='lina center' >-- SPI Bus 0, MISO --</a>
+                         <a v-show="pin.name==10 && pin.func==4" class='lina center' >-- SPI Bus 0, MOSI --</a>
+                         <a v-show="pin.name==11 && pin.func==4" class='lina center' >-- SPI Bus 0, SCLK --</a>
+                         <a v-show="pin.name==16 && pin.func==4" class='lina center' >-- SPI Bus 1, CS0 --</a>
+                         <a v-show="pin.name==19 && pin.func==4" class='lina center' >-- SPI Bus 1, MISO --</a>
+                         <a v-show="pin.name==20 && pin.func==4" class='lina center' >-- SPI Bus 1, MOSI --</a>
+                         <a v-show="pin.name==21 && pin.func==4" class='lina center' >-- SPI Bus 1, SCLK --</a>
+                         <a v-show="pin.name==14 && pin.func==4" class='lina center' >-- RS232 Tx on J3 Pin 2 --</a>
+                         <a v-show="pin.name==15 && pin.func==4" class='lina center' >-- RS232 Rx on J3 Pin 3 --</a>
+                         <a v-show="pin.name==2 && pin.func==4" class='lina center' >-- I2C Data on J1 Pin 2 --</a>
+                         <a v-show="pin.name==3 && pin.func==4" class='lina center' >-- I2C Clock on J1 Pin 3 --</a>
 
                     </template>
                 </div>
@@ -120,17 +121,18 @@
             </div>
           </div>
 <!-- ----------------------------------------------------------------------------------------------- -->
-          <div>
-            <a v-if="scripts[19].running==true">
-              <!-- <div class="optcol">
+            <b v-show="scripts[19].running">
+              <div class="optcol">
                 <div class="radio">
-                  <div class='grid' id='pwm_select'>
-                    - TEST -
+                  <div v-for="pin in pins" v-bind:key='pin.name'>
+                    <div class='grid' id='pwm_select'>
+                      <a class='pwmname'>GPIO ${pin.name}</a>
+                    </div>
                   </div>
                 </div>
-              </div> -->
-            </a>
-            <a v-if="scripts[19].running==false">
+              </div>
+            </b>
+            <a v-show="!scripts[19].running">
               <div class="rightcol">
                 <template v-if='"{{request.user.username}}"=="bill"'>
                   <iframe class="pyterm" src="{{IP}}"></iframe>
@@ -143,7 +145,6 @@
     	          </template>
               </div>
             </a>
-          </div>
 <!-- ----------------------------------------------------------------------------------------------- -->
         </div>
       <script src="static/vue.js"></script>
