@@ -126,7 +126,9 @@
                 <div class="radio">
                   <div v-for="pin in pins" v-bind:key='pin.name'>
                     <div class='grid' id='pwm_select'>
-                      <a class='pwmname'>GPIO ${pin.name}</a>
+                      <a v-if="pin.func==2 && pin.name==18" class="pwmname">GPIO ${pin.name}
+                        <b class="pwmfreq">
+                          <input type="number" name="Freq" min="0" max="30000000"></a>
                     </div>
                   </div>
                 </div>
