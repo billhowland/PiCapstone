@@ -21,7 +21,7 @@ pin_names = [4, 10, 9, 8, 11, 7, 5, 6, 12, 13, 26, 25, 27, 24, 23, 22, 18, 17, 2
 script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 script_names = ["Show Full Configuration", "GPIO Configuration", "Flash LEDs", "Hardware PWM Test", "Strobe LEDs", "Wave Test",
                 "Software PWM LEDs", "Official PIGPIO Wave", "Script 9", "Script 10", "Script 11", "Script 12", "Script 13",
-                "Script 14", "Script 15", "Script 16", "Script 17", "Script 18", "BASH Terminal", "More Options"]
+                "Script 14", "Script 15", "Script 16", "Script 17", "Script 18", "Script 19", "More Options"]
 script_urls = ["script1", "script2", "script3", "script4", "script5",
                "script6", "script7", "script8", "script9", "script10", "script11",
                "script12", "script13", "script14", "script15", "script16", "script17", "script18", "script19", "script20"]
@@ -410,6 +410,7 @@ def script_3():
 def script_4():
     if get_running(4):
         clr_running(4)
+        clr_running(20)
     else:
         tty_message("Script 4: PWM test.")
         set_running(4)
@@ -547,8 +548,10 @@ def script_7():
     global pins
     if get_running(7):
         clr_running(7)
+        clr_running(20)
     else:
         set_running(7)
+        set_running(20)
 
         tty_message("Script 7: Software PWM at 20Hz.")
         tty_message("Back -n- Forth...")
@@ -577,6 +580,7 @@ def script_7():
     for pin in LED_Pins:
         pin_out_low(pin)
     clr_running(7)
+    clr_running(20)
     tty_message("Script terminated.")
 
 
@@ -731,11 +735,10 @@ def script_18():
 
 
 def script_19():
-    if get_running(19):
-        clr_running(19)
-    else:
-        set_running(19)
+    set_running(19)
+    tty_message("Script 19 Not Implemented.")
     sleep(.25)
+    clr_running(19)
 
 
 # --script 20---------------------------------------------------------------------------
