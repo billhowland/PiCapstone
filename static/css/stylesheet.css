@@ -32,8 +32,8 @@ background-size: 100% auto;
 
 #pwm_select {
 	display: grid;
-	grid-template-areas: "pwmname pwmfreq two three";
-	grid-template-columns: 65px 110px 160px 105px;
+	grid-template-areas: "pwmname pwmfreq pwmduty";
+	grid-template-columns: 65px 146px 146px;
 }
 
 #script_select {
@@ -70,7 +70,8 @@ background-size: 100% auto;
 .pwmname{
 	grid-area: pwmname;
 	text-align: center;
-	background-color: orange;
+	background-color: #050197;
+	color: white;
 	border-style: outset;
 	border-color: darkgray;
 	font-size: 12px;
@@ -78,6 +79,15 @@ background-size: 100% auto;
 
 .pwmfreq{
 	grid-area: pwmfreq;
+	text-align: center;
+	background-color: darkgray;
+	border-style: outset;
+	border-color: darkgray;
+	font-size: 12px;
+}
+
+.pwmduty{
+	grid-area: pwmduty;
 	text-align: center;
 	background-color: darkgray;
 	border-style: outset;

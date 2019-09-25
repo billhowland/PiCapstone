@@ -27,7 +27,7 @@
                     <input type="radio" v-bind:name="'GPIO'+pin.name" value='0' v-model="pin.func" v-on:change="setPin(pin.name, pin.func)">
                     <label for="in">In</label>
                     <input type="radio" v-bind:name="'GPIO'+pin.name" value='1' v-model="pin.func" v-on:change="setPin(pin.name, pin.func)">
-                    <label for="out">Out</label>
+                    <label for="out">Out</label></a>
                     <a class='iosetb' v-if="pin.func==2">ALT 5
                     <a class='ioset' v-if="pin.func==4">ALT 0</a>
                     {# This is column 3 stuff #}
@@ -40,7 +40,7 @@
                         <label for="off">Off</label></a>
 
 
-                    <template> {# v-if="pin.func==1" -Show Alt functions when not set to input #}
+                    <template>
                         <a class='col3 center' v-if="pin.func==1">GPIO OUT</a>
                         <a v-show="pin.name==7 && pin.func==4" class='col3 center col3spi'>SPI0 CS1</a>
                         <a v-show="pin.name==8 && pin.func==4" class='col3 center col3spi'>SPI0 CS0</a>
@@ -121,32 +121,73 @@
             </div>
           </div>
 <!-- ----------------------------------------------------------------------------------------------- -->
-            <b v-show="scripts[19].running">
+          <c v-show='"{{request.user.username}}"=="bill" && scripts[18].running && !scripts[19].running'>  {# 18 = 19: BASH Terminal is ON #}
+            <div class="rightcol">
+              <iframe class="pyterm" src="{{IP}}"></iframe>
+            </div>
+          </c>
+<!-- ----------------------------------------------------------------------------------------------- -->
+          <b v-show="scripts[19].running">  {# 19 = 20: More Options is ON #}
+<!-- ----------------------------------------------------------------------------------------------- -->
+            <c v-show="scripts[3].running">  {# 3 = 4: Hardware PWM Test is ON #}
               <div class="optcol">
                 <div class="radio">
                   <div v-for="pin in pins" v-bind:key='pin.name'>
                     <div class='grid' id='pwm_select'>
-                      <a v-if="pin.func==2 && pin.name==18" class="pwmname">GPIO ${pin.name}
-                        <b class="pwmfreq">
-                          <input type="number" name="Freq" min="0" max="30000000"></a>
+                      <template v-if="pin.func==2 && pin.name==18">
+                        <a class="pwmname">PWM 0</a>
+                        <b class="pwmfreq">Frequency:
+                          <input type="number" name="Freq0" min="0" max="30000000">
+                        </b>
+                        <b class="pwmduty">Duty Cycle:
+                          <input type="number" name="Duty0" min="0" max="30000000">
+                        </b>
+                      </template>
+                      <template v-if="pin.func==2 && pin.name==19">
+                        <a class="pwmname">PWM 1</a>
+                        <b class="pwmfreq">Frequency:
+                          <input type="number" name="Freq1" min="0" max="30000000">
+                        </b>
+                        <b class="pwmduty">Duty Cycle:
+                          <input type="number" name="Duty1" min="0" max="30000000">
+                        </b>
+                      </template>
+                      <template v-if="pin.func==4 && pin.name==12">
+                        <a class="pwmname">PWM 0</a>
+                        <b class="pwmfreq">Frequency:
+                          <input type="number" name="Freq0" min="0" max="30000000">
+                        </b>
+                        <b class="pwmduty">Duty Cycle:
+                          <input type="number" name="Duty0" min="0" max="30000000">
+                        </b>
+                      </template>
+                      <template v-if="pin.func==4 && pin.name==13">
+                        <a class="pwmname">PWM 1</a>
+                        <b class="pwmfreq">Frequency:
+                          <input type="number" name="Freq1" min="0" max="30000000">
+                        </b>
+                        <b class="pwmduty">Duty Cycle:
+                          <input type="number" name="Duty1" min="0" max="30000000">
+                        </b>
+                      </template>
                     </div>
                   </div>
                 </div>
               </div>
-            </b>
-            <a v-show="!scripts[19].running">
-              <div class="rightcol">
-                <template v-if='"{{request.user.username}}"=="bill"'>
-                  <iframe class="pyterm" src="{{IP}}"></iframe>
-                </template>
-                <template v-if='"{{request.user.username}}"=="pi"'>
-                  <iframe class="pyterm" src="{{IPB}}"></iframe>
-    	          </template>
-                <template v-if='"{{request.user.username}}"!="bill" && "{{request.user.username}}"!="pi"'>
-                  <img class="img" src="/static/css/rp2_pinout_full.png" alt="RaspPi IO Port" />
-    	          </template>
-              </div>
-            </a>
+            </c>  {# END OF 4: Hardware PWM Test is ON #}
+<!-- ----------------------------------------------------------------------------------------------- -->
+</b>  {# END OF 20: More Options is ON #}
+<!-- ----------------------------------------------------------------------------------------------- -->
+          <a v-show="!scripts[19].running && !scripts[18].running">  {# 19 = 20:More Options IS OFF #}
+            <div class="rightcol">
+              <template v-if='"{{request.user.username}}"=="bill" || "{{request.user.username}}"=="pi"'>
+                <iframe class="pyterm" src="{{IPB}}"></iframe>
+    	        </template>
+              <template v-if='"{{request.user.username}}"!="bill" && "{{request.user.username}}"!="pi"'>
+                <img class="img" src="/static/css/rp2_pinout_full.png" alt="RaspPi IO Port" />
+    	        </template>
+            </div>
+          </a>
 <!-- ----------------------------------------------------------------------------------------------- -->
         </div>
       <script src="static/vue.js"></script>
