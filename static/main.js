@@ -15,6 +15,7 @@ let app = new Vue({
     pins: null,
     timer: null,
     scripts: null,
+    hpwms: null,
   },
   mounted: function() {
     this.timer = setInterval(this.getAllPins, 250) //call getAllPins 4 times/sec

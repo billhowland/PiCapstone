@@ -26,6 +26,9 @@ script_urls = ["script1", "script2", "script3", "script4", "script5",
                "script6", "script7", "script8", "script9", "script10", "script11",
                "script12", "script13", "script14", "script15", "script16", "script17", "script18", "script19", "script20"]
 
+hwpm_ports = [0, 1]
+hpwm_fr = 1
+hpwm_dc = 500000
 
 # URL -> View -> Piscript
 
@@ -412,7 +415,7 @@ def script_4():
         clr_running(4)
         clr_running(20)
     else:
-        tty_message("Script 4: PWM test.")
+        tty_message("Script 4: Hardware PWM test.")
         set_running(4)
         set_running(20)
         for pin in pin_names:
@@ -426,6 +429,10 @@ def script_4():
 
         butPin = 17
         exitPin = 25
+
+        # hwpm_ports = [0, 1]
+        # hpwm_fr = [1]
+        # hpwm_dc = [500000]
 
         for pin in pin_names:
             set_not_used(pin)
@@ -444,10 +451,12 @@ def script_4():
         pud_up(exitPin)
 
         set_pin_out(pwmPina)
-        pi.hardware_PWM((pwmPina), 1, 500000)  # 2Hz 50% dutycycle
+        hpwm_fr = 1
+        pi.hardware_PWM((pwmPina), (hpwm_fr), (hpwm_dc))  # 2Hz 50% dutycycle
         sleep(.125)
         set_pin_out(pwmPinc)
-        pi.hardware_PWM((pwmPinc), 2, 500000)  # 2Hz 50% dutycycle
+        hpwm_fr = 3
+        pi.hardware_PWM((pwmPinc), (hpwm_fr), (hpwm_dc))  # 2Hz 50% dutycycle
 
         set_pin_out(pwmPinb)
         pi.set_mode((pwmPinb), pigpio.ALT5)
