@@ -131,37 +131,37 @@
                       <template v-if="pin.func==2 && pin.name==18">
                         <a class="pwmname">PWM 0</a>
                         <b class="pwmfreq">Frequency:
-                          <input type="number" name="Freq0" min="0" max="30000000">
+                          <input type="number" v-bind:name="Freq0" min="0" max="30000000">
                         </b>
                         <b class="pwmduty">Duty Cycle:
-                          <input type="number" name="Duty0" min="0" max="1000000">
+                          <input type="number" v-bind:name="Duty0" min="0" max="1000000">
                         </b>
                       </template>
                       <template v-if="pin.func==2 && pin.name==19">
                         <a class="pwmname">PWM 1</a>
                         <b class="pwmfreq">Frequency:
-                          <input type="number" name="Freq1" min="0" max="30000000">
+                          <input type="number" v-bind:name="Freq1" min="0" max="30000000">
                         </b>
                         <b class="pwmduty">Duty Cycle:
-                          <input type="number" name="Duty1" min="0" max="1000000">
+                          <input type="number" v-bind:name="Duty1" min="0" max="1000000">
                         </b>
                       </template>
                       <template v-if="pin.func==4 && pin.name==12">
                         <a class="pwmname">PWM 0</a>
                         <b class="pwmfreq">Frequency:
-                          <input type="number" name="Freq0" min="0" max="30000000">
+                          <input type="number" v-bind:name="Freq0" min="0" max="30000000">
                         </b>
                         <b class="pwmduty">Duty Cycle:
-                          <input type="number" name="Duty0" min="0" max="1000000">
+                          <input type="number" v-bind:name="Duty0" min="0" max="1000000">
                         </b>
                       </template>
                       <template v-if="pin.func==4 && pin.name==13">
                         <a class="pwmname">PWM 1</a>
                         <b class="pwmfreq">Frequency:
-                          <input type="number" name="Freq1" min="0" max="30000000">
+                          <input type="number" v-bind:name="Freq1" min="0" max="30000000">
                         </b>
                         <b class="pwmduty">Duty Cycle:
-                          <input type="number" name="Duty1" min="0" max="1000000">
+                          <input type="number" v-bind:name="Duty1" min="0" max="1000000">
                         </b>
                       </template>
                     </div>
@@ -178,10 +178,10 @@
                       <template v-if="pin.func==1">
                         <a class="pwmname">GPIO ${pin.name}</a>
                         <b class="pwmfreq">Frequency:
-                          <input type="number" name="'Freq' + pin.name" min="10" max="8000">
+                          <input type="number" v-bind:name="'Freq' + pin.name" min="10" max="8000">
                         </b>
                         <b class="pwmduty">Duty Cycle:
-                          <input type="number" name="'Duty' + pin.name" min="0" max="255">
+                          <input type="number" v-bind:name="'Duty' + pin.name" min="0" max="255">
                         </b>
                       </template>
                     </div>
