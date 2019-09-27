@@ -26,9 +26,11 @@ script_urls = ["script1", "script2", "script3", "script4", "script5",
                "script6", "script7", "script8", "script9", "script10", "script11",
                "script12", "script13", "script14", "script15", "script16", "script17", "script18", "script19", "script20"]
 
-hwpm_ports = [0, 1]
-hpwm_fr = 1
-hpwm_dc = 500000
+
+hpwm0_fr = 1  # 2Hz
+hpwm0_dc = 500000  # 50%
+hpwm1_fr = 1  # 2Hz
+hpwm1_dc = 500000  # 50%
 
 # URL -> View -> Piscript
 
@@ -47,6 +49,14 @@ def get_ip():
 
 def get_pin_idx(pin):
     return pin_names.index(pin)
+
+
+def get_hpwm0():
+    return hpwm0_fr, hpwm0_dc
+
+
+def get_hpwm1():
+    return hpwm1_fr, hpwm1_dc
 
 
 def get_pud(pin):
@@ -429,10 +439,8 @@ def script_4():
 
         butPin = 17
         exitPin = 25
-
-        # hwpm_ports = [0, 1]
-        # hpwm_fr = [1]
-        # hpwm_dc = [500000]
+        pud_up(butPin)  # Button pin set as input w/ pull-up
+        pud_up(exitPin)
 
         for pin in pin_names:
             set_not_used(pin)
@@ -447,16 +455,13 @@ def script_4():
         # pi.set_mode((18), pigpio.ALT5)
         # set_pin_out(pwmPin)  # PWM pin set as output
 
-        pud_up(butPin)  # Button pin set as input w/ pull-up
-        pud_up(exitPin)
-
         set_pin_out(pwmPina)
-        hpwm_fr = 1
-        pi.hardware_PWM((pwmPina), (hpwm_fr), (hpwm_dc))  # 2Hz 50% dutycycle
+        hpwm0_fr = 1
+        pi.hardware_PWM((pwmPina), (hpwm0_fr), (hpwm0_dc))  # 2Hz 50% dutycycle
         sleep(.125)
         set_pin_out(pwmPinc)
-        hpwm_fr = 3
-        pi.hardware_PWM((pwmPinc), (hpwm_fr), (hpwm_dc))  # 2Hz 50% dutycycle
+        hpwm1_fr = 2
+        pi.hardware_PWM((pwmPinc), (hpwm1_fr), (hpwm1_dc))  # 2Hz 50% dutycycle
 
         set_pin_out(pwmPinb)
         pi.set_mode((pwmPinb), pigpio.ALT5)
@@ -501,7 +506,13 @@ def script_5():
         tty_message("Script 5: one LED at a time...")
         tty_message("Back -n- Forth...")
         LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
-        while get_running(5):
+
+        butPin = 17
+        exitPin = 25
+        pud_up(butPin)  # Button pin set as input w/ pull-up
+        pud_up(exitPin)
+
+        while get_running(5) and read_pin(exitPin):
             for pin in LED_Pins:
                 set_used(pin)
                 pin_out_hi(pin)
@@ -529,6 +540,12 @@ def script_6():
         tty_message("Script 6: wave test.")
         flash_500 = []  # flash every 500 ms
         LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
+
+        butPin = 17
+        exitPin = 25
+        pud_up(butPin)  # Button pin set as input w/ pull-up
+        pud_up(exitPin)
+
         for pin in LED_Pins:
             set_used(pin)
             set_pin_out(pin)
@@ -540,7 +557,7 @@ def script_6():
         f500 = pi.wave_create()  # create and save id
         tty_message(str(f500))  # returning 0
 
-        while get_running(6):
+        while get_running(6) and read_pin(exitPin):
             pi.wave_send_repeat(f500)
             sleep(.18)
 
@@ -566,7 +583,12 @@ def script_7():
         tty_message("Back -n- Forth...")
         LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
 
-        while get_running(7):
+        butPin = 17
+        exitPin = 25
+        pud_up(butPin)  # Button pin set as input w/ pull-up
+        pud_up(exitPin)
+
+        while get_running(7) and read_pin(exitPin):
             dc = 1
             for pin in LED_Pins:
                 set_used(pin)

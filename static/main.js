@@ -34,6 +34,18 @@ let app = new Vue({
           this.scripts = scriptData
         }).catch(err => console.log(err))
     },
+    gethpwm_0: function() {
+      const request = fetch('get_hpwm0')
+        .then(response => {
+          return response.json()
+        }).catch(err => console.log(err))
+    },
+    gethpwm_1: function() {
+      const request = fetch('get_hpwm1')
+        .then(response => {
+          return response.json()
+        }).catch(err => console.log(err))
+    },
     runscript: function(num) { // was (url)
          const request = fetch('run_script/' + num) // was (url)
          //   .then(response => {

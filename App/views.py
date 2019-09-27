@@ -146,3 +146,12 @@ def run_script(request, num):
     return HttpResponse('Success')
     # running = True
     # return JsonResponse(running, safe=False)
+
+def get_hpwm0(request):
+    get_hpwm0()
+    return HttpResponse('Success')
+
+
+def get_hpwm1(request):
+    get_hpwm1()
+    return HttpResponse('Success')
