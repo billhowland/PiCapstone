@@ -27,11 +27,6 @@ script_urls = ["script1", "script2", "script3", "script4", "script5",
                "script12", "script13", "script14", "script15", "script16", "script17", "script18", "script19", "script20"]
 
 
-hpwm0_fr = 1  # 2Hz
-hpwm0_dc = 500000  # 50%
-hpwm1_fr = 1  # 2Hz
-hpwm1_dc = 500000  # 50%
-
 # URL -> View -> Piscript
 
 
@@ -51,17 +46,53 @@ def get_pin_idx(pin):
     return pin_names.index(pin)
 
 
-def get_hpwm0():
-    return hpwm0_fr, hpwm0_dc
+def get_hfrq(pin):
+    pin = pins[get_pin_idx(pin)]
+    return pin['hfrq']
 
 
-def get_hpwm1():
-    return hpwm1_fr, hpwm1_dc
+def get_hdc(pin):
+    pin = pins[get_pin_idx(pin)]
+    return pin['hdc']
 
 
 def get_pud(pin):
     pin = pins[get_pin_idx(pin)]
     return pin['pud']
+
+
+def get_frq(pin):
+    frq = pi.get_PWM_frequency(pin)
+    return frq
+
+
+def set_frq(pin, frq):
+    pi.set_PWM_frequency(pin, frq)
+
+
+def get_dc(pin):
+    dc = 0
+    pin = pins[get_pin_idx(pin)]
+    pdc = pin['dc']
+    if pdc:
+        dc = pi.get_PWM_dutycycle(pin)
+    else:
+        pdc = dc
+    return pdc
+
+
+def set_dc(pin, dc):
+    pi.set_PWM_dutycycle(pin, dc)
+
+
+def get_hfrq(pin):
+    pin = pins[get_pin_idx(pin)]
+    return pin['hfrq']
+
+
+def get_hdc(pin):
+    pin = pins[get_pin_idx(pin)]
+    return pin['hdc']
 
 
 def get_used(pin):
@@ -90,6 +121,12 @@ def get_all_pins(init=False):
             test = False
             testing = False
             pud = 'off'
+            frq = 10
+            set_frq((pin), (frq))
+            dc = 0
+            set_dc((pin), (dc))
+            hfrq = 10
+            hdc = 500000
             pin_info.append({
                 'name': pin,
                 'func': func,
@@ -98,12 +135,20 @@ def get_all_pins(init=False):
                 'test': test,
                 'used': used,
                 'testing': testing,
+                'frq': frq,
+                'dc': dc,
+                'hfrq': hfrq,
+                'hdc': hdc,
             })
         else:
             test = get_test(pin)
             testing = get_testing(pin)
             pud = get_pud(pin)
             used = get_used(pin)
+            frq = get_frq(pin)
+            dc = get_dc(pin)
+            hfrq = get_hfrq(pin)
+            hdc = get_hdc(pin)
             pin_info.append({
                 'name': pin,
                 'func': func,
@@ -112,6 +157,10 @@ def get_all_pins(init=False):
                 'test': test,
                 'used': used,
                 'testing': testing,
+                'frq': frq,
+                'dc': dc,
+                'hfrq': hfrq,
+                'hdc': hdc,
             })
 
     pins = pin_info
@@ -436,6 +485,11 @@ def script_4():
         pwmPinb = 18
         pwmPinc = 13
         pwmPind = 19
+
+        hpwm0_fr = 1  # 2Hz
+        hpwm0_dc = 500000  # 50%
+        hpwm1_fr = 1  # 2Hz
+        hpwm1_dc = 500000  # 50%
 
         butPin = 17
         exitPin = 25

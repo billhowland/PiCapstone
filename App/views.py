@@ -6,7 +6,7 @@ from .piscripts import (pin_names, test_pin, script_nums, set_pin_out,
                         pin_out_hi, pin_out_low, pin_tog, set_pin_in, read_pin,
                         pin_use, pud_up, pud_dn, pud_off, get_pud, get_ip, get_test,
                         get_testing, get_used, get_name, get_url, get_running,
-                        do_script)
+                        do_script, get_frq, set_frq, get_dc, set_dc, get_hfrq, get_hdc)
 
 # These come from main.js and call things in piscripts.py:
 
@@ -70,6 +70,42 @@ def gpused(request, pin):
     get_used(pin)
     return JsonResponse(used, safe=False)
 
+# --
+
+def gphdc(request, pin):
+
+    hdc = get_hdc(pin)
+    return JsonResponse(hdc, safe=False)
+
+
+def gpfrq(request, pin):
+    frq = get_frq(pin)
+    return JsonResponse(frq, safe=False)
+
+
+def gpsfrq(request, pin, frq):
+    set_frq(pin, frq)
+    # frq = {pin: read_pin(pin)}
+    return JsonResponse(frq, safe=False)
+
+
+def gpdc(request, pin):
+    dc = get_dc(pin)
+    return JsonResponse(dc, safe=False)
+
+
+def gpsdc(request, pin):
+    set_dc(pin, dc)
+    return JsonResponse(dc, safe=False)
+
+
+def gphfrq(request, pin):
+
+    hfrq = get_hfrq(pin)
+    return JsonResponse(hfrq, safe=False)
+
+# --
+
 
 def gpnot_used(request, pin):
     used = False
@@ -108,6 +144,10 @@ def get_all_pins(request):  # returns pin data back to the html, does not call
         in_lvl = read_pin(pin)
         pud = get_pud(pin)
         test = get_test(pin)
+        frq = get_frq(pin)
+        dc = get_dc(pin)
+        hfrq = get_hfrq(pin)
+        hdc = get_hdc(pin)
         if not testing:
             if test:
                 pin_tog(pin)
@@ -121,6 +161,10 @@ def get_all_pins(request):  # returns pin data back to the html, does not call
             'test': test,
             'used': used,
             'testing': testing,
+            'frq': frq,
+            'dc': dc,
+            'hfrq': hfrq,
+            'hdc': hdc,
         })
     return JsonResponse(pin_info, safe=False)
 
@@ -147,11 +191,11 @@ def run_script(request, num):
     # running = True
     # return JsonResponse(running, safe=False)
 
-def get_hpwm0(request):
-    get_hpwm0()
-    return HttpResponse('Success')
-
-
-def get_hpwm1(request):
-    get_hpwm1()
-    return HttpResponse('Success')
+# def get_hpwm0(request):
+#     get_hpwm0()
+#     return HttpResponse('Success')
+#
+#
+# def get_hpwm1(request):
+#     get_hpwm1()
+#     return HttpResponse('Success')

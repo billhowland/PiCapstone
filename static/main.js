@@ -34,23 +34,8 @@ let app = new Vue({
           this.scripts = scriptData
         }).catch(err => console.log(err))
     },
-    gethpwm_0: function() {
-      const request = fetch('get_hpwm0')
-        .then(response => {
-          return response.json()
-        }).catch(err => console.log(err))
-    },
-    gethpwm_1: function() {
-      const request = fetch('get_hpwm1')
-        .then(response => {
-          return response.json()
-        }).catch(err => console.log(err))
-    },
     runscript: function(num) { // was (url)
          const request = fetch('run_script/' + num) // was (url)
-         //   .then(response => {
-         //   return response.json()
-         // })
     },
     scrrunning: function(script) {
          return scriptData(scrrunning==True)
@@ -72,9 +57,6 @@ let app = new Vue({
         } else {
           api_root = 'gpout/'
         }
-
-        // const api_root = (pin == 1 ? 'gpin/' : 'gpout/')
-
         const request = fetch(api_root + pin, {
           method: 'POST',
           credentials: 'same-origin',
@@ -141,6 +123,42 @@ let app = new Vue({
         }).then(test => {
            this.getAllPins()
         }).catch(err => console.log(err))
-   }
+   },
+   // path('gpfrq/<int:pin>', views.gpfrq, name='gpfrq'),
+   gpfrq: function(pin, frq) {
+        const request = fetch('gpfrq/' + pin)
+          .then(response => {
+          return response.json()
+        }).then(frq => {
+           this.getAllPins()
+        }).catch(err => console.log(err))
+    },
+    // path('gpsfrq/<int:pin>', views.gpsfrq, name='gpsfrq'),
+    gpsfrq: function(pin, sfrq) {
+         const request = fetch('gpsfrq/' + pin)
+           .then(response => {
+           return response.json()
+         }).then(sfrq => {
+            this.getAllPins()
+         }).catch(err => console.log(err))
+     },
+    // path('gpdc/<int:pin>', views.gpdc, name='gpdc'),
+    gpdc: function(pin, dc) {
+         const request = fetch('gpdc/' + pin)
+           .then(response => {
+           return response.json()
+         }).then(dc => {
+            this.getAllPins()
+         }).catch(err => console.log(err))
+     },
+     // path('gpsdc/<int:pin>', views.gpsdc, name='gpsdc'),
+     gpsdc: function(pin, sdc) {
+          const request = fetch('gpsdc/' + pin)
+            .then(response => {
+            return response.json()
+          }).then(sdc => {
+             this.getAllPins()
+          }).catch(err => console.log(err))
+     }
   }
 })

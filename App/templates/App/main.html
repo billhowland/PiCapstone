@@ -132,7 +132,7 @@
                         <a class="pwmname">PWM 0</a>
                         <b class="pwmfreq">Frequency:
                           <!-- how to call get_hpwm0()? -->
-                          <input type="number" value="gethpwm_0" min="0" max="30000000">
+                          <!-- <input type="number" value="gethpwm_0" min="0" max="30000000"> -->
                         </b>
                         <b class="pwmduty">Duty Cycle:
                           <!-- <input type="number" v-bind:name="Duty0" v-model="Duty0" value="Duty0" min="0" max="1000000"> -->
@@ -179,10 +179,10 @@
                       <template v-if="pin.func==1">
                         <a class="pwmname">GPIO ${pin.name}</a>
                         <b class="pwmfreq">Frequency:
-                          <input type="number" name="'Freq' + pin.name" min="10" max="8000">
+                          <input type="number" name="'GPIO' + pin.name" v-model="pin.frq" min="10" max="8000" v-on:input="gpsfrq(pin.name)">
                         </b>
                         <b class="pwmduty">Duty Cycle:
-                          <input type="number" name="'Duty' + pin.name" min="0" max="255">
+                          <input type="number" name="'GPIO' + pin.name" v-model="pin.dc" min="0" max="255" v-on:input="gpsdc(pin.name)">
                         </b>
                       </template>
                     </div>
