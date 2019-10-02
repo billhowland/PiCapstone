@@ -1,4 +1,4 @@
-from .piscripts import (get_all_pins, get_scripts, pin_names, script_2)
+from .piscripts import (get_all_pins, get_scripts, script_2)
 import pigpio
 pi = pigpio.pi()
 init = True
@@ -21,11 +21,9 @@ def main():
     for pin in ser_Pins:
         pi.set_mode((pin), pigpio.ALT0)
 
-
     i2c_Pins = [2, 3]
     for pin in i2c_Pins:
         pi.set_mode((pin), pigpio.ALT0)
-
 
     pins = get_all_pins(init)
     scripts = get_scripts(init)

@@ -3,7 +3,7 @@ from time import sleep
 import socket
 # Daemon must be started FIRST!:
 os.system("sudo pigpiod")
-import pigpio
+import pigpio  # NOT an error, DO NOT MOVE!
 pi = pigpio.pi()
 os.system('gotty --config "/home/pi/.gotty" bash &')  # permit writes with -w
 os.system('gotty --config "/home/pi/.gotty9001" cat &')
@@ -18,13 +18,23 @@ script_info = []
 # pin_names = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
 # pin_names = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 17, 18, 22, 23, 24, 25, 26, 27, 2, 3, 14, 15, 16, 19, 20, 21]
 pin_names = [4, 10, 9, 8, 11, 7, 5, 6, 12, 13, 26, 25, 27, 24, 23, 22, 18, 17, 2, 3, 14, 15, 16, 19, 20, 21]
-script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
-script_names = ["Show Full Configuration", "GPIO Configuration", "Flash LEDs", "Hardware PWM Test", "Strobe LEDs", "Wave Test",
-                "Software PWM LEDs", "Official PIGPIO Wave", "Script 9", "Script 10", "Script 11", "Script 12", "Script 13",
-                "Script 14", "Script 15", "Script 16", "Script 17", "Script 18", "Script 19", "More Options"]
+script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+               22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]
+script_names = ["Full Configuration", "GPIO Configuration", "Flash LEDs", "Hardware PWM Test",
+                "Strobe LEDs", "Wave Test", "Software PWM LEDs", "Official PIGPIO Wave",
+                "Script 9", "Script 10", "Script 11", "Script 12", "Script 13", "Script 14",
+                "Script 15", "Script 16", "Script 17", "Script 18", "Script 19", "PWM Settings",
+                "Script 21", "Script 22", "Script 23", "Script 24", "Script 25", "Script 26",
+                "Script 27", "Script 28", "Script 29", "Script 30", "Script 31", "Script 32",
+                "Script 33", "Script 34", "Script 35", "Script 36", "Script 37", "Script 38",
+                "Script 39", "Script 40"]
 script_urls = ["script1", "script2", "script3", "script4", "script5",
                "script6", "script7", "script8", "script9", "script10", "script11",
-               "script12", "script13", "script14", "script15", "script16", "script17", "script18", "script19", "script20"]
+               "script12", "script13", "script14", "script15", "script16", "script17",
+               "script18", "script19", "script20", "script21", "script22", "script23",
+               "script24", "script25", "script26", "script27", "script28", "script29",
+               "script30", "script31", "script32", "script33", "script34", "script35",
+               "script36", "script37", "script38", "script39", "script40"]
 
 
 # URL -> View -> Piscript
@@ -56,6 +66,28 @@ def get_hdc(pin):
     return pin['hdc']
 
 
+def set_hfrq(pin, hfrq):
+    idx = get_pin_idx(pin)
+    pins[idx]['hfrq'] = hfrq
+
+
+def set_hdc(pin, hdc):
+    idx = get_pin_idx(pin)
+    pins[idx]['hdc'] = hdc
+
+
+def start_hpwm(pin):
+    hfrq = get_hfrq(pin)
+    hdc = get_hdc(pin)
+    pi.hardware_PWM((pin), (hfrq), (hdc))
+
+
+def stop_hpwm(pin):
+    hfrq = get_hfrq(pin)
+    hdc = 0
+    pi.hardware_PWM((pin), (hfrq), (hdc))
+
+
 def get_pud(pin):
     pin = pins[get_pin_idx(pin)]
     return pin['pud']
@@ -71,28 +103,15 @@ def set_frq(pin, frq):
 
 
 def get_dc(pin):
-    dc = 0
-    pin = pins[get_pin_idx(pin)]
-    pdc = pin['dc']
-    if pdc:
+    try:
         dc = pi.get_PWM_dutycycle(pin)
-    else:
-        pdc = dc
-    return pdc
+    except pigpio.error:
+        dc = 0
+    return dc
 
 
 def set_dc(pin, dc):
     pi.set_PWM_dutycycle(pin, dc)
-
-
-def get_hfrq(pin):
-    pin = pins[get_pin_idx(pin)]
-    return pin['hfrq']
-
-
-def get_hdc(pin):
-    pin = pins[get_pin_idx(pin)]
-    return pin['hdc']
 
 
 def get_used(pin):
@@ -122,9 +141,7 @@ def get_all_pins(init=False):
             testing = False
             pud = 'off'
             frq = 10
-            set_frq((pin), (frq))
             dc = 0
-            set_dc((pin), (dc))
             hfrq = 10
             hdc = 500000
             pin_info.append({
@@ -248,15 +265,15 @@ def read_pin(pin):
 
 def pin_use(pin):
     return pi.get_mode(pin)
-    # RPi.GPIO #            pigpio #
-    # 0 = GPIO.OUT          0 = pi.INPUT
-    # 1 = GPIO.IN           1 = pi.OUTPUT
-    # 40 = GPIO.SERIAL      2 = pi.ALT5
-    # 41 = GPIO.SPI         3 = pi.ALT4
-    # 42 = GPIO.I2C         4 = pi.ALT0
-    # 43 = GPIO.HARD_PWM    5 = pi.ALT1
-    # -1 = GPIO.UNKNOWN     6 = pi.ALT2
-    #                       7 = pi.ALT3
+    # pigpio #
+    # 0 = pi.INPUT
+    # 1 = pi.OUTPUT
+    # 2 = pi.ALT5
+    # 3 = pi.ALT4
+    # 4 = pi.ALT0
+    # 5 = pi.ALT1
+    # 6 = pi.ALT2
+    # 7 = pi.ALT3
 
 # pull_up_down
 
@@ -348,51 +365,6 @@ def clr_running(scr):
     scripts[scr]['running'] = False
 
 
-def do_script(num):
-    # script_funcs[num]
-
-    if num == 1:
-        script_1()
-    elif num == 2:
-        script_2()
-    elif num == 3:
-        script_3()
-    elif num == 4:
-        script_4()
-    elif num == 5:
-        script_5()
-    elif num == 6:
-        script_6()
-    elif num == 7:
-        script_7()
-    elif num == 8:
-        script_8()
-    elif num == 9:
-        script_9()
-    elif num == 10:
-        script_10()
-    elif num == 11:
-        script_11()
-    elif num == 12:
-        script_12()
-    elif num == 13:
-        script_13()
-    elif num == 14:
-        script_14()
-    elif num == 15:
-        script_15()
-    elif num == 16:
-        script_16()
-    elif num == 17:
-        script_17()
-    elif num == 18:
-        script_18()
-    elif num == 19:
-        script_19()
-    elif num == 20:
-        script_20()
-
-
 # --script 1----------------------------------------------------------------------------
 
 
@@ -413,7 +385,6 @@ def script_1():
 
     Pushbutton_Pins = [18, 17, 23, 22, 27, 24, 25, 13, 26]
     for pin in Pushbutton_Pins:
-        set_used(pin)
         pud_up(pin)
 
     sleep(0.25)
@@ -488,7 +459,7 @@ def script_4():
 
         hpwm0_fr = 1  # 2Hz
         hpwm0_dc = 500000  # 50%
-        hpwm1_fr = 1  # 2Hz
+        hpwm1_fr = 2  # 4Hz
         hpwm1_dc = 500000  # 50%
 
         butPin = 17
@@ -503,28 +474,21 @@ def script_4():
         for pin in used_Pins:
             set_used(pin)
 
-        # h = ()
-        # h2 = ()
-        # Pin Setup:
-        # pi.set_mode((18), pigpio.ALT5)
-        # set_pin_out(pwmPin)  # PWM pin set as output
+        set_pin_out(pwmPinb)
+        set_hfrq(pwmPinb, hpwm0_fr)
+        set_hdc(pwmPinb, hpwm0_dc)
+        start_hpwm(pwmPinb)
+
+        sleep(.125)
+        set_pin_out(pwmPind)
+        set_hfrq(pwmPind, hpwm1_fr)
+        set_hdc(pwmPind, hpwm1_dc)
+        start_hpwm(pwmPind)
 
         set_pin_out(pwmPina)
-        hpwm0_fr = 1
-        pi.hardware_PWM((pwmPina), (hpwm0_fr), (hpwm0_dc))  # 2Hz 50% dutycycle
-        sleep(.125)
+        pi.set_mode((pwmPina), pigpio.ALT0)
         set_pin_out(pwmPinc)
-        hpwm1_fr = 2
-        pi.hardware_PWM((pwmPinc), (hpwm1_fr), (hpwm1_dc))  # 2Hz 50% dutycycle
-
-        set_pin_out(pwmPinb)
-        pi.set_mode((pwmPinb), pigpio.ALT5)
-        set_pin_out(pwmPind)
-        pi.set_mode((pwmPind), pigpio.ALT5)
-        # h2 = pi.i2c_open(1, 0x53)  # open device at address 0x53 on bus 1, pins 2 & 3
-        # h = pi.spi_open(1, 50000, 3)  # This one works, pins 7, 8, 9, 10, 11
-        # pi.spi_write(h, b'a')
-        # spi_data = pi.spi_read(h, 1)
+        pi.set_mode((pwmPinc), pigpio.ALT0)
 
         tty_message("Hardware PWM on pins 12, 13, 18, 19")
         tty_message("Press GPIO 25 to terminate")
@@ -533,10 +497,8 @@ def script_4():
         while get_running(4) and read_pin(exitPin):
             pass
 
-        pi.hardware_PWM((pwmPina), 0, 500000)
-        pi.hardware_PWM((pwmPinc), 0, 500000)
-        # pi.spi_close(h)
-        # pi.i2c_close(h2)
+        stop_hpwm(pwmPina)
+        stop_hpwm(pwmPinc)
 
         pud_up(pwmPinb)
         pud_up(pwmPinc)
@@ -636,6 +598,9 @@ def script_7():
         tty_message("Script 7: Software PWM at 20Hz.")
         tty_message("Back -n- Forth...")
         LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
+        for pin in LED_Pins:
+            set_used(pin)
+            pi.set_PWM_frequency((pin), 10)
 
         butPin = 17
         exitPin = 25
@@ -645,8 +610,6 @@ def script_7():
         while get_running(7) and read_pin(exitPin):
             dc = 1
             for pin in LED_Pins:
-                set_used(pin)
-                pi.set_PWM_frequency((pin), 10)
                 pi.set_PWM_dutycycle((pin), (dc))  # PWM 1/2 on
                 dc = dc + 31
                 if (dc == 256):
@@ -654,8 +617,6 @@ def script_7():
                 sleep(.15)
             dc = 1
             for pin in reversed(LED_Pins):
-                set_used(pin)
-                pi.set_PWM_frequency((pin), 10)
                 pi.set_PWM_dutycycle((pin), (dc))  # PWM 1/2 on
                 dc = dc + 31
                 if (dc == 256):
@@ -835,3 +796,291 @@ def script_20():
     else:
         set_running(20)
     sleep(.25)
+
+
+# --script 21---------------------------------------------------------------------------
+
+
+def script_21():
+    set_running(21)
+    tty_message("Script 21 Not Implemented.")
+    sleep(.25)
+    clr_running(21)
+
+
+# --script 22---------------------------------------------------------------------------
+
+
+def script_22():
+    set_running(22)
+    tty_message("Script 22 Not Implemented.")
+    sleep(.25)
+    clr_running(22)
+
+
+# --script 23---------------------------------------------------------------------------
+
+
+def script_23():
+    set_running(23)
+    tty_message("Script 23 Not Implemented.")
+    sleep(.25)
+    clr_running(23)
+
+
+# --script 24---------------------------------------------------------------------------
+
+
+def script_24():
+    set_running(24)
+    tty_message("Script 24 Not Implemented.")
+    sleep(.25)
+    clr_running(24)
+
+
+# --script 25---------------------------------------------------------------------------
+
+
+def script_25():
+    set_running(25)
+    tty_message("Script 25 Not Implemented.")
+    sleep(.25)
+    clr_running(25)
+
+
+# --script 26---------------------------------------------------------------------------
+
+
+def script_26():
+    set_running(26)
+    tty_message("Script 26 Not Implemented.")
+    sleep(.25)
+    clr_running(26)
+
+
+# --script 27---------------------------------------------------------------------------
+
+
+def script_27():
+    set_running(27)
+    tty_message("Script 27 Not Implemented.")
+    sleep(.25)
+    clr_running(27)
+
+
+# --script 28---------------------------------------------------------------------------
+
+
+def script_28():
+    set_running(28)
+    tty_message("Script 28 Not Implemented.")
+    sleep(.25)
+    clr_running(28)
+
+
+# --script 29---------------------------------------------------------------------------
+
+
+def script_29():
+    set_running(29)
+    tty_message("Script 29 Not Implemented.")
+    sleep(.25)
+    clr_running(29)
+
+
+# --script 30---------------------------------------------------------------------------
+
+
+def script_30():
+    set_running(30)
+    tty_message("Script 30 Not Implemented.")
+    sleep(.25)
+    clr_running(30)
+
+
+# --script 31---------------------------------------------------------------------------
+
+
+def script_31():
+    set_running(31)
+    tty_message("Script 31 Not Implemented.")
+    sleep(.25)
+    clr_running(31)
+
+
+# --script 32---------------------------------------------------------------------------
+
+
+def script_32():
+    set_running(32)
+    tty_message("Script 32 Not Implemented.")
+    sleep(.25)
+    clr_running(32)
+
+
+# --script 33---------------------------------------------------------------------------
+
+
+def script_33():
+    set_running(33)
+    tty_message("Script 33 Not Implemented.")
+    sleep(.25)
+    clr_running(33)
+
+
+# --script 34---------------------------------------------------------------------------
+
+
+def script_34():
+    set_running(34)
+    tty_message("Script 34 Not Implemented.")
+    sleep(.25)
+    clr_running(34)
+
+
+# --script 35---------------------------------------------------------------------------
+
+
+def script_35():
+    set_running(35)
+    tty_message("Script 35 Not Implemented.")
+    sleep(.25)
+    clr_running(35)
+
+
+# --script 36---------------------------------------------------------------------------
+
+
+def script_36():
+    set_running(36)
+    tty_message("Script 36 Not Implemented.")
+    sleep(.25)
+    clr_running(36)
+
+
+# --script 37---------------------------------------------------------------------------
+
+
+def script_37():
+    set_running(37)
+    tty_message("Script 37 Not Implemented.")
+    sleep(.25)
+    clr_running(37)
+
+
+# --script 38---------------------------------------------------------------------------
+
+
+def script_38():
+    set_running(38)
+    tty_message("Script 38 Not Implemented.")
+    sleep(.25)
+    clr_running(38)
+
+
+# --script 39---------------------------------------------------------------------------
+
+
+def script_39():
+    set_running(39)
+    tty_message("Script 39 Not Implemented.")
+    sleep(.25)
+    clr_running(39)
+
+
+# --script 40---------------------------------------------------------------------------
+
+
+def script_40():
+    set_running(40)
+    tty_message("Script 40 Not Implemented.")
+    sleep(.25)
+    clr_running(40)
+
+
+# -------------------------------------------------------------------------------------
+
+
+def do_script(num):
+    # script_funcs[num]
+
+    if num == 1:
+        script_1()
+    elif num == 2:
+        script_2()
+    elif num == 3:
+        script_3()
+    elif num == 4:
+        script_4()
+    elif num == 5:
+        script_5()
+    elif num == 6:
+        script_6()
+    elif num == 7:
+        script_7()
+    elif num == 8:
+        script_8()
+    elif num == 9:
+        script_9()
+    elif num == 10:
+        script_10()
+    elif num == 11:
+        script_11()
+    elif num == 12:
+        script_12()
+    elif num == 13:
+        script_13()
+    elif num == 14:
+        script_14()
+    elif num == 15:
+        script_15()
+    elif num == 16:
+        script_16()
+    elif num == 17:
+        script_17()
+    elif num == 18:
+        script_18()
+    elif num == 19:
+        script_19()
+    elif num == 20:
+        script_20()
+    elif num == 21:
+        script_21()
+    elif num == 22:
+        script_22()
+    elif num == 23:
+        script_23()
+    elif num == 24:
+        script_24()
+    elif num == 25:
+        script_25()
+    elif num == 26:
+        script_26()
+    elif num == 27:
+        script_27()
+    elif num == 28:
+        script_28()
+    elif num == 29:
+        script_29()
+    elif num == 30:
+        script_30()
+    elif num == 31:
+        script_31()
+    elif num == 32:
+        script_32()
+    elif num == 33:
+        script_33()
+    elif num == 34:
+        script_34()
+    elif num == 35:
+        script_35()
+    elif num == 36:
+        script_36()
+    elif num == 37:
+        script_37()
+    elif num == 38:
+        script_38()
+    elif num == 39:
+        script_39()
+    elif num == 40:
+        script_40()

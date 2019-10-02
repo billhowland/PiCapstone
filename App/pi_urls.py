@@ -22,4 +22,8 @@ urlpatterns = [
     path('gpsfrq/<int:pin>', views.gpsfrq, name='gpsfrq'),
     path('gpdc/<int:pin>', views.gpdc, name='gpdc'),
     path('gpsdc/<int:pin>', views.gpsdc, name='gpsdc'),
+    path('gphdc/<int:pin>', views.gphdc, name='gphdc'),
+    path('gphfrq/<int:pin>', views.gphfrq, name='gphfrq'),
+    path('gpshdc/<int:pin>', views.gpshdc, name='gpshdc'),
+    path('gpshfrq/<int:pin>', views.gpshfrq, name='gpshfrq'),
 ]

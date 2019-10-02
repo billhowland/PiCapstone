@@ -1,12 +1,14 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
-from .pimain import *
 from .piscripts import (pin_names, test_pin, script_nums, set_pin_out,
                         pin_out_hi, pin_out_low, pin_tog, set_pin_in, read_pin,
                         pin_use, pud_up, pud_dn, pud_off, get_pud, get_ip, get_test,
                         get_testing, get_used, get_name, get_url, get_running,
-                        do_script, get_frq, set_frq, get_dc, set_dc, get_hfrq, get_hdc)
+                        do_script, get_frq, set_frq, get_dc, set_dc, get_hfrq, get_hdc,
+                        set_hdc, set_hfrq)
+
+from .pimain import *
 
 # These come from main.js and call things in piscripts.py:
 
@@ -72,6 +74,7 @@ def gpused(request, pin):
 
 # --
 
+
 def gphdc(request, pin):
 
     hdc = get_hdc(pin)
@@ -89,14 +92,25 @@ def gpsfrq(request, pin, frq):
     return JsonResponse(frq, safe=False)
 
 
+def gpshfrq(request, pin, hfrq):
+    set_hfrq(pin, hfrq)
+    # frq = {pin: read_pin(pin)}
+    return JsonResponse(hfrq, safe=False)
+
+
 def gpdc(request, pin):
     dc = get_dc(pin)
     return JsonResponse(dc, safe=False)
 
 
-def gpsdc(request, pin):
+def gpsdc(request, pin, dc):
     set_dc(pin, dc)
     return JsonResponse(dc, safe=False)
+
+
+def gpshdc(request, pin, hdc):
+    set_hdc(pin, hdc)
+    return JsonResponse(hdc, safe=False)
 
 
 def gphfrq(request, pin):
@@ -188,8 +202,7 @@ def get_scripts(request):
 def run_script(request, num):
     do_script(num)
     return HttpResponse('Success')
-    # running = True
-    # return JsonResponse(running, safe=False)
+
 
 # def get_hpwm0(request):
 #     get_hpwm0()
