@@ -13,15 +13,18 @@ pins = []
 pin_info = []
 scripts = []
 script_info = []
+pwms = []
+pwm_info = []
 # pin order on display is set by the list order here:
 # pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
 # pin_names = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
 # pin_names = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 17, 18, 22, 23, 24, 25, 26, 27, 2, 3, 14, 15, 16, 19, 20, 21]
 pin_names = [4, 10, 9, 8, 11, 7, 5, 6, 12, 13, 26, 25, 27, 24, 23, 22, 18, 17, 2, 3, 14, 15, 16, 19, 20, 21]
+pwm_names = [4, 10, 9, 8, 11, 7, 5, 6, 12, 13, 26, 25, 27, 24, 23, 22, 18, 17, 2, 3, 14, 15, 16, 19, 20, 21]
 script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
                22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]
 script_names = ["Full Configuration", "GPIO Configuration", "Flash LEDs", "Hardware PWM Test",
-                "Strobe LEDs", "Wave Test", "Software PWM LEDs", "Official PIGPIO Wave",
+                "Strobe LEDs", "Wave Test", "Software PWM LEDs", "Wave Example",
                 "Script 9", "Script 10", "Script 11", "Script 12", "Script 13", "Script 14",
                 "Script 15", "Script 16", "Script 17", "Script 18", "Script 19", "PWM Settings",
                 "Script 21", "Script 22", "Script 23", "Script 24", "Script 25", "Script 26",
@@ -340,6 +343,10 @@ def get_scr_idx(scr):
     return script_nums.index(scr)
 
 
+def get_pwm_idx(pwm):
+    return pwm_names.index(pwm)
+
+
 def get_running(scr):
     scr = scripts[get_scr_idx(scr)]
     return scr['running']
@@ -353,6 +360,11 @@ def get_name(scr):
 def get_url(scr):
     scr = script_urls[get_scr_idx(scr)]
     return scr
+
+
+def get_pwm(pwm):
+    pwm = pwm_names[get_pwm_idx(pwm)]
+    return pwm
 
 
 def set_running(scr):

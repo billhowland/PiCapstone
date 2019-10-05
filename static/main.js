@@ -1,5 +1,6 @@
 // gpio radio button event listeners
 const pins = document.getElementsByName('pins')
+const pwms = document.getElementsByName('pwms')
 const scripts = document.getElementsByName('scripts')
 const csrftoken = Cookies.get('csrftoken')
 const headers = new Headers({
@@ -15,12 +16,14 @@ let app = new Vue({
     pins: null,
     timer: null,
     scripts: null,
+    pwms: null,
   },
   mounted: function() {
     this.timer = setInterval(this.getAllPins, 250) //call getAllPins 4 times/sec
     this.timer = setInterval(this.getScripts, 250)
     this.getAllPins()
     this.getScripts()
+    this.getPwms()
   },
   beforeDestroy: function() {
     clearInterval(this.timer)
@@ -49,6 +52,14 @@ let app = new Vue({
           return response.json()
         }).then(pinData => {
           this.pins = pinData.filter(pin => pin.used)
+        }).catch(err => console.log(err))
+    },
+    getPwms: function() {
+      const request = fetch('get_pwms') // Calls get_pwms in views.py
+        .then(response => {
+          return response.json()
+        }).then(pwmData => {
+          this.pwms = pwmData
         }).catch(err => console.log(err))
     },
     setPin: function(pin, func) {

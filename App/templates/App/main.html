@@ -22,7 +22,7 @@
             <div class="radio">
               <div v-for="pin in pins" v-bind:key='pin.name'>
                 <div class='grid' id='io_select'>
-                    <a class='name'>GPIO ${pin.name}</a>
+                    <a class='name'>${pin.name}</a>
                     <a class='set'>
                     <input type="radio" v-bind:name="'GPIO'+pin.name" value='0' v-model="pin.func" v-on:change="setPin(pin.name, pin.func)">
                     <label for="in">In</label>
@@ -64,12 +64,12 @@
 
                     {# This is column 4 stuff #}
                   	<template>
-                         <a v-show="pin.func==0 && pin.in_lvl==1" class='linh center'>***HIGH***</a>
-                         <a v-show="pin.func==0 && pin.in_lvl==0" class='linl center'>---LOW---</a>
+                         <a v-show="pin.func==0 && pin.in_lvl==1" class='linh center'>---High---</a>
+                         <a v-show="pin.func==0 && pin.in_lvl==0" class='linl center'>---Low---</a>
                     </template>
 
                   	<a class='lout' v-if="pin.func==1"> {# 0 = Output #}
-                         <label>OUT:</label>
+                         <label>Out:</label>
                   		   <input type="radio" v-bind:name="'OUT'+pin.name" value='1' v-model="pin.in_lvl" v-on:change="gphigh(pin.name, pin.high)">
                   		   <label for="Hi">Hi</label>
                   		   <input type="radio" v-bind:name="'OUT'+pin.name" value='0' v-model="pin.in_lvl" v-on:change="gplow(pin.name, pin.low)">
@@ -91,15 +91,15 @@
                     </template>
 
                     <template>
-                         <a v-show="pin.name==7 && pin.func==4" class='lina center' >-- Bus 0, CS1 --</a> {# 4 = ALT0 #}
-                         <a v-show="pin.name==8 && pin.func==4" class='lina center' >-- Bus 0, CS0 --</a>
-                         <a v-show="pin.name==9 && pin.func==4" class='lina center' >-- Bus 0, MISO --</a>
-                         <a v-show="pin.name==10 && pin.func==4" class='lina center' >-- Bus 0, MOSI --</a>
-                         <a v-show="pin.name==11 && pin.func==4" class='lina center' >-- Bus 0, SCLK --</a>
-                         <a v-show="pin.name==16 && pin.func==4" class='lina center' >-- Bus 1, CS0 --</a>
-                         <a v-show="pin.name==19 && pin.func==4" class='lina center' >-- Bus 1, MISO --</a>
-                         <a v-show="pin.name==20 && pin.func==4" class='lina center' >-- Bus 1, MOSI --</a>
-                         <a v-show="pin.name==21 && pin.func==4" class='lina center' >-- Bus 1, SCLK --</a>
+                         <a v-show="pin.name==7 && pin.func==4" class='lina center' >-- CS1 --</a> {# 4 = ALT0 #}
+                         <a v-show="pin.name==8 && pin.func==4" class='lina center' >-- CS0 --</a>
+                         <a v-show="pin.name==9 && pin.func==4" class='lina center' >-- MISO --</a>
+                         <a v-show="pin.name==10 && pin.func==4" class='lina center' >-- MOSI --</a>
+                         <a v-show="pin.name==11 && pin.func==4" class='lina center' >-- SCLK --</a>
+                         <a v-show="pin.name==16 && pin.func==4" class='lina center' >-- J2 Pin 5 --</a>
+                         <a v-show="pin.name==19 && pin.func==4" class='lina center' >-- J2 Pin 2 --</a>
+                         <a v-show="pin.name==20 && pin.func==4" class='lina center' >-- J2 Pin 3 --</a>
+                         <a v-show="pin.name==21 && pin.func==4" class='lina center' >-- J2 Pin 4 --</a>
                          <a v-show="pin.name==14 && pin.func==4" class='lina center' >-- J3 Pin 2 --</a>
                          <a v-show="pin.name==15 && pin.func==4" class='lina center' >-- J3 Pin 3 --</a>
                          <a v-show="pin.name==2 && pin.func==4" class='lina center' >-- J1 Pin 2 --</a>
@@ -137,53 +137,53 @@
             <!-- <c v-show="scripts[6].running">  {# 6 = 7: Software PWM is ON #} -->
               <div class="optcol">
                 <div class="radio">
-                  <div v-for="pin in pins" v-bind:key='pin.name'>
+                  <div v-for="pwm in pwms" v-bind:key='pwm.name'>
                     <div class='grid' id='pwm_select'>
                       <template v-if="pin.func==1">
                         <a class="pwmname">GPIO ${pin.name}</a>
-                        <b class="pwmfreq">Frequency:
-                          <input type="number" name="'GPIO' + pin.name" v-model="pin.frq" min="10" max="8000" v-on:input="gpsfrq(pin.name, sfrq)">
+                        <b class="pwmfreq">Frequency: (${pin.frq})
+                          <input type="number" name="'GPIO' + pin.name" v-model="pin.sfrq" min="10" max="8000" v-on:enter="gpsfrq(pin.name, sfrq)">
                         </b>
-                        <b class="pwmduty">Duty Cycle:
-                          <input type="number" name="'GPIO' + pin.name" v-model="pin.dc" min="0" max="255" v-on:input="gpsdc(pin.name, sdc)">
+                        <b class="pwmduty">Duty Cycle: (${pin.dc})
+                          <input type="number" name="'GPIO' + pin.name" v-model="pin.sdc" min="0" max="255" v-on:enter="gpsdc(pin.name, sdc)">
                         </b>
                       </template>
                       <template v-if="pin.func==2 && pin.name==18">
                         <a class="pwmname">PWM 0</a>
-                        <b class="pwmfreq">Frequency:
-                          <input type="number" name="'GPIO' + pin.name" v-model="pin.frq" min="0" max="30000000" v-on:input="gpshfrq(pin.name, shfrq)">
+                        <b class="pwmfreq">Frequency: (${pin.frq})
+                          <input type="number" name="'GPIO' + pin.name" v-model="pin.shfrq" min="0" max="30000000" v-on:input="gpshfrq(pin.name, shfrq)">
                         </b>
-                        <b class="pwmduty">Duty Cycle:
-                          <input type="number" name="'GPIO' + pin.name" v-model="pin.dc" min="0" max="1000000" v-on:input="gpshdc(pin.name, shdc)">
+                        <b class="pwmduty">Duty Cycle: (${pin.dc})
+                          <input type="number" name="'GPIO' + pin.name" v-model="pin.shdc" min="0" max="1000000" v-on:input="gpshdc(pin.name, shdc)">
                         </b>
                       </template>
                       <template v-if="pin.func==2 && pin.name==19">
                         <a class="pwmname">PWM 1</a>
-                        <b class="pwmfreq">Frequency:
-                          <input type="number" name="'GPIO' + pin.name" v-model="pin.frq" min="0" max="30000000" v-on:input="gpshfrq(pin.name, shfrq)">
+                        <b class="pwmfreq">Frequency: (${pin.frq})
+                          <input type="number" name="'GPIO' + pin.name" v-model="pin.shfrq" min="0" max="30000000" v-on:input="gpshfrq(pin.name, shfrq)">
                         </b>
-                        <b class="pwmduty">Duty Cycle:
-                          <input type="number" name="'GPIO' + pin.name" v-model="pin.dc" min="0" max="1000000" v-on:input="gpshdc(pin.name, shdc)">
+                        <b class="pwmduty">Duty Cycle: (${pin.dc})
+                          <input type="number" name="'GPIO' + pin.name" v-model="pin.shdc" min="0" max="1000000" v-on:input="gpshdc(pin.name, shdc)">
                         </b>
                       </template>
                       <template v-if="pin.func==4 && pin.name==12">
                         <a class="pwmname">PWM 0</a>
-                        <b class="pwmfreq">Frequency:
-                          <input type="number" name="'GPIO' + pin.name" v-model="pin.frq" min="0" max="30000000" v-on:input="gpshfrq(pin.name, shfrq)">
+                        <b class="pwmfreq">Frequency: (${pin.frq})
+                          <input type="number" name="'GPIO' + pin.name" v-model="pin.shfrq" min="0" max="30000000" v-on:input="gpshfrq(pin.name, shfrq)">
                         </b>
-                        <b class="pwmduty">Duty Cycle:
-                          <input type="number" name="'GPIO' + pin.name" v-model="pin.dc" min="0" max="1000000" v-on:input="gpshdc(pin.name, shdc)">
+                        <b class="pwmduty">Duty Cycle: (${pin.dc})
+                          <input type="number" name="'GPIO' + pin.name" v-model="pin.shdc" min="0" max="1000000" v-on:input="gpshdc(pin.name, shdc)">
                         </b>
                       </template>
                       <template v-if="pin.func==4 && pin.name==13">
                         <a class="pwmname">PWM 1</a>
-                        <b class="pwmfreq">Frequency:
+                        <b class="pwmfreq">Frequency: (${pin.frq})
                           <!-- <input type="number" v-bind:name="Freq1" v-model="Freq1" value="Freq1" min="0" max="30000000"> -->
-                          <input type="number" name="'GPIO' + pin.name" v-model="pin.frq" min="0" max="30000000" v-on:input="gpshfrq(pin.name, shfrq)">
+                          <input type="number" name="'GPIO' + pin.name" v-model="pin.shfrq" min="0" max="30000000" v-on:input="gpshfrq(pin.name, shfrq)">
                         </b>
-                        <b class="pwmduty">Duty Cycle:
+                        <b class="pwmduty">Duty Cycle: (${pin.dc})
                           <!-- <input type="number" v-bind:name="Duty1" v-model="Duty1" value="Duty1" min="0" max="1000000"> -->
-                          <input type="number" name="'GPIO' + pin.name" v-model="pin.dc" min="0" max="1000000" v-on:input="gpshdc(pin.name, shdc)">
+                          <input type="number" name="'GPIO' + pin.name" v-model="pin.shdc" min="0" max="1000000" v-on:input="gpshdc(pin.name, shdc)">
                         </b>
                       </template>
                     </div>
