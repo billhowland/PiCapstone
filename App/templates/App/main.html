@@ -136,59 +136,116 @@
 <!-- ----------------------------------------------------------------------------------------------- -->
             <div class="optcol">
               <div class="radio">
-                <div v-for="pwm in pwms" v-bind:key='pwm.name'>
-                    <div class='grid' id='pwm_select'>
-                      <template v-if="pwm.func==1">
-                        <a class="pwmname">GPIO ${pwm.name}</a>
-                        <b class="pwmfreq">Frequency: (${pwm.frq})
-                          <input type="number" name="'GPIO' + pwm.name" v-model="pwm.sfrq" min="10" max="8000" v-on:enter="gpsfrq(pwm.name, sfrq)">
-                        </b>
-                        <b class="pwmduty">Duty Cycle: (${pwm.dc})
-                          <input type="number" name="'GPIO' + pwm.name" v-model="pwm.sdc" min="0" max="255" v-on:enter="gpsdc(pwm.name, sdc)">
-                        </b>
-                      </template>
-                      <template v-if="pwm.func==2 && pwm.name==18">
-                        <a class="pwmname">PWM 0</a>
-                        <b class="pwmfreq">Frequency: (${pwm.frq})
-                          <input type="number" name="'GPIO' + pwm.name" v-model="pwm.shfrq" min="0" max="30000000" v-on:enter="gpshfrq(pwm.name, shfrq)">
-                        </b>
-                        <b class="pwmduty">Duty Cycle: (${pin.dc})
-                          <input type="number" name="'GPIO' + pwm.name" v-model="pwm.shdc" min="0" max="1000000" v-on:enter="gpshdc(pwm.name, shdc)">
-                        </b>
-                      </template>
-                      <template v-if="pwm.func==2 && pwm.name==19">
-                        <a class="pwmname">PWM 1</a>
-                        <b class="pwmfreq">Frequency: (${pwm.frq})
-                          <input type="number" name="'GPIO' + pwm.name" v-model="pwm.shfrq" min="0" max="30000000" v-on:enter="gpshfrq(pwm.name, shfrq)">
-                        </b>
-                        <b class="pwmduty">Duty Cycle: (${pwm.dc})
-                          <input type="number" name="'GPIO' + pwm.name" v-model="pwm.shdc" min="0" max="1000000" v-on:enter="gpshdc(pwm.name, shdc)">
-                        </b>
-                      </template>
-                      <template v-if="pwm.func==4 && pwm.name==12">
-                        <a class="pwmname">PWM 0</a>
-                        <b class="pwmfreq">Frequency: (${pwm.frq})
-                          <input type="number" name="'GPIO' + pwm.name" v-model="pwm.shfrq" min="0" max="30000000" v-on:enter="gpshfrq(pwm.name, shfrq)">
-                        </b>
-                        <b class="pwmduty">Duty Cycle: (${pwm.dc})
-                          <input type="number" name="'GPIO' + pwm.name" v-model="pwm.shdc" min="0" max="1000000" v-on:enter="gpshdc(pwm.name, shdc)">
-                        </b>
-                      </template>
-                      <template v-if="pwm.func==4 && pwm.name==13">
-                        <a class="pwmname">PWM 1</a>
-                        <b class="pwmfreq">Frequency: (${pwm.frq}) -->
-                          <input type="number" v-bind:name="Freq1" v-model="Freq1" value="Freq1" min="0" max="30000000"> -->
-                          <input type="number" name="'GPIO' + pwm.name" v-model="pwm.shfrq" min="0" max="30000000" v-on:enter="gpshfrq(pwm.name, shfrq)">
-                        </b>
-                        <b class="pwmduty">Duty Cycle: (${pwm.dc}) -->
-                          <input type="number" v-bind:name="Duty1" v-model="Duty1" value="Duty1" min="0" max="1000000"> -->
-                          <input type="number" name="'GPIO' + pwm.name" v-model="pwm.shdc" min="0" max="1000000" v-on:enter="gpshdc(pwm.name, shdc)">
-                        </b>
-                      </template>
-                    </div>
+                <div v-for="pin in pins" v-bind:key='pin.name'>
+                  <div class='grid' id='pwm_select'>
+                    <template v-if="pin.func==1">
+                      <a class="pwmname">GPIO ${pin.name}</a>
+                      <b class="pwmfreq">Frequency: (${pin.frq})
+                        <input type="number" name="'GPIO' + pin.name" v-model="pin.sfrq" min="10" max="8000" v-on:enter="gpsfrq(pin.name, sfrq)">
+                      </b>
+                      <b class="pwmduty">Duty Cycle: (${pin.dc})
+                        <input type="number" name="'GPIO' + pin.name" v-model="pin.sdc" min="0" max="255" v-on:enter="gpsdc(pin.name, sdc)">
+                      </b>
+                    </template>
+<!-- ----------------------------------------------------------------------------------------------- -->
+                    <template v-if="pin.func==2 && pin.name==18">
+                      <a class="pwmname">PWM 0</a>
+                      <b class="pwmfreq">Frequency: (${pin.frq})
+                        <input type="number" name="'GPIO' + pin.name" v-model="pin.shfrq" min="0" max="30000000" v-on:enter="gpshfrq(pin.name, shfrq)">
+                      </b>
+                      <b class="pwmduty">Duty Cycle: (${pin.dc})
+                        <input type="number" name="'GPIO' + pin.name" v-model="pin.shdc" min="0" max="1000000" v-on:enter="gpshdc(pin.name, shdc)">
+                      </b>
+                    </template>
+                    <template v-if="pin.func==2 && pin.name==19">
+                      <a class="pwmname">PWM 1</a>
+                      <b class="pwmfreq">Frequency: (${pin.frq})
+                        <input type="number" name="'GPIO' + pin.name" v-model="pin.shfrq" min="0" max="30000000" v-on:enter="gpshfrq(pin.name, shfrq)">
+                      </b>
+                      <b class="pwmduty">Duty Cycle: (${pin.dc})
+                        <input type="number" name="'GPIO' + pin.name" v-model="pin.shdc" min="0" max="1000000" v-on:enter="gpshdc(pin.name, shdc)">
+                      </b>
+                    </template>
+                    <template v-if="pin.func==4 && pin.name==12">
+                      <a class="pwmname">PWM 0</a>
+                      <b class="pwmfreq">Frequency: (${pin.frq})
+                        <input type="number" name="'GPIO' + pin.name" v-model="pin.shfrq" min="0" max="30000000" v-on:enter="gpshfrq(pin.name, shfrq)">
+                      </b>
+                      <b class="pwmduty">Duty Cycle: (${pin.dc})
+                        <input type="number" name="'GPIO' + pin.name" v-model="pin.shdc" min="0" max="1000000" v-on:enter="gpshdc(pin.name, shdc)">
+                      </b>
+                    </template>
+                    <template v-if="pin.func==4 && pin.name==13">
+                      <a class="pwmname">PWM 1</a>
+                      <b class="pwmfreq">Frequency: (${pin.frq})
+                        <input type="number" v-bind:name="Freq1" v-model="Freq1" value="Freq1" min="0" max="30000000">
+                        <input type="number" name="'GPIO' + pin.name" v-model="pin.shfrq" min="0" max="30000000" v-on:enter="gpshfrq(pin.name, shfrq)">
+                      </b>
+                      <b class="pwmduty">Duty Cycle: (${pin.dc})
+                        <input type="number" v-bind:name="Duty1" v-model="Duty1" value="Duty1" min="0" max="1000000">
+                        <input type="number" name="'GPIO' + pin.name" v-model="pin.shdc" min="0" max="1000000" v-on:enter="gpshdc(pin.name, shdc)">
+                      </b>
+                    </template>
+                  </div>
                 </div>
               </div>
             </div>
+<!-- ----------------------------------------------------------------------------------------------- -->
+            <!-- <div class="optcol"> -->
+              <!-- <div class="radio"> -->
+                <!-- <div v-for="pwm in pwms" v-bind:key='pwm.name'> -->
+                  <!-- <div class='grid' id='pwm_select'> -->
+                    <!-- <template v-if="pwm.func==1"> -->
+                      <!-- <a class="pwmname">GPIO ${pwm.name}</a> -->
+                      <!-- <b class="pwmfreq">Frequency: (${pwm.frq}) -->
+                        <!-- <input type="number" name="'GPIO' + pwm.name" v-model="pwm.sfrq" min="10" max="8000" v-on:enter="gpsfrq(pwm.name, sfrq)"> -->
+                      <!-- </b> -->
+                      <!-- <b class="pwmduty">Duty Cycle: (${pwm.dc}) -->
+                        <!-- <input type="number" name="'GPIO' + pwm.name" v-model="pwm.sdc" min="0" max="255" v-on:enter="gpsdc(pwm.name, sdc)"> -->
+                      <!-- </b> -->
+                    <!-- </template> -->
+                    <!-- <template v-if="pwm.func==2 && pwm.name==18"> -->
+                      <!-- <a class="pwmname">PWM 0</a> -->
+                      <!-- <b class="pwmfreq">Frequency: (${pwm.frq}) -->
+                        <!-- <input type="number" name="'GPIO' + pwm.name" v-model="pwm.shfrq" min="0" max="30000000" v-on:enter="gpshfrq(pwm.name, shfrq)"> -->
+                      <!-- </b> -->
+                      <!-- <b class="pwmduty">Duty Cycle: (${pin.dc}) -->
+                        <!-- <input type="number" name="'GPIO' + pwm.name" v-model="pwm.shdc" min="0" max="1000000" v-on:enter="gpshdc(pwm.name, shdc)"> -->
+                      <!-- </b> -->
+                    <!-- </template> -->
+                    <!-- <template v-if="pwm.func==2 && pwm.name==19"> -->
+                      <!-- <a class="pwmname">PWM 1</a> -->
+                      <!-- <b class="pwmfreq">Frequency: (${pwm.frq}) -->
+                        <!-- <input type="number" name="'GPIO' + pwm.name" v-model="pwm.shfrq" min="0" max="30000000" v-on:enter="gpshfrq(pwm.name, shfrq)"> -->
+                      <!-- </b> -->
+                      <!-- <b class="pwmduty">Duty Cycle: (${pwm.dc}) -->
+                        <!-- <input type="number" name="'GPIO' + pwm.name" v-model="pwm.shdc" min="0" max="1000000" v-on:enter="gpshdc(pwm.name, shdc)"> -->
+                      <!-- </b> -->
+                    <!-- </template> -->
+                    <!-- <template v-if="pwm.func==4 && pwm.name==12"> -->
+                      <!-- <a class="pwmname">PWM 0</a> -->
+                      <!-- <b class="pwmfreq">Frequency: (${pwm.frq}) -->
+                        <!-- <input type="number" name="'GPIO' + pwm.name" v-model="pwm.shfrq" min="0" max="30000000" v-on:enter="gpshfrq(pwm.name, shfrq)"> -->
+                      <!-- </b> -->
+                      <!-- <b class="pwmduty">Duty Cycle: (${pwm.dc}) -->
+                        <!-- <input type="number" name="'GPIO' + pwm.name" v-model="pwm.shdc" min="0" max="1000000" v-on:enter="gpshdc(pwm.name, shdc)"> -->
+                      <!-- </b> -->
+                    <!-- </template> -->
+                    <!-- <template v-if="pwm.func==4 && pwm.name==13"> -->
+                      <!-- <a class="pwmname">PWM 1</a> -->
+                      <!-- <b class="pwmfreq">Frequency: (${pwm.frq})> -->
+                        <!-- <input type="number" v-bind:name="Freq1" v-model="Freq1" value="Freq1" min="0" max="30000000"> -->
+                        <!-- <input type="number" name="'GPIO' + pwm.name" v-model="pwm.shfrq" min="0" max="30000000" v-on:enter="gpshfrq(pwm.name, shfrq)"> -->
+                      <!-- </b> -->
+                      <!-- <b class="pwmduty">Duty Cycle: (${pwm.dc})> -->
+                        <!-- <input type="number" v-bind:name="Duty1" v-model="Duty1" value="Duty1" min="0" max="1000000"> -->
+                        <!-- <input type="number" name="'GPIO' + pwm.name" v-model="pwm.shdc" min="0" max="1000000" v-on:enter="gpshdc(pwm.name, shdc)"> -->
+                      <!-- </b> -->
+                    <!-- </template> -->
+                  <!-- </div> -->
+                <!-- </div> -->
+              <!-- </div> -->
+            <!-- </div> -->
 <!-- ----------------------------------------------------------------------------------------------- -->
           </b>  {# END OF 20: More Options is ON #}
 <!-- ----------------------------------------------------------------------------------------------- -->
