@@ -202,9 +202,19 @@ def get_scripts(request):
 def get_pwms(request):
     pwm_info = []
     for pwm in pwm_names:
-        name = pwm_name(pwm)
+        name = pwm
+        func = pin_use(pwm)
+        frq = get_frq(pwm)
+        dc = get_dc(pwm)
+        hfrq = get_hfrq(pwm)
+        hdc = get_hdc(pwm)
         pwm_info.append({
             'name': name,
+            'func': func,
+            'frq': frq,
+            'dc': dc,
+            'hfrq': hfrq,
+            'hdc': hdc,
             })
 
     return JsonResponse(pwm_info, safe=False)

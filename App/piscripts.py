@@ -184,7 +184,7 @@ def get_all_pins(init=False):
             })
 
     pins = pin_info
-    return pins
+    # return pins
 
 # Outputs:
 
