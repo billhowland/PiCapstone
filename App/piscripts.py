@@ -339,6 +339,26 @@ def get_scripts(init):
     scripts = script_info
 
 
+def get_pwms():
+    global pwms
+    pwm_info = []
+    for pwm in pwm_names:
+        func = pin_use(pwm)
+        frq = get_frq(pwm)
+        dc = get_dc(pwm)
+        hfrq = get_hfrq(pwm)
+        hdc = get_hdc(pwm)
+        pwm_info.append({
+            'name': pwm,
+            'func': func,
+            'frq': frq,
+            'dc': dc,
+            'hfrq': hfrq,
+            'hdc': hdc,
+            })
+    pwms = pwm_info
+
+
 def get_scr_idx(scr):
     return script_nums.index(scr)
 
@@ -803,6 +823,7 @@ def script_19():
 
 
 def script_20():
+    get_pwms()
     if get_running(20):
         clr_running(20)
     else:
