@@ -154,7 +154,7 @@ let app = new Vue({
    },
    // path('gpsfrq/<int:pin>', views.gpsfrq, name='gpsfrq'),
    gpsfrq: function(pin, sfrq) {
-         const request = fetch('gpsfrq/' + pin, sfrq)
+         const request = fetch('gpsfrq/' + pin  + '/' + sfrq)
            .then(response => {
            return response.json()
          }).then(sfrq => {
@@ -172,7 +172,7 @@ let app = new Vue({
    },
    // path('gpsdc/<int:pin>', views.gpsdc, name='gpsdc'),
    gpsdc: function(pin, sdc) {
-          const request = fetch('gpsdc/' + pin, sdc)
+          const request = fetch('gpsdc/' + pin + '/' + sdc)
             .then(response => {
             return response.json()
           }).then(sdc => {
@@ -188,7 +188,7 @@ let app = new Vue({
         }).catch(err => console.log(err))
    },
    gpshfrq: function(pin, shfrq) {
-         const request = fetch('gpshfrq/' + pin)
+         const request = fetch('gpshfrq/' + pin + '/' + shfrq)
            .then(response => {
            return response.json()
          }).then(shfrq => {
@@ -204,7 +204,7 @@ let app = new Vue({
          }).catch(err => console.log(err))
    },
    gpshdc: function(pin, sdc) {
-          const request = fetch('gpshdc/' + pin)
+          const request = fetch('gpshdc/' + pin + '/' + shdc)
             .then(response => {
             return response.json()
           }).then(shdc => {
