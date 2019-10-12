@@ -323,7 +323,7 @@ background-size: 100% auto;
 
 .optcol {
 	font-size: 12px;
-	grid-area: left-col;
+	grid-area: right-col;
 	border-style: ridge;
 	border-width: 10px;
 	border-color: darkgray;
