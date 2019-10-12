@@ -25,8 +25,8 @@ script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
                22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]
 script_names = ["Full Configuration", "GPIO Configuration", "Flash LEDs", "Hardware PWM Test",
                 "Strobe LEDs", "Wave Test", "Software PWM LEDs", "Wave Example",
-                "Script 9", "Script 10", "Script 11", "Script 12", "Script 13", "Script 14",
-                "Script 15", "Script 16", "Script 17", "Script 18", "Script 19", "PWM Settings",
+                "Hardware Clock 4", "Script 10", "Script 11", "Script 12", "Script 13", "Script 14",
+                "Script 15", "Script 16", "Script 17", "Script 18", "Hard PWM Panel", "Soft PWM Panel",
                 "Script 21", "Script 22", "Script 23", "Script 24", "Script 25", "Script 26",
                 "Script 27", "Script 28", "Script 29", "Script 30", "Script 31", "Script 32",
                 "Script 33", "Script 34", "Script 35", "Script 36", "Script 37", "Script 38",
@@ -70,12 +70,12 @@ def get_hdc(pin):
 
 
 def set_hfrq(pin, hfrq):
-    idx = get_pin_idx(pin)
+    idx = get_pwm_idx(pin)
     pins[idx]['hfrq'] = hfrq
 
 
 def set_hdc(pin, hdc):
-    idx = get_pin_idx(pin)
+    idx = get_pwm_idx(pin)
     pins[idx]['hdc'] = hdc
 
 
@@ -86,7 +86,7 @@ def start_hpwm(pin):
 
 
 def stop_hpwm(pin):
-    hfrq = get_hfrq(pin)
+    hfrq = 0
     hdc = 0
     pi.hardware_PWM((pin), (hfrq), (hdc))
 
@@ -351,10 +351,10 @@ def get_pwms():
         pwm_info.append({
             'name': pwm,
             'func': func,
-            'frq': frq,
-            'dc': dc,
-            'hfrq': hfrq,
-            'hdc': hdc,
+            'sfrq': frq,
+            'sdc': dc,
+            'shfrq': hfrq,
+            'shdc': hdc,
             })
     pwms = pwm_info
 
@@ -469,35 +469,41 @@ def script_3():
     clr_running(3)
     tty_message("Script terminated.")
 
-# --script 4 PWM Test-------------------------------------------------------------------
+# --script 4 Hardware PWM Test----------------------------------------------------------
 
 
 def script_4():
+    pwmPina = 12
+    pwmPinb = 18
+    pwmPinc = 13
+    pwmPind = 19
+    butPin = 17
+    exitPin = 25
+    pud_up(butPin)  # Button pin set as input w/ pull-up
+    pud_up(exitPin)
+
     if get_running(4):
+        stop_hpwm(pwmPinb)
+        stop_hpwm(pwmPind)
+        pud_up(pwmPinb)
+        pud_up(pwmPinc)
+        pin_out_low(pwmPina)
+        pi.set_mode((19), pigpio.ALT0)
+        tty_message("Script terminated.")
         clr_running(4)
-        clr_running(20)
+        script_2()
+
     else:
         tty_message("Script 4: Hardware PWM test.")
         set_running(4)
-        set_running(20)
         for pin in pin_names:
             untest_pin(pin)
         get_all_pins(init=True)
-
-        pwmPina = 12
-        pwmPinb = 18
-        pwmPinc = 13
-        pwmPind = 19
 
         hpwm0_fr = 1  # 2Hz
         hpwm0_dc = 500000  # 50%
         hpwm1_fr = 2  # 4Hz
         hpwm1_dc = 500000  # 50%
-
-        butPin = 17
-        exitPin = 25
-        pud_up(butPin)  # Button pin set as input w/ pull-up
-        pud_up(exitPin)
 
         for pin in pin_names:
             set_not_used(pin)
@@ -510,7 +516,6 @@ def script_4():
         set_hfrq(pwmPinb, hpwm0_fr)
         set_hdc(pwmPinb, hpwm0_dc)
         start_hpwm(pwmPinb)
-
         sleep(.125)
         set_pin_out(pwmPind)
         set_hfrq(pwmPind, hpwm1_fr)
@@ -526,21 +531,10 @@ def script_4():
         tty_message("Press GPIO 25 to terminate")
         tty_message("Press GPIO 17 to change duty cycle")
 
-        while get_running(4) and read_pin(exitPin):
+        while read_pin(exitPin):
             pass
 
-        stop_hpwm(pwmPina)
-        stop_hpwm(pwmPinc)
-
-        pud_up(pwmPinb)
-        pud_up(pwmPinc)
-        pin_out_low(pwmPina)
-        pi.set_mode((19), pigpio.ALT0)
-        tty_message("Script terminated.")
-        sleep(.25)
-        clr_running(4)
-        clr_running(20)
-        script_2()
+        script_4()
 
 # --script 5 Strobe LEDs----------------------------------------------------------------
 
@@ -615,7 +609,7 @@ def script_6():
         clr_running(6)
         tty_message("Script terminated.")
 
-# --script 7----------------------------------------------------------------------------
+# --script 7: Software PWM Test----------------------------------------------------------
 
 
 def script_7():
@@ -625,7 +619,6 @@ def script_7():
         clr_running(20)
     else:
         set_running(7)
-        set_running(20)
 
         tty_message("Script 7: Software PWM at 20Hz.")
         tty_message("Back -n- Forth...")
@@ -654,20 +647,20 @@ def script_7():
                 if (dc == 256):
                     dc = 255
                 sleep(.15)
+            get_pwms()
 
     for pin in LED_Pins:
         pin_out_low(pin)
     clr_running(7)
-    clr_running(20)
     tty_message("Script terminated.")
 
 
-# --script 8----------------------------------------------------------------------------
+# --script 8: PIGPIO Wave Example--------------------------------------------------------
 
 
 def script_8():
     set_running(8)
-    tty_message("Script 8: PIGPIO Wave Test")
+    tty_message("Script 8: PIGPIO Wave Example")
     sleep(.25)
 
     G1 = 4
@@ -713,11 +706,16 @@ def script_8():
 
 
 def script_9():
-    set_running(9)
-    tty_message("Script 9 Not Implemented.")
-    sleep(.25)
-    clr_running(9)
+    if get_running(9):
+        clr_running(9)
+        pi.hardware_clock(4, 0)
+        pin_out_low(4)
 
+    else:
+        set_running(9)
+        tty_message("Script 9 Clock on GPIO 4")
+        sleep(.25)
+        pi.hardware_clock(4, 5000)  # 5 KHz clock on GPIO 4
 
 # --script 10----------------------------------------------------------------------------
 
@@ -813,20 +811,58 @@ def script_18():
 
 
 def script_19():
-    set_running(19)
-    tty_message("Script 19 Not Implemented.")
+    pwmPina = 12
+    pwmPinb = 18
+    pwmPinc = 13
+    pwmPind = 19
+
+    if get_running(19):
+        # Shut down PWMs:
+        stop_hpwm(pwmPina)
+        stop_hpwm(pwmPinb)
+        stop_hpwm(pwmPinc)
+        stop_hpwm(pwmPind)
+        # Default config the pins:
+        pud_up(pwmPinb)
+        pud_up(pwmPinc)
+        pin_out_low(pwmPina)
+        pi.set_mode((19), pigpio.ALT0)
+
+        tty_message("Script terminated.")
+        clr_running(19)
+        script_2()
+
+    else:
+        for pin in pin_names:
+            set_not_used(pin)
+
+        used_Pins = [(pwmPina), (pwmPinb), (pwmPinc), (pwmPind)]
+        for pin in used_Pins:
+            set_used(pin)
+            set_pin_out(pin)
+
+        pi.set_mode((pwmPina), pigpio.ALT0)
+        pi.set_mode((pwmPinb), pigpio.ALT5)
+        start_hpwm(pwmPina)
+        pi.set_mode((pwmPinc), pigpio.ALT0)
+        pi.set_mode((pwmPind), pigpio.ALT5)
+        start_hpwm(pwmPinc)
+
+        clr_running(20)
+        set_running(19)
+
     sleep(.25)
-    clr_running(19)
 
 
 # --script 20---------------------------------------------------------------------------
 
 
 def script_20():
-    get_pwms()
+
     if get_running(20):
         clr_running(20)
     else:
+        clr_running(19)
         set_running(20)
     sleep(.25)
 

@@ -27,13 +27,13 @@ background-size: 100% auto;
 #io_select {
 	display: grid;
 	grid-template-areas: "name set pud inout";
-	grid-template-columns: 35px 110px 160px 135px;
+	grid-template-columns: 60px 110px 160px 135px;
 }
 
 #pwm_select {
 	display: grid;
 	grid-template-areas: "pwmname pwmfreq pwmduty";
-	grid-template-columns: 65px 146px 146px;
+	grid-template-columns: 45px 120px 105px;
 }
 
 #script_select {
@@ -193,6 +193,20 @@ background-size: 100% auto;
 	font-size: 15px;
 }
 
+.col3p{
+	grid-area: pud;
+	justify-self: center;
+	box-sizing: border-box;
+
+	align-items: center;
+  background-color: lightgreen;
+	color: black;
+	border-style: outset;
+	border-color: darkgray;
+	width: 100%;
+	font-size: 15px;
+}
+
 .col3serial{
 	background-color: lime;
 }
@@ -250,6 +264,34 @@ background-size: 100% auto;
 	font-size: 15px;
 }
 
+.linph{
+	box-sizing: border-box;
+	grid-area: inout;
+	justify-self: center;
+
+	align-items: center;
+  background-color: green;
+	color: white;
+	border-style: outset;
+	border-color: black;
+	width: 100%;
+	font-size: 15px;
+}
+
+.linpl{
+	box-sizing: border-box;
+	grid-area: inout;
+	justify-self: center;
+
+	align-items: center;
+  background-color: lightgreen;
+	color: black;
+	border-style: outset;
+	border-color: black;
+	width: 100%;
+	font-size: 15px;
+}
+
 .lina{
 	box-sizing: border-box;
 	grid-area: inout;
@@ -276,8 +318,20 @@ background-size: 100% auto;
 	width: 100%;
 }
 
-.header {
+.loutp{
+	font-size: 15px;
+	text-align: center;
+	box-sizing: border-box;
+	grid-area: inout;
+	justify-self: center;
+	align-items: center;
+  background-color: lightblue;
+	border-style: outset;
+	border-color: darkgray;
+	width: 100%;
+}
 
+.header {
 	top: 0;
 	left: 0;
 	font-weight: bolder;

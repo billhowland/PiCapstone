@@ -6,7 +6,7 @@ from .piscripts import (pin_names, pwm_names, test_pin, script_nums, set_pin_out
                         pin_use, pud_up, pud_dn, pud_off, get_pud, get_ip, get_test,
                         get_testing, get_used, get_name, get_url, get_running,
                         do_script, get_frq, set_frq, get_dc, set_dc, get_hfrq, get_hdc,
-                        set_hdc, set_hfrq)
+                        set_hdc, set_hfrq, start_hpwm)
 
 from .pimain import *
 
@@ -19,12 +19,6 @@ def main(request):
     IPB = 'http://{}:9001'.format(get_ip())
     IPX = ' {}:8080'.format(get_ip())
     return render(request, 'App/main.html', {'IP': IP, 'IPB': IPB, 'IPX': IPX})
-
-
-# @login_required
-# def addons(request):
-#     IPY = ' {}:8080'.format(get_ip())
-#     return render(request, 'App/addons.html', {'IPY': IPY})
 
 
 def gptest(request, pin):
@@ -94,7 +88,8 @@ def gpsfrq(request, pin, frq):
 
 def gpshfrq(request, pin, hfrq):
     set_hfrq(pin, hfrq)
-    # frq = {pin: read_pin(pin)}
+    if hfrq > 0:
+        start_hpwm(pin)
     return JsonResponse(hfrq, safe=False)
 
 
@@ -110,6 +105,8 @@ def gpsdc(request, pin, dc):
 
 def gpshdc(request, pin, hdc):
     set_hdc(pin, hdc)
+    if hdc > 0:
+        start_hpwm(pin)
     return JsonResponse(hdc, safe=False)
 
 
@@ -211,10 +208,10 @@ def get_pwms(request):
         pwm_info.append({
             'name': name,
             'func': func,
-            'frq': frq,
-            'dc': dc,
-            'hfrq': hfrq,
-            'hdc': hdc,
+            'sfrq': frq,
+            'sdc': dc,
+            'shfrq': hfrq,
+            'shdc': hdc,
             })
 
     return JsonResponse(pwm_info, safe=False)
@@ -223,13 +220,3 @@ def get_pwms(request):
 def run_script(request, num):
     do_script(num)
     return HttpResponse('Success')
-
-
-# def get_hpwm0(request):
-#     get_hpwm0()
-#     return HttpResponse('Success')
-#
-#
-# def get_hpwm1(request):
-#     get_hpwm1()
-#     return HttpResponse('Success')

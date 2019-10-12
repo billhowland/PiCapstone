@@ -203,7 +203,7 @@ let app = new Vue({
             this.getAllPins()
          }).catch(err => console.log(err))
    },
-   gpshdc: function(pin, sdc) {
+   gpshdc: function(pin, shdc) {
           const request = fetch('gpshdc/' + pin + '/' + shdc)
             .then(response => {
             return response.json()
