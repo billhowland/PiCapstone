@@ -491,7 +491,10 @@ def script_4():
         pi.set_mode((19), pigpio.ALT0)
         tty_message("Script terminated.")
         clr_running(4)
-        script_2()
+        if get_running(1):
+            script_1()
+        if get_running(2):
+            script_2()
 
     else:
         tty_message("Script 4: Hardware PWM test.")
@@ -544,7 +547,6 @@ def script_5():
         clr_running(5)
     else:
         set_running(5)
-        script_2()
         tty_message("Script 5: one LED at a time...")
         tty_message("Back -n- Forth...")
         LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
@@ -578,7 +580,6 @@ def script_6():
         clr_running(6)
     else:
         set_running(6)
-        script_2()
         tty_message("Script 6: wave test.")
         flash_500 = []  # flash every 500 ms
         LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
