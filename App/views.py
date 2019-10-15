@@ -142,10 +142,8 @@ def gpoff(request, pin):
     return JsonResponse(pud, safe=False)
 
 
-def get_all_pins(request):  # returns pin data back to the html, does not call
-    # get_all_pins in piscripts!
-    # if this is the spot called by main.js 4 times a
-    # second, blinking s/b done here!
+def get_all_pins(request):  # returns pin data back to the html, does not call get_all_pins in piscripts.
+    # This is the spot called by main.js 4 times a second.
 
     pin_info = []
 

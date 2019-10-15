@@ -21,6 +21,7 @@
 <!-- ----------------------------------------------------------------------------------------------- -->
         	<div class="leftcol">
             <div class="radio">
+              <div class="lint center">GPIO Configuration Menu</div>
               <div v-for="pin in pins" v-bind:key='pin.name'>
                 <div class='grid' id='io_select'>
                     <a class='name'>GPIO ${pin.name}</a>
@@ -117,25 +118,25 @@
             </div>
         	</div>
 <!-- ----------------------------------------------------------------------------------------------- -->
-  	   	  <div class="grid" id='centercol'>
-            <div class="ccleft">
-              <div class='script' v-for="script in scripts.slice(0, 20)" v-bind:key='script.name'>
-                <div class='grid' id='script_select'>
-                  <button class='scriptbtn' v-bind:name="script.name" value='script.name' v-on:click="runscript(script.num)">${script.name}</button>
-                  <a class='notrunning' v-if="script.running==false">-OFF-</a>
-                  <a class='running' v-if="script.running==true">-ON-</a>
+          <div class="grid" id='centercol'>
+              <div class="ccleft">
+                <div class='script' v-for="script in scripts.slice(0, 20)" v-bind:key='script.name'>
+                  <div class='grid' id='script_select'>
+                    <button class='scriptbtn' v-bind:name="script.name" value='script.name' v-on:click="runscript(script.num)">${script.name}</button>
+                    <a class='notrunning' v-if="script.running==false">-OFF-</a>
+                    <a class='running' v-if="script.running==true">-ON-</a>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="ccright">
-              <div class='script' v-for="script in scripts.slice(20, 40)" v-bind:key='script.name'>
-                <div class='grid' id='script_selectb'>
-                  <button class='scriptbtnb' v-bind:name="script.name" value='script.name' v-on:click="runscript(script.num)">${script.name}</button>
-                  <a class='notrunningb' v-if="script.running==false">-OFF-</a>
-                  <a class='runningb' v-if="script.running==true">-ON-</a>
+              <div class="ccright">
+                <div class='script' v-for="script in scripts.slice(20, 40)" v-bind:key='script.name'>
+                  <div class='grid' id='script_selectb'>
+                    <button class='scriptbtnb' v-bind:name="script.name" value='script.name' v-on:click="runscript(script.num)">${script.name}</button>
+                    <a class='notrunningb' v-if="script.running==false">-OFF-</a>
+                    <a class='runningb' v-if="script.running==true">-ON-</a>
+                  </div>
                 </div>
               </div>
-            </div>
           </div>
 <!-- ----------------------------------------------------------------------------------------------- -->
           <b v-show="scripts[18].running">  {# 18 = 19: Hard PWM Settings is ON #}
@@ -212,12 +213,15 @@
           <a v-show="!scripts[19].running && !scripts[18].running">  {# 19 = 20:More Options IS OFF #}
             <div class="rightcol">
               <template v-if='"{{request.user.username}}"=="bill"'>
+                <div class="linl center">Interactive Console</div>
                 <iframe class="pyterm" src="{{IP}}"></iframe>
     	        </template>
               <template v-if='"{{request.user.username}}"=="pi"'>
+                <div class="linl center">Console Output</div>
                 <iframe class="pyterm" src="{{IPB}}"></iframe>
     	        </template>
               <template v-if='"{{request.user.username}}"!="bill" && "{{request.user.username}}"!="pi"'>
+                <div class="lint center">Raspberry Pi Diagram</div>
                 <img class="img" src="/static/css/rp2_pinout_full.png" alt="RaspPi IO Port" />
     	        </template>
             </div>

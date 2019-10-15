@@ -248,6 +248,20 @@ background-size: 100% auto;
 	font-size: 15px;
 }
 
+.lint{
+	box-sizing: border-box;
+	grid-area: inout;
+	justify-self: center;
+
+	align-items: center;
+  background-color: lightgray;
+	color: black;
+	border-style: outset;
+	border-color: darkgray;
+	width: 100%;
+	font-size: 16px;
+}
+
 .linl{
 	box-sizing: border-box;
 	grid-area: inout;
@@ -472,7 +486,7 @@ background-size: 100% auto;
 
 .runningb {
 	box-sizing: border-box;
-	grid-area: s3cr-runningb;
+	grid-area: scr-runningb;
 	width: 100%;
 	justify-self: center;
 	align-self: center;

@@ -30,7 +30,7 @@ script_names = ["Full Configuration", "GPIO Configuration", "Flash LEDs", "Hardw
                 "Script 21", "Script 22", "Script 23", "Script 24", "Script 25", "Script 26",
                 "Script 27", "Script 28", "Script 29", "Script 30", "Script 31", "Script 32",
                 "Script 33", "Script 34", "Script 35", "Script 36", "Script 37", "Script 38",
-                "Script 39", "Script 40"]
+                "Script 39", "Clear All"]
 script_urls = ["script1", "script2", "script3", "script4", "script5",
                "script6", "script7", "script8", "script9", "script10", "script11",
                "script12", "script13", "script14", "script15", "script16", "script17",
@@ -503,11 +503,6 @@ def script_4():
             untest_pin(pin)
         get_all_pins(init=True)
 
-        hpwm0_fr = 1  # 2Hz
-        hpwm0_dc = 500000  # 50%
-        hpwm1_fr = 2  # 4Hz
-        hpwm1_dc = 500000  # 50%
-
         for pin in pin_names:
             set_not_used(pin)
 
@@ -515,14 +510,10 @@ def script_4():
         for pin in used_Pins:
             set_used(pin)
 
-        set_pin_out(pwmPinb)
-        set_hfrq(pwmPinb, hpwm0_fr)
-        set_hdc(pwmPinb, hpwm0_dc)
-        start_hpwm(pwmPinb)
         sleep(.125)
         set_pin_out(pwmPind)
-        set_hfrq(pwmPind, hpwm1_fr)
-        set_hdc(pwmPind, hpwm1_dc)
+        set_hfrq(pwmPind, 2)
+        set_hdc(pwmPind, 500000)
         start_hpwm(pwmPind)
 
         set_pin_out(pwmPina)
@@ -532,10 +523,17 @@ def script_4():
 
         tty_message("Hardware PWM on pins 12, 13, 18, 19")
         tty_message("Press GPIO 25 to terminate")
-        tty_message("Press GPIO 17 to change duty cycle")
+        tty_message("Press GPIO 17 button for fun")
 
         while read_pin(exitPin):
-            pass
+            if read_pin(butPin) == 1:
+                set_hfrq(pwmPinb, 1)
+                set_hdc(pwmPinb, 500000)
+                start_hpwm(pwmPinb)
+            else:
+                set_hfrq(pwmPinb, 5)
+                set_hdc(pwmPinb, 100000)
+                start_hpwm(pwmPinb)
 
         script_4()
 
@@ -831,7 +829,12 @@ def script_19():
 
         tty_message("Script terminated.")
         clr_running(19)
-        script_2()
+        if get_running(1):
+            script_1()
+        if get_running(2):
+            script_2()
+        if get_running(20):
+            script_20()
 
     else:
         for pin in pin_names:
@@ -1058,14 +1061,44 @@ def script_39():
     clr_running(39)
 
 
-# --script 40---------------------------------------------------------------------------
+# --script 40-Clear All-----------------------------------------------------------------
 
 
 def script_40():
     set_running(40)
-    tty_message("Script 40 Not Implemented.")
-    sleep(.25)
-    clr_running(40)
+    global pins
+
+    hpwms = [12, 13, 18, 19]
+
+    for hpwm in hpwms:
+        stop_hpwm(hpwm)
+        pi.set_mode((hpwm), pigpio.ALT0)
+
+    for pin in pin_names:
+        untest_pin(pin)
+    get_all_pins(init=True)
+
+    LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
+    for pin in LED_Pins:
+        pin_out_low(pin)
+
+    Pushbutton_Pins = [18, 17, 23, 22, 27, 24, 25, 13, 26]
+    for pin in Pushbutton_Pins:
+        pud_up(pin)
+
+    if get_running(1):
+        scriptrunning = 1
+    if get_running(2):
+        scriptrunning = 2
+
+    for script in script_nums:
+        clr_running(script)
+
+    sleep(0.25)
+    if scriptrunning == 1:
+        script_1()
+    if scriptrunning == 2:
+        script_2()
 
 
 # -------------------------------------------------------------------------------------
