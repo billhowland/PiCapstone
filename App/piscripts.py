@@ -25,12 +25,12 @@ script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
                22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]
 script_names = ["Full Configuration", "GPIO Configuration", "Flash LEDs", "Hardware PWM Test",
                 "Strobe LEDs", "Wave Test", "Software PWM LEDs", "Wave Example",
-                "Hardware Clock 4", "Script 10", "Script 11", "Script 12", "Script 13", "Script 14",
-                "Script 15", "Script 16", "Script 17", "Script 18", "Hard PWM Panel", "Soft PWM Panel",
+                "Hardware Clock 4", "PiCamera Test", "Script 11", "Script 12", "Script 13", "Script 14",
+                "Script 15", "Script 16", "Script 17", "Script 18", "Hardware PWM", "Software PWM",
                 "Script 21", "Script 22", "Script 23", "Script 24", "Script 25", "Script 26",
                 "Script 27", "Script 28", "Script 29", "Script 30", "Script 31", "Script 32",
-                "Script 33", "Script 34", "Script 35", "Script 36", "Script 37", "Script 38",
-                "Script 39", "Clear All"]
+                "Script 33", "Script 34", "Script 35", "Script 36", "Script 37", "PiCamera",
+                "Hardware Clock", "Clear All"]
 script_urls = ["script1", "script2", "script3", "script4", "script5",
                "script6", "script7", "script8", "script9", "script10", "script11",
                "script12", "script13", "script14", "script15", "script16", "script17",
@@ -144,6 +144,7 @@ def get_all_pins(init=False):
             testing = False
             pud = 'off'
             frq = 10
+            set_frq(pin, frq)
             dc = 0
             hfrq = 10
             hdc = 500000
@@ -495,6 +496,7 @@ def script_4():
             script_1()
         if get_running(2):
             script_2()
+        clr_running(4)
 
     else:
         tty_message("Script 4: Hardware PWM test.")
@@ -514,7 +516,12 @@ def script_4():
         set_pin_out(pwmPind)
         set_hfrq(pwmPind, 2)
         set_hdc(pwmPind, 500000)
+        set_pin_out(pwmPinb)
+
         start_hpwm(pwmPind)
+        set_hfrq(pwmPinb, 1)
+        set_hdc(pwmPinb, 500000)
+        start_hpwm(pwmPinb)
 
         set_pin_out(pwmPina)
         pi.set_mode((pwmPina), pigpio.ALT0)
@@ -527,15 +534,14 @@ def script_4():
 
         while read_pin(exitPin):
             if read_pin(butPin) == 1:
-                set_hfrq(pwmPinb, 1)
-                set_hdc(pwmPinb, 500000)
-                start_hpwm(pwmPinb)
+                pass
             else:
                 set_hfrq(pwmPinb, 5)
                 set_hdc(pwmPinb, 100000)
                 start_hpwm(pwmPinb)
 
         script_4()
+
 
 # --script 5 Strobe LEDs----------------------------------------------------------------
 
@@ -865,9 +871,15 @@ def script_20():
 
     if get_running(20):
         clr_running(20)
+        if get_running(1):
+            script_1()
+        if get_running(2):
+            script_2()
     else:
-        clr_running(19)
+        if get_running(19):
+            script_19()
         set_running(20)
+
     sleep(.25)
 
 
@@ -1045,20 +1057,26 @@ def script_37():
 
 
 def script_38():
-    set_running(38)
-    tty_message("Script 38 Not Implemented.")
+
+    if get_running(38):
+        clr_running(38)
+    else:
+        clr_running(38)
+        set_running(38)
     sleep(.25)
-    clr_running(38)
 
 
 # --script 39---------------------------------------------------------------------------
 
 
 def script_39():
-    set_running(39)
-    tty_message("Script 39 Not Implemented.")
+
+    if get_running(39):
+        clr_running(39)
+    else:
+        clr_running(39)
+        set_running(39)
     sleep(.25)
-    clr_running(39)
 
 
 # --script 40-Clear All-----------------------------------------------------------------

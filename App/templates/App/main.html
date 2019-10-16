@@ -21,7 +21,7 @@
 <!-- ----------------------------------------------------------------------------------------------- -->
         	<div class="leftcol">
             <div class="radio">
-              <div class="lint center">GPIO Configuration Menu</div>
+              <div class="lint center">GPIO Pin Settings</div>
               <div v-for="pin in pins" v-bind:key='pin.name'>
                 <div class='grid' id='io_select'>
                     <a class='name'>GPIO ${pin.name}</a>
@@ -143,6 +143,7 @@
 <!-- ----------------------------------------------------------------------------------------------- -->
             <div class="optcol">
               <div class="radio">
+                <div class="lint center">Hardware PWM Settings</div>
                 <div v-for="pwm in pwms" v-bind:key='pwm.name'>
                   <div class='grid' id='pwm_select'>
                     <template v-if="pwm.name==12">
@@ -192,6 +193,7 @@
 <!-- ----------------------------------------------------------------------------------------------- -->
             <div class="optcol">
               <div class="radio">
+                <div class="lint center">Software PWM Settings</div>
                 <div v-for="pwm in pwms" v-bind:key='pwm.name'>
                   <div class='grid' id='pwm_select'>
                     <template v-if="pwm.func==1">
@@ -210,7 +212,30 @@
 <!-- ----------------------------------------------------------------------------------------------- -->
           </b>  {# END OF 20:Soft PWM Settings is OFF #}
 <!-- ----------------------------------------------------------------------------------------------- -->
-          <a v-show="!scripts[19].running && !scripts[18].running">  {# 19 = 20:More Options IS OFF #}
+          <b v-show="scripts[38].running">  {# 38 = 39: Hardware Clock Settings is ON #}
+<!-- ----------------------------------------------------------------------------------------------- -->
+            <div class="optcol">
+              <div class="radio">
+                <div class="lint center">Hardware Clock Settings</div>
+                <div v-for="pwm in pwms" v-bind:key='pwm.name'>
+                  <div class='grid' id='pwm_select'>
+                    <template v-if="pwm.name==4 && pwm.func==4">
+                      <a class="pwmname">Clock ${pwm.name}</a>
+                      <b class="pwmfreq">Frequency: 0-50Mhz
+                        <input type="number" style="width: 8em" name="'GPIO' + pwm.name" v-model.number="pwm.sfrq" min="0" max="50000000" step="10" v-on:input="gpsfrq(pwm.name, pwm.sfrq)">
+                      </b>
+                      <!-- <b class="pwmduty">Duty Cycle: 0-255 -->
+                        <!-- <input type="number" style="width: 7em" name="'GPIO' + pwm.name" v-model.number="pwm.sdc" min="0" max="255" v-on:input="gpsdc(pwm.name, pwm.sdc)"> -->
+                      <!-- </b> -->
+                    </template>
+                  </div>
+                </div>
+              </div>
+            </div>
+<!-- ----------------------------------------------------------------------------------------------- -->
+</b>  {# END OF 39: Hardware Clock Settings is OFF #}
+<!-- ----------------------------------------------------------------------------------------------- -->
+          <a v-show="!scripts[38].running && !scripts[19].running && !scripts[18].running">  {# Exclude optional rightcols #}
             <div class="rightcol">
               <template v-if='"{{request.user.username}}"=="bill"'>
                 <div class="linl center">Interactive Console</div>
