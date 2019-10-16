@@ -812,7 +812,7 @@ def script_18():
     clr_running(18)
 
 
-# --script 19---------------------------------------------------------------------------
+# --script 19-Hardware PWM Menu----------------------------------------------------------
 
 
 def script_19():
@@ -864,8 +864,8 @@ def script_19():
     sleep(.25)
 
 
-# --script 20---------------------------------------------------------------------------
-
+# --script 20-Software PWM Menu---------------------------------------------------------
+# Need to get pwms.sdc to update when re-opened
 
 def script_20():
 
@@ -1053,7 +1053,7 @@ def script_37():
     clr_running(37)
 
 
-# --script 38---------------------------------------------------------------------------
+# --script 38-Pi Camera-----------------------------------------------------------------
 
 
 def script_38():
@@ -1061,22 +1061,23 @@ def script_38():
     if get_running(38):
         clr_running(38)
     else:
-        clr_running(38)
         set_running(38)
     sleep(.25)
 
 
-# --script 39---------------------------------------------------------------------------
+# --script 39-Hardware Clock Menu-------------------------------------------------------
 
 
 def script_39():
 
     if get_running(39):
         clr_running(39)
+        pin_out_low(4)
     else:
-        clr_running(39)
+        pi.set_mode((4), pigpio.ALT0)
+        # pi.hardware_clock(4, 5000)
+        sleep(.25)
         set_running(39)
-    sleep(.25)
 
 
 # --script 40-Clear All-----------------------------------------------------------------
