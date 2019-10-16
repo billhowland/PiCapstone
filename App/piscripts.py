@@ -102,7 +102,13 @@ def get_frq(pin):
 
 
 def set_frq(pin, frq):
-    pi.set_PWM_frequency(pin, frq)
+    pi.set_PWM_frequency(pin, frq)  # returns nearest good frequency
+
+
+def set_cfrq(pin, frq):
+    if frq < 4689:
+        frq = 4689
+    pi.hardware_clock(pin, frq)  # returns 0 if OK
 
 
 def get_dc(pin):
@@ -1072,10 +1078,11 @@ def script_39():
 
     if get_running(39):
         clr_running(39)
+        pi.hardware_clock(4, 0)
         pin_out_low(4)
     else:
-        pi.set_mode((4), pigpio.ALT0)
-        # pi.hardware_clock(4, 5000)
+        # pi.set_mode((4), pigpio.ALT0)
+        pi.hardware_clock(4, 5000)
         sleep(.25)
         set_running(39)
 

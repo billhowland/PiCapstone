@@ -83,7 +83,7 @@
                     </a>
 
                     <a class='loutp' v-if="pin.func==1 && pin.dc!=0">Duty Cycle: ${pin.dc}</a>
-                    <a class='loutp' v-if="pin.name==4 && pin.func==4">Freq: ${pin.frq}Hz</a>
+                    <a class='loutp' v-if="pin.name==4 && pin.func==4">${pin.frq}Hz</a>
 
 
                     <template>
@@ -218,12 +218,17 @@
               <div class="radio">
                 <div class="lint center">Hardware Clock Settings</div>
                 <div v-for="pwm in pwms" v-bind:key='pwm.name'>
-                  <template v-if="pwm.name==4 && pwm.func==4">
-                    <a class="pwmname">Clock ${pwm.name}</a>
-                    <b class="pwmfreq">Frequency: 0-50Mhz:
-                      <input type="number" style="width: 16em" name="'GPIO' + pwm.name" v-model.number="pwm.sfrq" min="0" max="50000000" step="10" v-on:input="gpsfrq(pwm.name, pwm.sfrq)">
-                    </b>
-                  </template>
+                  <div class='grid' id='pwm_select'>
+                    <template v-if="pwm.name==4 && pwm.func==4">
+                      <a class="pwmname">GPIO ${pwm.name}</a>
+                      <b class="pwmfreq">Frequency: 0-50Mhz:
+                        <!-- <input type="number" style="width: 14em" name="'GPIO' + pwm.name" v-model.number="pwm.sfrq" min="0" max="50000000" step="10" v-on:input="gpsfrq(pwm.name, pwm.sfrq)"> -->
+                      </b>
+                      <b class="pwmduty">
+                        <input type="number" style="width: 102px" name="'GPIO' + pwm.name" v-model.number="pwm.sfrq" min="4689" max="30000000" step="1" v-on:input="gpcfrq(pwm.name, pwm.sfrq)">
+                      </b>
+                    </template>
+                    </div>
                 </div>
               </div>
             </div>

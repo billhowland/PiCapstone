@@ -21,6 +21,7 @@ urlpatterns = [
     path('run_script/<int:num>/', views.run_script, name='run_script'),
     path('gpfrq/<int:pin>', views.gpfrq, name='gpfrq'),
     path('gpsfrq/<int:pin>/<int:frq>', views.gpsfrq, name='gpsfrq'),
+    path('gpcfrq/<int:pin>/<int:frq>', views.gpcfrq, name='gpcfrq'),
     path('gpdc/<int:pin>', views.gpdc, name='gpdc'),
     path('gpsdc/<int:pin>/<int:dc>', views.gpsdc, name='gpsdc'),
     path('gphdc/<int:pin>', views.gphdc, name='gphdc'),

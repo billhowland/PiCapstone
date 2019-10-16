@@ -161,6 +161,15 @@ let app = new Vue({
             this.getAllPins()
          }).catch(err => console.log(err))
    },
+
+   gpcfrq: function(pin, sfrq) {
+         const request = fetch('gpcfrq/' + pin  + '/' + sfrq)
+           .then(response => {
+           return response.json()
+         }).then(sfrq => {
+            this.getAllPins()
+         }).catch(err => console.log(err))
+   },
    // path('gpdc/<int:pin>', views.gpdc, name='gpdc'),
    gpdc: function(pin) {
          const request = fetch('gpdc/' + pin)

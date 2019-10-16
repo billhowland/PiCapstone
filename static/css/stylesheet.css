@@ -33,7 +33,7 @@ background-size: 100% auto;
 #pwm_select {
 	display: grid;
 	grid-template-areas: "pwmname pwmfreq pwmduty";
-	grid-template-columns: 45px 120px 105px;
+	grid-template-columns: 45px 120px 115px;
 }
 
 #script_select {
