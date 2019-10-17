@@ -839,16 +839,20 @@ def script_19():
         pin_out_low(pwmPina)
         pi.set_mode((19), pigpio.ALT0)
 
-        tty_message("Script terminated.")
         clr_running(19)
         if get_running(1):
             script_1()
         if get_running(2):
             script_2()
-        if get_running(20):
-            script_20()
 
     else:
+        if get_running(20):
+            script_20()
+        if get_running(38):
+            script_38()
+        if get_running(39):
+            script_39()
+        set_running(19)
         for pin in pin_names:
             set_not_used(pin)
 
@@ -863,9 +867,6 @@ def script_19():
         pi.set_mode((pwmPinc), pigpio.ALT0)
         pi.set_mode((pwmPind), pigpio.ALT5)
         start_hpwm(pwmPinc)
-
-        clr_running(20)
-        set_running(19)
 
     sleep(.25)
 
@@ -884,6 +885,10 @@ def script_20():
     else:
         if get_running(19):
             script_19()
+        if get_running(38):
+            script_38()
+        if get_running(39):
+            script_39()
         set_running(20)
 
     sleep(.25)
@@ -1067,6 +1072,12 @@ def script_38():
     if get_running(38):
         clr_running(38)
     else:
+        if get_running(19):
+            script_19()
+        if get_running(20):
+            script_20()
+        if get_running(39):
+            script_39()
         set_running(38)
     sleep(.25)
 
@@ -1081,7 +1092,12 @@ def script_39():
         pi.hardware_clock(4, 0)
         pin_out_low(4)
     else:
-        # pi.set_mode((4), pigpio.ALT0)
+        if get_running(19):
+            script_19()
+        if get_running(20):
+            script_20()
+        if get_running(38):
+            script_38()
         pi.hardware_clock(4, 5000)
         sleep(.25)
         set_running(39)
