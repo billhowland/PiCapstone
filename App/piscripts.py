@@ -878,10 +878,11 @@ def script_20():
 
     if get_running(20):
         clr_running(20)
-        if get_running(1):
-            script_1()
-        if get_running(2):
-            script_2()
+        if not get_running(7):
+            if get_running(1):
+                script_1()
+            if get_running(2):
+                script_2()
     else:
         if get_running(19):
             script_19()
@@ -889,6 +890,10 @@ def script_20():
             script_38()
         if get_running(39):
             script_39()
+        LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
+        for pin in LED_Pins:
+            set_used(pin)
+            pi.set_PWM_dutycycle((pin), 48)
         set_running(20)
 
     sleep(.25)
