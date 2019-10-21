@@ -44,7 +44,7 @@ script_urls = ["script1", "script2", "script3", "script4", "script5",
                "script24", "script25", "script26", "script27", "script28", "script29",
                "script30", "script31", "script32", "script33", "script34", "script35",
                "script36", "script37", "script38", "script39", "script40"]
-
+IP = '127.0.0.1'
 
 # URL -> View -> Piscript
 
@@ -821,7 +821,7 @@ def script_10():
             output = StreamingOutput()
             camera.start_recording(output, format='mjpeg')
             try:
-                address = ('', 8000)
+                address = (IP, 8000)
                 server = StreamingServer(address, StreamingHandler)
                 server.serve_forever()
             finally:
