@@ -30,6 +30,12 @@ background-size: 100% auto;
 	grid-template-columns: 60px 110px 160px 135px;
 }
 
+#spi_menu {
+	display: grid;
+	grid-template-areas: "spichan spibaud spiflags";
+	grid-template-columns: 80px 120px 115px;
+}
+
 #pwm_select {
 	display: grid;
 	grid-template-areas: "pwmname pwmfreq pwmduty";
@@ -102,6 +108,34 @@ background-size: 100% auto;
 
 .pwmduty{
 	grid-area: pwmduty;
+	text-align: center;
+	background-color: darkgray;
+	border-style: outset;
+	border-color: darkgray;
+	font-size: 12px;
+}
+
+.spichan{
+	grid-area: spichan;
+	text-align: center;
+	background-color: #050197;
+	color: white;
+	border-style: outset;
+	border-color: darkgray;
+	font-size: 12px;
+}
+
+.spibaud{
+	grid-area: spibaud;
+	text-align: center;
+	background-color: darkgray;
+	border-style: outset;
+	border-color: darkgray;
+	font-size: 12px;
+}
+
+.spiflags{
+	grid-area: spiflags;
 	text-align: center;
 	background-color: darkgray;
 	border-style: outset;

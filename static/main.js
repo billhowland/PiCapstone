@@ -37,8 +37,8 @@ let app = new Vue({
           this.scripts = scriptData
         }).catch(err => console.log(err))
     },
-    runscript: function(num) {
-         const request = fetch('run_script/' + num)
+    runscript: function(num) { // was (url)
+         const request = fetch('run_script/' + num) // was (url)
          .then(sfrq => {
           this.getPwms()})
     },

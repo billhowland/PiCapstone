@@ -32,7 +32,7 @@ script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
 script_names = ["Full Configuration", "GPIO Configuration", "Flash LEDs", "Hardware PWM Test",
                 "Strobe LEDs", "Wave Test", "Software PWM LEDs", "Wave Example",
                 "Hardware Clock 4", "PiCamera Test", "Script 11", "Script 12", "Script 13", "Script 14",
-                "Script 15", "Script 16", "Script 17", "Script 18", "Hardware PWM", "Software PWM",
+                "Script 15", "Script 16", "SPI Menu", "Show Pinout", "Hardware PWM", "Software PWM",
                 "Script 21", "Script 22", "Script 23", "Script 24", "Script 25", "Script 26",
                 "Script 27", "Script 28", "Script 29", "Script 30", "Script 31", "Script 32",
                 "Script 33", "Script 34", "Script 35", "Script 36", "Script 37", "PiCamera",
@@ -894,20 +894,46 @@ def script_16():
 
 
 def script_17():
-    set_running(17)
-    tty_message("Script 17 Not Implemented.")
-    sleep(.25)
-    clr_running(17)
+    spiCS0 = 16
+    spiMOSI = 19
+    spiMISO = 20
+    spiSCLK = 21
 
+    if get_running(17):
+        clr_running(17)
+        if get_running(1):
+            script_1()
+        if get_running(2):
+            script_2()
+
+    else:
+        if get_running(20):
+            script_20()
+        if get_running(38):
+            script_38()
+        if get_running(39):
+            script_39()
+        set_running(17)
+        
+        for pin in pin_names:
+            set_not_used(pin)
+
+        used_Pins = [(spiCS0), (spiMOSI), (spiMISO), (spiSCLK)]
+        for pin in used_Pins:
+            set_used(pin)
+            pi.set_mode((pin), pigpio.ALT0)
+            get_all_pins(init=True)
+        sleep(.25)
 
 # --script 18---------------------------------------------------------------------------
 
 
 def script_18():
-    set_running(18)
-    tty_message("Script 18 Not Implemented.")
+    if get_running(18):
+        clr_running(18)
+    else:
+        set_running(18)
     sleep(.25)
-    clr_running(18)
 
 
 # --script 19-Hardware PWM Menu----------------------------------------------------------
