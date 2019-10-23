@@ -565,6 +565,11 @@ background-size: 100% auto;
 	width: 500;
 }
 
+.picam {
+	height: 496;
+	width: 656;
+}
+
 .ipadd {
 	grid-area: menu;
 	justify-self: end;

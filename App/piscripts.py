@@ -1,19 +1,13 @@
 import os
 from time import sleep
 import socket
-import io
-import picamera
-import logging
-import socketserver
-from threading import Condition
-from http import server
 # Daemon must be started FIRST!:
 os.system("sudo pigpiod")
 import pigpio  # NOT an error, DO NOT MOVE!
 pi = pigpio.pi()
 os.system('gotty --config "/home/pi/.gotty" bash &')  # permit writes with -w
 os.system('gotty --config "/home/pi/.gotty9001" cat &')
-
+os.system('python3 picam_8000.py &')
 
 pins = []
 pin_info = []
@@ -31,7 +25,7 @@ script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
                22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]
 script_names = ["Full Configuration", "GPIO Configuration", "Flash LEDs", "Hardware PWM Test",
                 "Strobe LEDs", "Wave Test", "Software PWM LEDs", "Wave Example",
-                "Hardware Clock 4", "PiCamera Test", "Script 11", "Script 12", "Script 13", "Script 14",
+                "Script 9", "Script 10", "Script 11", "Script 12", "Script 13", "Script 14",
                 "Script 15", "Script 16", "SPI Menu", "Show Pinout", "Hardware PWM", "Software PWM",
                 "Script 21", "Script 22", "Script 23", "Script 24", "Script 25", "Script 26",
                 "Script 27", "Script 28", "Script 29", "Script 30", "Script 31", "Script 32",
@@ -723,111 +717,19 @@ def script_8():
 
 
 def script_9():
-    if get_running(9):
-        clr_running(9)
-        pi.hardware_clock(4, 0)
-        pin_out_low(4)
-
-    else:
-        set_running(9)
-        tty_message("Script 9 Clock on GPIO 4")
-        sleep(.25)
-        pi.hardware_clock(4, 5000)  # 5 KHz clock on GPIO 4
+    set_running(9)
+    tty_message("Script 9 Not Implemented.")
+    sleep(.25)
+    clr_running(9)
 
 # --script 10----------------------------------------------------------------------------
 
 
 def script_10():
-    if get_running(10):
-        clr_running(10)
-
-    else:
-        set_running(10)
-        tty_message("PiCamera Test ON")
-        # sleep(.25)
-        # clr_running(10)
-
-        PAGE = """\
-        <html>
-        <head>
-        <title>picamera MJPEG streaming demo</title>
-        </head>
-        <body>
-        <h1>PiCamera MJPEG Streaming Demo</h1>
-        <img src="stream.mjpg" width="640" height="480" />
-        </body>
-        </html>
-        """
-
-        class StreamingOutput(object):
-            def __init__(self):
-                self.frame = None
-                self.buffer = io.BytesIO()
-                self.condition = Condition()
-
-            def write(self, buf):
-                if buf.startswith(b'\xff\xd8'):
-                    # New frame, copy the existing buffer's content and notify all
-                    # clients it's available
-                    self.buffer.truncate()
-                    with self.condition:
-                        self.frame = self.buffer.getvalue()
-                        self.condition.notify_all()
-                        self.buffer.seek(0)
-                return self.buffer.write(buf)
-
-        class StreamingHandler(server.BaseHTTPRequestHandler):
-            def do_GET(self):
-                if self.path == '/':
-                    self.send_response(301)
-                    self.send_header('Location', '/index.html')
-                    self.end_headers()
-                elif self.path == '/index.html':
-                    content = PAGE.encode('utf-8')
-                    self.send_response(200)
-                    self.send_header('Content-Type', 'text/html')
-                    self.send_header('Content-Length', len(content))
-                    self.end_headers()
-                    self.wfile.write(content)
-                elif self.path == '/stream.mjpg':
-                    self.send_response(200)
-                    self.send_header('Age', 0)
-                    self.send_header('Cache-Control', 'no-cache, private')
-                    self.send_header('Pragma', 'no-cache')
-                    self.send_header('Content-Type', 'multipart/x-mixed-replace; boundary=FRAME')
-                    self.end_headers()
-                    try:
-                        while True:
-                            with output.condition:
-                                output.condition.wait()
-                                frame = output.frame
-                                self.wfile.write(b'--FRAME\r\n')
-                                self.send_header('Content-Type', 'image/jpeg')
-                                self.send_header('Content-Length', len(frame))
-                                self.end_headers()
-                                self.wfile.write(frame)
-                                self.wfile.write(b'\r\n')
-                    except Exception as e:
-                        logging.warning('Removed streaming client %s: %s', self.client_address, str(e))
-                else:
-                    self.send_error(404)
-                    self.end_headers()
-
-        class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
-            allow_reuse_address = True
-            daemon_threads = True
-
-        with picamera.PiCamera(resolution='640x480', framerate=24) as camera:
-            output = StreamingOutput()
-            camera.start_recording(output, format='mjpeg')
-            try:
-                address = (IP, 8000)
-                server = StreamingServer(address, StreamingHandler)
-                server.serve_forever()
-            finally:
-                camera.stop_recording()
-
-# Once the script is running, visit http://your-pi-address:8000/ with your web-browser to view the video stream.
+    set_running(10)
+    tty_message("Script 10 Not Implemented.")
+    sleep(.25)
+    clr_running(10)
 
 
 # --script 11----------------------------------------------------------------------------
@@ -914,7 +816,7 @@ def script_17():
         if get_running(39):
             script_39()
         set_running(17)
-        
+
         for pin in pin_names:
             set_not_used(pin)
 
@@ -1195,12 +1097,6 @@ def script_38():
     if get_running(38):
         clr_running(38)
     else:
-        if get_running(19):
-            script_19()
-        if get_running(20):
-            script_20()
-        if get_running(39):
-            script_39()
         set_running(38)
     sleep(.25)
 

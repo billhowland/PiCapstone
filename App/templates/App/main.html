@@ -139,7 +139,7 @@
               </div>
           </div>
 <!-- ----------------------------------------------------------------------------------------------- -->
-          <b v-show="scripts[18].running && !scripts[17].running">  {# 18 = 19: Hard PWM Settings is ON #}
+          <b v-show="scripts[18].running && !scripts[17].running && !scripts[37].running">  {# 18 = 19: Hard PWM Settings is ON #}
 <!-- ----------------------------------------------------------------------------------------------- -->
             <div class="optcol">
               <div class="radio">
@@ -189,7 +189,7 @@
 <!-- ----------------------------------------------------------------------------------------------- -->
           </b>  {# END OF 19:Hard PWM Settings is OFF #}
 <!-- ----------------------------------------------------------------------------------------------- -->
-          <b v-show="scripts[16].running && !scripts[17].running">  {# 16 = 17: SPI Bus Settings is ON #}
+          <b v-show="scripts[16].running && !scripts[17].running && !scripts[37].running">  {# 16 = 17: SPI Bus Settings is ON #}
 <!-- ----------------------------------------------------------------------------------------------- -->
             <div class="optcol">
               <div class="radio">
@@ -221,7 +221,7 @@
 <!-- ----------------------------------------------------------------------------------------------- -->
           </b>  {# END OF 17:SPI Bus Settings is OFF #}
 <!-- ----------------------------------------------------------------------------------------------- -->
-          <b v-show="scripts[19].running && !scripts[17].running">  {# 19 = 20: Soft PWM Settings is ON #}
+          <b v-show="scripts[19].running && !scripts[17].running && !scripts[37].running">  {# 19 = 20: Soft PWM Settings is ON #}
 <!-- ----------------------------------------------------------------------------------------------- -->
             <div class="optcol">
               <div class="radio">
@@ -244,7 +244,7 @@
 <!-- ----------------------------------------------------------------------------------------------- -->
           </b>  {# END OF 20:Soft PWM Settings is OFF #}
 <!-- ----------------------------------------------------------------------------------------------- -->
-          <b v-show="scripts[38].running && !scripts[17].running">  {# 38 = 39: Hardware Clock Settings is ON #}
+          <b v-show="scripts[38].running && !scripts[17].running && !scripts[37].running">  {# 38 = 39: Hardware Clock Settings is ON #}
 <!-- ----------------------------------------------------------------------------------------------- -->
             <div class="optcol">
               <div class="radio">
@@ -267,7 +267,7 @@
 <!-- ----------------------------------------------------------------------------------------------- -->
 </b>  {# END OF 39: Hardware Clock Settings is OFF #}
 <!-- ----------------------------------------------------------------------------------------------- -->
-          <a v-show="!scripts[38].running && !scripts[19].running && !scripts[18].running && !scripts[17].running && !scripts[16].running">  {# Exclude optional rightcols #}
+          <a v-show="!scripts[38].running && !scripts[37].running && !scripts[19].running && !scripts[18].running && !scripts[17].running && !scripts[16].running">  {# Exclude optional rightcols #}
             <div class="rightcol">
               <template v-if='"{{request.user.username}}"=="bill"'>
                 <div class="linl center">Interactive Console</div>
@@ -288,6 +288,14 @@
               <template>
                 <div class="lint center">Raspberry Pi Diagram</div>
                 <img class="img" src="/static/css/rp2_pinout_full.png" alt="RaspPi IO Port" />
+              </template>
+            </div>
+          </a>
+          <a v-show="scripts[37].running && !scripts[17].running">
+            <div class="rightcol">
+              <template>
+                <div class="linl center">Top Secret sPiCam</div>
+                <iframe class="picam" src="{{IPC}}"></iframe>
               </template>
             </div>
           </a>
