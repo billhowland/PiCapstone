@@ -24,7 +24,7 @@ pwm_names = [4, 10, 9, 8, 11, 7, 5, 6, 12, 13, 26, 25, 27, 24, 23, 22, 18, 17, 2
 script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
                22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]
 script_names = ["Full Configuration", "GPIO Configuration", "Flash LEDs", "Hardware PWM Test",
-                "Strobe LEDs", "Wave Test", "Software PWM LEDs", "Wave Example",
+                "Strobe LEDs", "Wave Test", "Software PWM LEDs", "Script 8",
                 "Script 9", "Script 10", "Script 11", "Script 12", "Script 13", "Script 14",
                 "Script 15", "Script 16", "SPI Menu", "Show Pinout", "Hardware PWM", "Software PWM",
                 "Script 21", "Script 22", "Script 23", "Script 24", "Script 25", "Script 26",
@@ -608,7 +608,7 @@ def script_6():
         pi.wave_clear()
         pi.wave_add_generic(flash_500)  # 500 ms flashes
         f500 = pi.wave_create()  # create and save id
-        tty_message(str(f500))  # returning 0
+        # tty_message(str(f500))  # returning 0
 
         while get_running(6) and read_pin(exitPin):
             pi.wave_send_repeat(f500)
@@ -666,13 +666,15 @@ def script_7():
     tty_message("Script terminated.")
 
 
-# --script 8: PIGPIO Wave Example--------------------------------------------------------
-
+# --script 8: ---------------------------------------------------------------------------
 
 def script_8():
     set_running(8)
-    tty_message("Script 8: PIGPIO Wave Example")
+    tty_message("Script 8 Not Implemented.")
     sleep(.25)
+    clr_running(8)
+
+# Original PIGPIO Wave Example:
 
     G1 = 4
     G2 = 5
@@ -811,6 +813,8 @@ def script_17():
     else:
         if get_running(20):
             script_20()
+        if get_running(19):
+            script_19()
         if get_running(38):
             script_38()
         if get_running(39):
@@ -868,6 +872,8 @@ def script_19():
     else:
         if get_running(20):
             script_20()
+        if get_running(17):
+            script_17()
         if get_running(38):
             script_38()
         if get_running(39):
@@ -891,8 +897,8 @@ def script_19():
     sleep(.25)
 
 
-# --script 20-Software PWM Menu---------------------------------------------------------
-# Need to get pwms.sdc to update when re-opened
+# --script 20-Software PWM Menu----------------------------------------------------------
+
 
 def script_20():
 
@@ -906,6 +912,8 @@ def script_20():
     else:
         if get_running(19):
             script_19()
+        if get_running(17):
+            script_17()
         if get_running(38):
             script_38()
         if get_running(39):
@@ -1113,6 +1121,8 @@ def script_39():
     else:
         if get_running(19):
             script_19()
+        if get_running(17):
+            script_17()
         if get_running(20):
             script_20()
         if get_running(38):
@@ -1155,6 +1165,7 @@ def script_40():
     for script in script_nums:
         clr_running(script)
 
+    tty_message("All scripts terminated.")
     sleep(0.25)
     if scriptrunning == 1:
         script_1()
