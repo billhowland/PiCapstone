@@ -25,7 +25,7 @@ script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
                22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]
 script_names = ["Full Configuration", "GPIO Configuration", "Flash LEDs", "Hardware PWM Test",
                 "Strobe LEDs", "Wave Test", "Software PWM LEDs", "Script 8",
-                "Script 9", "Script 10", "Script 11", "Script 12", "Script 13", "Script 14",
+                "Dimmer", "Script 10", "Script 11", "Script 12", "Script 13", "Script 14",
                 "Script 15", "Script 16", "SPI Menu", "Show Pinout", "Hardware PWM", "Software PWM",
                 "Script 21", "Script 22", "Script 23", "Script 24", "Script 25", "Script 26",
                 "Script 27", "Script 28", "Script 29", "Script 30", "Script 31", "Script 32",
@@ -489,15 +489,22 @@ def script_4():
     pud_up(butPin)  # Button pin set as input w/ pull-up
     pud_up(exitPin)
 
-    if get_running(4):
+    if  get_running(4):
+        clr_running(4)
+        stop_hpwm(pwmPina)
         stop_hpwm(pwmPinb)
+        stop_hpwm(pwmPinc)
         stop_hpwm(pwmPind)
+        pi.set_mode((pwmPina), pigpio.OUTPUT)
+        pi.set_mode((pwmPinb), pigpio.INPUT)
+        pi.set_mode((pwmPinc), pigpio.INPUT)
+        pi.set_mode((pwmPind), pigpio.OUTPUT)
         pud_up(pwmPinb)
         pud_up(pwmPinc)
         pin_out_low(pwmPina)
+        pin_out_low(pwmPind)
         pi.set_mode((19), pigpio.ALT0)
         tty_message("Script terminated.")
-        clr_running(4)
         if get_running(1):
             script_1()
         if get_running(2):
@@ -538,15 +545,17 @@ def script_4():
         tty_message("Press GPIO 25 to terminate")
         tty_message("Press GPIO 17 button for fun")
 
-        while read_pin(exitPin):
-            if read_pin(butPin) == 1:
-                pass
-            else:
+        while get_running(4):
+            if read_pin(butPin):
+                set_hfrq(pwmPinb, 1)
+                set_hdc(pwmPinb, 500000)
+            elif read_pin(butPin) == 0:
                 set_hfrq(pwmPinb, 5)
                 set_hdc(pwmPinb, 100000)
+            if read_pin(exitPin):
                 start_hpwm(pwmPinb)
-
-        script_4()
+            elif read_pin(exitPin) == 0:
+                script_4()
 
 
 # --script 5 Strobe LEDs----------------------------------------------------------------
@@ -676,53 +685,93 @@ def script_8():
 
 # Original PIGPIO Wave Example:
 
-    G1 = 4
-    G2 = 5
-
-    set_pin_out(G1)
-    set_pin_out(G2)
-
-    flash_500 = []  # flash every 500 ms
-    flash_100 = []  # flash every 100 ms
-
-    #                              ON     OFF  DELAY
-
-    flash_500.append(pigpio.pulse(1 << G1, 0, 500000))
-    flash_500.append(pigpio.pulse(0, 1 << G1, 500000))
-
-    flash_100.append(pigpio.pulse(1 << G1, 1 << G2, 100000))
-    flash_100.append(pigpio.pulse(1 << G2, 1 << G1, 100000))
-
-    pi.wave_clear()  # clear any existing waveforms
-
-    pi.wave_add_generic(flash_500)  # 500 ms flashes
-    f500 = pi.wave_create()  # create and save id
-    # tty_message(str(flash_500))
-
-    pi.wave_add_generic(flash_100)  # 100 ms flashes
-    f100 = pi.wave_create()  # create and save id
-    # tty_message(str(flash_100))
-
-    pi.wave_send_repeat(f500)
-    sleep(4)
-    pi.wave_send_repeat(f100)
-    sleep(4)
-    pi.wave_send_repeat(f500)
-    sleep(4)
-
-    pi.wave_tx_stop()  # stop waveform
-    pi.wave_clear()  # clear all waveforms
-    clr_running(8)
+    # G1 = 4
+    # G2 = 5
+    #
+    # set_pin_out(G1)
+    # set_pin_out(G2)
+    #
+    # flash_500 = []  # flash every 500 ms
+    # flash_100 = []  # flash every 100 ms
+    #
+    # #                              ON     OFF  DELAY
+    #
+    # flash_500.append(pigpio.pulse(1 << G1, 0, 500000))
+    # flash_500.append(pigpio.pulse(0, 1 << G1, 500000))
+    #
+    # flash_100.append(pigpio.pulse(1 << G1, 1 << G2, 100000))
+    # flash_100.append(pigpio.pulse(1 << G2, 1 << G1, 100000))
+    #
+    # pi.wave_clear()  # clear any existing waveforms
+    #
+    # pi.wave_add_generic(flash_500)  # 500 ms flashes
+    # f500 = pi.wave_create()  # create and save id
+    # # tty_message(str(flash_500))
+    #
+    # pi.wave_add_generic(flash_100)  # 100 ms flashes
+    # f100 = pi.wave_create()  # create and save id
+    # # tty_message(str(flash_100))
+    #
+    # pi.wave_send_repeat(f500)
+    # sleep(4)
+    # pi.wave_send_repeat(f100)
+    # sleep(4)
+    # pi.wave_send_repeat(f500)
+    # sleep(4)
+    #
+    # pi.wave_tx_stop()  # stop waveform
+    # pi.wave_clear()  # clear all waveforms
+    # clr_running(8)
 
 
 # --script 9----------------------------------------------------------------------------
 
 
 def script_9():
-    set_running(9)
-    tty_message("Script 9 Not Implemented.")
-    sleep(.25)
+    global pins
+    if get_running(9):
+        clr_running(9)
+        clr_running(20)
+    else:
+        set_running(9)
+        tty_message("Script 9: Software PWM dimmer")
+
+        ALED_Pins = [4, 9, 11, 5, 12]
+        for pin in ALED_Pins:
+            set_used(pin)
+            pi.set_PWM_frequency((pin), 100)
+
+        BLED_Pins = [10, 8, 7, 6]
+        for pin in BLED_Pins:
+            set_used(pin)
+            pi.set_PWM_frequency((pin), 100)
+
+        butPin = 17
+        exitPin = 25
+        pud_up(butPin)  # Button pin set as input w/ pull-up
+        pud_up(exitPin)
+
+        while get_running(9) and read_pin(exitPin):
+
+            for dc in range (0, 255):
+                for pin in ALED_Pins:
+                    pi.set_PWM_dutycycle((pin), (dc))  # PWM 1/2 on
+                for pin in BLED_Pins:
+                    pi.set_PWM_dutycycle((pin), (255 - dc))  # PWM 1/2 on
+                sleep(.015)
+            for dc in range (255, 0, -1):
+                for pin in ALED_Pins:
+                    pi.set_PWM_dutycycle((pin), (dc))  # PWM 1/2 on
+                for pin in BLED_Pins:
+                    pi.set_PWM_dutycycle((pin), (255 - dc))  # PWM 1/2 on
+                sleep(.015)
+            get_pwms()
+
+    for pin in LED_Pins:
+        pin_out_low(pin)
     clr_running(9)
+    tty_message("Script terminated.")
+
 
 # --script 10----------------------------------------------------------------------------
 
@@ -858,9 +907,9 @@ def script_19():
         stop_hpwm(pwmPinc)
         stop_hpwm(pwmPind)
         # Default config the pins:
+        pin_out_low(pwmPina)
         pud_up(pwmPinb)
         pud_up(pwmPinc)
-        pin_out_low(pwmPina)
         pi.set_mode((19), pigpio.ALT0)
 
         clr_running(19)
