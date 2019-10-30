@@ -558,6 +558,7 @@ def script_4():
                 script_4()
 
 
+
 # --script 5 Strobe LEDs----------------------------------------------------------------
 
 
@@ -767,8 +768,11 @@ def script_9():
                 sleep(.015)
             get_pwms()
 
-    for pin in LED_Pins:
+    for pin in ALED_Pins:
         pin_out_low(pin)
+    for pin in BLED_Pins:
+        pin_out_low(pin)
+
     clr_running(9)
     tty_message("Script terminated.")
 
