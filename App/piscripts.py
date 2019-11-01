@@ -414,17 +414,19 @@ def script_1():
     sleep(0.25)
 
     for pin in pin_names:
-        untest_pin(pin)
+        # untest_pin(pin)
         set_used(pin)
-    get_all_pins(init=True)
+    # get_all_pins(init=True)
 
-    LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
-    for pin in LED_Pins:
-        pin_out_low(pin)
+    # LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
+    # for pin in LED_Pins:
+        # if pin_use(pin) != 4 and pin_use(pin) != 2:
+            # pin_out_low(pin)
 
-    Pushbutton_Pins = [18, 17, 23, 22, 27, 24, 25, 13, 26]
-    for pin in Pushbutton_Pins:
-        pud_up(pin)
+    # Pushbutton_Pins = [18, 17, 23, 22, 27, 24, 25, 13, 26]
+    # for pin in Pushbutton_Pins:
+        # if pin_use(pin) != 4 and pin_use(pin) != 2:
+            # pud_up(pin)
 
     sleep(0.25)
 
@@ -436,23 +438,23 @@ def script_2():
     set_running(2)
     clr_running(1)
     sleep(0.25)
-    pi.wave_tx_stop()  # stop waveform
-    pi.wave_clear()  # clear all waveforms
+    # pi.wave_tx_stop()  # stop waveform
+    # pi.wave_clear()  # clear all waveforms
 
     for pin in pin_names:
-        untest_pin(pin)
+        # untest_pin(pin)
         set_not_used(pin)
-    get_all_pins(init=True)
+    # get_all_pins(init=True)
 
     LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
     for pin in LED_Pins:
         set_used(pin)
-        pin_out_low(pin)
+        # pin_out_low(pin)
 
     Pushbutton_Pins = [18, 17, 23, 22, 27, 24, 25, 13, 26]
     for pin in Pushbutton_Pins:
         set_used(pin)
-        pud_up(pin)
+        # pud_up(pin)
 
     sleep(0.25)
 
