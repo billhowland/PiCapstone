@@ -1,4 +1,4 @@
-from .piscripts import (get_all_pins, get_scripts, script_2)
+from .piscripts import (get_all_pins, get_scripts, script_0, script_2)
 import pigpio
 pi = pigpio.pi()
 init = True
@@ -29,6 +29,7 @@ def main():
     scripts = get_scripts(init)
 
     # Call start config here:
+    script_0()
     script_2()
     init = False
 

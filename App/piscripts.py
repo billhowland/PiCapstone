@@ -7,7 +7,7 @@ import pigpio  # NOT an error, DO NOT MOVE!
 pi = pigpio.pi()
 os.system('gotty --config "/home/pi/.gotty" bash &')  # permit writes with -w
 os.system('gotty --config "/home/pi/.gotty9001" cat &')
-os.system('python3 picam_8000.py &')
+# os.system('python3 picam_8000.py &')
 
 pins = []
 pin_info = []
@@ -404,6 +404,28 @@ def clr_running(scr):
     scripts[scr]['running'] = False
 
 
+# --script 0----------------------------------------------------------------------------
+
+
+def script_0():
+    global pins
+
+    for pin in pin_names:
+        untest_pin(pin)
+        set_used(pin)
+    get_all_pins(init=True)
+
+    LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
+    for pin in LED_Pins:
+        pin_out_low(pin)
+
+    Pushbutton_Pins = [18, 17, 23, 22, 27, 24, 25, 13, 26]
+    for pin in Pushbutton_Pins:
+        pud_up(pin)
+
+    sleep(0.25)
+
+
 # --script 1----------------------------------------------------------------------------
 
 
@@ -491,8 +513,9 @@ def script_4():
     pud_up(butPin)  # Button pin set as input w/ pull-up
     pud_up(exitPin)
 
-    if  get_running(4):
+    if get_running(4):
         clr_running(4)
+        sleep(.125)
         stop_hpwm(pwmPina)
         stop_hpwm(pwmPinb)
         stop_hpwm(pwmPinc)
@@ -511,7 +534,6 @@ def script_4():
             script_1()
         if get_running(2):
             script_2()
-        clr_running(4)
 
     else:
         tty_message("Script 4: Hardware PWM test.")
@@ -558,7 +580,6 @@ def script_4():
                 start_hpwm(pwmPinb)
             elif read_pin(exitPin) == 0:
                 script_4()
-
 
 
 # --script 5 Strobe LEDs----------------------------------------------------------------
@@ -756,13 +777,13 @@ def script_9():
 
         while get_running(9) and read_pin(exitPin):
 
-            for dc in range (0, 255):
+            for dc in range(0, 255):
                 for pin in ALED_Pins:
                     pi.set_PWM_dutycycle((pin), (dc))  # PWM 1/2 on
                 for pin in BLED_Pins:
                     pi.set_PWM_dutycycle((pin), (255 - dc))  # PWM 1/2 on
                 sleep(.015)
-            for dc in range (255, 0, -1):
+            for dc in range(255, 0, -1):
                 for pin in ALED_Pins:
                     pi.set_PWM_dutycycle((pin), (dc))  # PWM 1/2 on
                 for pin in BLED_Pins:
@@ -963,7 +984,7 @@ def script_20():
         if not get_running(7):
             for pin in LED_Pins:
                 pi.set_PWM_dutycycle((pin), 0)
-    
+
     else:
         if get_running(19):
             script_19()
