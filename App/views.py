@@ -17,7 +17,7 @@ from .pimain import *
 def main(request):
     IP = 'http://{}:9000'.format(get_ip())
     IPB = 'http://{}:9001'.format(get_ip())
-    IPC = 'http://{}:8000'.format(get_ip())
+    IPC = 'http://{}:9002'.format(get_ip())
     IPX = ' {}:8080'.format(get_ip())
     return render(request, 'App/main.html', {'IP': IP, 'IPB': IPB, 'IPC': IPC, 'IPX': IPX})
 

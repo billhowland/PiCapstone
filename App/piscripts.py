@@ -7,7 +7,7 @@ import pigpio  # NOT an error, DO NOT MOVE!
 pi = pigpio.pi()
 os.system('gotty --config "/home/pi/.gotty" bash &')  # permit writes with -w
 os.system('gotty --config "/home/pi/.gotty9001" cat &')
-# os.system('python3 picam_8000.py &')
+os.system('python3 picam_9002.py &')
 
 pins = []
 pin_info = []
@@ -872,12 +872,15 @@ def script_16():
 
 # --script 17---------------------------------------------------------------------------
 
-
+# Opens SPI 1
+# Baud is tied to shfrq
+# Flags is tied to shdc
 def script_17():
     spiCS0 = 16
     spiMOSI = 19
     spiMISO = 20
     spiSCLK = 21
+    h = 0
 
     if get_running(17):
         clr_running(17)
@@ -885,6 +888,7 @@ def script_17():
             script_1()
         if get_running(2):
             script_2()
+        pi.spi_close(h)
 
     else:
         if get_running(20):
@@ -906,6 +910,8 @@ def script_17():
             pi.set_mode((pin), pigpio.ALT0)
             get_all_pins(init=True)
         sleep(.25)
+
+        h = pi.spi_open(1, 50000, 3)
 
 # --script 18---------------------------------------------------------------------------
 
@@ -1238,11 +1244,13 @@ def script_40():
     if get_running(2):
         scriptrunning = 2
 
+    sleep(.25)
+
     for script in script_nums:
         clr_running(script)
 
     tty_message("All scripts terminated.")
-    sleep(0.25)
+
     if scriptrunning == 1:
         script_1()
     if scriptrunning == 2:
