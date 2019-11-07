@@ -7,7 +7,7 @@ import pigpio  # NOT an error, DO NOT MOVE!
 pi = pigpio.pi()
 # os.system('gotty --config "/home/pi/.gotty" bash &')  # permit writes with -w
 os.system('gotty --config "/home/pi/.gotty9001" cat &')
-os.system('python3 picam_9002.py &')
+# os.system('python3 picam_9002.py &')
 
 pins = []
 pin_info = []

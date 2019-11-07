@@ -5,7 +5,7 @@ import socketserver
 from threading import Condition
 from http import server
 import sys
-close=sys.argv[1]
+# close=sys.argv[1]
 
 PAGE = """\
 <html>
