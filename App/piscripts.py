@@ -5,7 +5,7 @@ import socket
 os.system("sudo pigpiod")
 import pigpio  # NOT an error, DO NOT MOVE!
 pi = pigpio.pi()
-os.system('gotty --config "/home/pi/.gotty" bash &')  # permit writes with -w
+# os.system('gotty --config "/home/pi/.gotty" bash &')  # permit writes with -w
 os.system('gotty --config "/home/pi/.gotty9001" cat &')
 os.system('python3 picam_9002.py &')
 
@@ -54,6 +54,22 @@ def get_ip():
         s.close()
         return IP
 
+
+def start_bash():
+    os.system('gotty --config "/home/pi/.gotty" bash &')
+
+
+def stop_bash():
+    os.system('gotty --config "/home/pi/.gotty" exit &')
+
+
+def start_cam():
+    os.system('python3 picam_9002.py open &')
+    # pass
+
+def stop_cam():
+    os.system('python3 picam_9002.py close &')
+    # pass
 
 def get_pin_idx(pin):
     return pin_names.index(pin)
@@ -1186,8 +1202,10 @@ def script_38():
 
     if get_running(38):
         clr_running(38)
+        # stop_cam()
     else:
         set_running(38)
+        # start_cam()
     sleep(.25)
 
 

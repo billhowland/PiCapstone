@@ -4,6 +4,8 @@ import logging
 import socketserver
 from threading import Condition
 from http import server
+import sys
+close=sys.argv[1]
 
 PAGE = """\
 <html>
@@ -78,6 +80,9 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
     allow_reuse_address = True
     daemon_threads = True
 
+# if close == 'close':
+    # camera.close()
+
 
 with picamera.PiCamera(resolution='320x200', framerate=10) as camera:
     output = StreamingOutput()
@@ -86,5 +91,6 @@ with picamera.PiCamera(resolution='320x200', framerate=10) as camera:
         address = ('', 9002)
         server = StreamingServer(address, StreamingHandler)
         server.serve_forever()
+
     finally:
         camera.stop_recording()
