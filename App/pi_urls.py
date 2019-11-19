@@ -28,4 +28,8 @@ urlpatterns = [
     path('gphfrq/<int:pin>', views.gphfrq, name='gphfrq'),
     path('gpshdc/<int:pin>/<int:hdc>', views.gpshdc, name='gpshdc'),
     path('gpshfrq/<int:pin>/<int:hfrq>', views.gpshfrq, name='gpshfrq'),
+
+    path('gpspibaud/<int:spi>', views.gpspibaud, name='gpspibaud'),
+    path('gpspiflags/<int:spi>', views.gpspiflags, name='gpspiflags'),
+
 ]

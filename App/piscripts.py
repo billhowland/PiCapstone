@@ -7,20 +7,20 @@ import pigpio  # NOT an error, DO NOT MOVE!
 pi = pigpio.pi()
 # os.system('gotty --config "/home/pi/.gotty" bash &')  # permit writes with -w
 os.system('gotty --config "/home/pi/.gotty9001" cat &')
-# os.system('python3 picam_9002.py &')
+os.system('python3 picam_9002.py &')
 
 pins = []
 pin_info = []
 scripts = []
 script_info = []
 pwms = []
+spis = []
+spi_info = []
 pwm_info = []
 # pin order on display is set by the list order here:
-# pin_names = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
-# pin_names = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
-# pin_names = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 17, 18, 22, 23, 24, 25, 26, 27, 2, 3, 14, 15, 16, 19, 20, 21]
 pin_names = [4, 10, 9, 8, 11, 7, 5, 6, 12, 13, 26, 25, 27, 24, 23, 22, 18, 17, 2, 3, 14, 15, 16, 19, 20, 21]
 pwm_names = [4, 10, 9, 8, 11, 7, 5, 6, 12, 13, 26, 25, 27, 24, 23, 22, 18, 17, 2, 3, 14, 15, 16, 19, 20, 21]
+spi_names = [0, 1]
 script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
                22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]
 script_names = ["Full Configuration", "GPIO Configuration", "Flash LEDs", "Hardware PWM Test",
@@ -156,6 +156,8 @@ def set_not_used(pin):
 
 def get_all_pins(init=False):
     global pins
+    global spis
+
 
     for pin in pin_names:
         func = pin_use(pin)
@@ -207,6 +209,18 @@ def get_all_pins(init=False):
             })
 
     pins = pin_info
+
+
+    for spi in spi_names:
+        if init:
+            baud = 32000
+            flags = 0
+            spi_info.append({
+                'spi': spi,
+                'baud': baud,
+                'flags': flags,
+            })
+    spis = spi_info
     # return pins
 
 # Outputs:
@@ -379,7 +393,31 @@ def get_pwms():
             'shfrq': hfrq,
             'shdc': hdc,
             })
+
+    global spis
+    for spi in spi_names:
+        baud = get_spi_baud(spi)
+        flags = get_spi_flags(spi)
+        pwm_info.append({
+            'spi': spi,
+            'baud': baud,
+            'flags': flags,
+            })
     pwms = pwm_info
+
+
+def get_spi_idx(spi):
+    return spi_names.index(spi)
+
+
+def get_spi_baud(spi):
+    spi = spis[get_spi_idx(spi)]
+    return spi['baud']
+
+
+def get_spi_flags(spi):
+    spi = spis[get_spi_idx(spi)]
+    return spi['flags']
 
 
 def get_scr_idx(scr):

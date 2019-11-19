@@ -6,7 +6,7 @@ from .piscripts import (pin_names, pwm_names, test_pin, script_nums, set_pin_out
                         pin_use, pud_up, pud_dn, pud_off, get_pud, get_ip, get_test,
                         get_testing, get_used, get_name, get_url, get_running,
                         do_script, get_frq, set_frq, set_cfrq, get_dc, set_dc, get_hfrq, get_hdc,
-                        set_hdc, set_hfrq, start_hpwm)
+                        set_hdc, set_hfrq, start_hpwm, spi_names, get_spi_baud, get_spi_flags)
 
 from .pimain import *
 
@@ -218,6 +218,14 @@ def get_pwms(request):
             'shfrq': hfrq,
             'shdc': hdc,
             })
+    for spi in spi_names:
+        baud = get_spi_baud(spi)
+        flags = get_spi_flags(spi)
+        pwm_info.append({
+            'spi': spi,
+            'baud': baud,
+            'flags': flags,
+            })
 
     return JsonResponse(pwm_info, safe=False)
 
@@ -225,3 +233,13 @@ def get_pwms(request):
 def run_script(request, num):
     do_script(num)
     return HttpResponse('Success')
+
+
+def gpspibaud(request, spi):
+    baud = get_spi_baud(spi)
+    return JsonResponse(baud, safe=False)
+
+
+def gpspiflags(request, spi):
+    flags = get_spi_flags(pin)
+    return JsonResponse(flags, safe=False)
