@@ -1,6 +1,7 @@
 // gpio radio button event listeners
 const pins = document.getElementsByName('pins')
 const pwms = document.getElementsByName('pwms')
+const spis = document.getElementsByName('spis')
 const scripts = document.getElementsByName('scripts')
 const csrftoken = Cookies.get('csrftoken')
 const headers = new Headers({
@@ -221,6 +222,28 @@ let app = new Vue({
           }).then(shdc => {
              this.getAllPins()
           }).catch(err => console.log(err))
+   },
+   gpspibaud: function(spi, baud) {
+          const request = fetch('gpspibaud/' + spi + '/' + baud)
+            .then(response => {
+            return response.json()
+          }).then(baud => {
+             this.getAllPins()
+          }).catch(err => console.log(err))
+   },
+   gpspiflags: function(spi, flags) {
+          const request = fetch('gpspiflags/' + spi + '/' + flags)
+            .then(response => {
+            return response.json()
+          }).then(flags => {
+             this.getAllPins()
+          }).catch(err => console.log(err))
+   },
+   dispbash: function() {
+          const request = fetch(dispbash)
+   },
+   killbash: function() {
+          const request = fetch(killbash)
    },
   }
 })

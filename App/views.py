@@ -241,5 +241,11 @@ def gpspibaud(request, spi):
 
 
 def gpspiflags(request, spi):
-    flags = get_spi_flags(pin)
+    flags = get_spi_flags(spi)
     return JsonResponse(flags, safe=False)
+
+def dispbash(request):
+    startbash()
+
+def killbash(request):
+    stopbash()
