@@ -31,7 +31,4 @@ urlpatterns = [
 
     path('gpspibaud/<int:spi>', views.gpspibaud, name='gpspibaud'),
     path('gpspiflags/<int:spi>', views.gpspiflags, name='gpspiflags'),
-
-    path('dispbash', views.dispbash, name='dispbash'),
-    path('killbash', views.killbash, name='killbash'),
 ]

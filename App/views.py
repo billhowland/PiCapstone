@@ -6,7 +6,8 @@ from .piscripts import (pin_names, pwm_names, test_pin, script_nums, set_pin_out
                         pin_use, pud_up, pud_dn, pud_off, get_pud, get_ip, get_test,
                         get_testing, get_used, get_name, get_url, get_running,
                         do_script, get_frq, set_frq, set_cfrq, get_dc, set_dc, get_hfrq, get_hdc,
-                        set_hdc, set_hfrq, start_hpwm, spi_names, get_spi_baud, get_spi_flags)
+                        set_hdc, set_hfrq, start_hpwm, spi_names, get_spi_baud, get_spi_flags, start_bash,
+                        stop_bash)
 
 from .pimain import *
 
@@ -19,6 +20,10 @@ def main(request):
     IPB = 'http://{}:9001'.format(get_ip())
     IPC = 'http://{}:9002'.format(get_ip())
     IPX = ' {}:8080'.format(get_ip())
+    if request.user.username == "bill":
+        start_bash()
+    else:
+        stop_bash()
     return render(request, 'App/main.html', {'IP': IP, 'IPB': IPB, 'IPC': IPC, 'IPX': IPX})
 
 
@@ -243,9 +248,3 @@ def gpspibaud(request, spi):
 def gpspiflags(request, spi):
     flags = get_spi_flags(spi)
     return JsonResponse(flags, safe=False)
-
-def dispbash(request):
-    startbash()
-
-def killbash(request):
-    stopbash()
