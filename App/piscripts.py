@@ -1,11 +1,11 @@
 import os
 from time import sleep
 import socket
+import picamera
 # Daemon must be started FIRST!:
 os.system("sudo pigpiod")
 import pigpio  # NOT an error, DO NOT MOVE!
 pi = pigpio.pi()
-# os.system('gotty --config "/home/pi/.gotty" bash &')  # permit writes with -w
 os.system('gotty --config "/home/pi/.gotty9001" cat &')
 os.system('python3 picam_9002.py &')
 
@@ -29,7 +29,7 @@ script_names = ["Full Configuration", "GPIO Configuration", "Flash LEDs", "Hardw
                 "Script 15", "Script 16", "SPI Menu", "Show Pinout", "Hardware PWM", "Software PWM",
                 "Script 21", "Script 22", "Script 23", "Script 24", "Script 25", "Script 26",
                 "Script 27", "Script 28", "Script 29", "Script 30", "Script 31", "Script 32",
-                "Script 33", "Script 34", "Script 35", "Script 36", "Script 37", "PiCamera",
+                "Script 33", "Script 34", "Script 35", "Cam Check", "BASH Console", "PiCamera",
                 "Hardware Clock", "Clear All"]
 script_urls = ["script1", "script2", "script3", "script4", "script5",
                "script6", "script7", "script8", "script9", "script10", "script11",
@@ -56,20 +56,25 @@ def get_ip():
 
 
 def start_bash():
+    os.system('killall gotty')
     os.system('gotty --config "/home/pi/.gotty" bash &')
+    os.system('gotty --config "/home/pi/.gotty9001" cat &')
 
 
 def stop_bash():
-    os.system('gotty --config "/home/pi/.gotty" exit &')
+    os.system('killall gotty')
+    os.system('gotty --config "/home/pi/.gotty9001" cat &')
 
 
 def start_cam():
     os.system('python3 picam_9002.py open &')
     # pass
 
+
 def stop_cam():
     os.system('python3 picam_9002.py close &')
     # pass
+
 
 def get_pin_idx(pin):
     return pin_names.index(pin)
@@ -158,7 +163,6 @@ def get_all_pins(init=False):
     global pins
     global spis
 
-
     for pin in pin_names:
         func = pin_use(pin)
         in_lvl = read_pin(pin)
@@ -209,7 +213,6 @@ def get_all_pins(init=False):
             })
 
     pins = pin_info
-
 
     for spi in spi_names:
         if init:
@@ -458,6 +461,14 @@ def clr_running(scr):
     scripts[scr]['running'] = False
 
 
+def tog_failed(scr):
+    if get_running(scr) != 2:
+        scr = get_scr_idx(scr)
+        scripts[scr]['running'] = 2
+    else:
+        clr_running(scr)
+
+
 # --script 0----------------------------------------------------------------------------
 
 
@@ -526,6 +537,8 @@ def script_2():
     for pin in LED_Pins:
         set_used(pin)
         # pin_out_low(pin)
+    if get_running(19):
+        set_used(19)
 
     Pushbutton_Pins = [18, 17, 23, 22, 27, 24, 25, 13, 26]
     for pin in Pushbutton_Pins:
@@ -703,6 +716,8 @@ def script_6():
 
         pi.wave_tx_stop()  # stop waveform
         pi.wave_clear()  # clear all waveforms
+        for pin in LED_Pins:
+            pin_out_low(pin)
         sleep(.25)
         clr_running(6)
         tty_message("Script terminated.")
@@ -1217,20 +1232,31 @@ def script_35():
 
 
 def script_36():
-    set_running(36)
-    tty_message("Script 36 Not Implemented.")
-    sleep(.25)
-    clr_running(36)
+    if get_running(36):
+        clr_running(36)
+    else:
+        set_running(36)
+        camtest = os.popen('vcgencmd get_camera').read()
+        tty_message(camtest)
 
+        sleep(.15)
+        clr_running(36)
 
 # --script 37---------------------------------------------------------------------------
 
 
 def script_37():
-    set_running(37)
-    tty_message("Script 37 Not Implemented.")
+
+    if get_running(37):
+        stop_bash()
+        sleep(.5)
+        clr_running(37)
+
+    else:
+        set_running(37)
+        start_bash()
+        sleep(.5)
     sleep(.25)
-    clr_running(37)
 
 
 # --script 38-Pi Camera-----------------------------------------------------------------
@@ -1242,8 +1268,13 @@ def script_38():
         clr_running(38)
         # stop_cam()
     else:
-        set_running(38)
-        # start_cam()
+        camtest = os.popen('vcgencmd get_camera').read()
+        if camtest != "supported=1 detected=1\n":
+            tty_message("No camera connected.")
+            tog_failed(38)
+        else:
+            set_running(38)
+            # start_cam()
     sleep(.25)
 
 

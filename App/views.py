@@ -6,8 +6,7 @@ from .piscripts import (pin_names, pwm_names, test_pin, script_nums, set_pin_out
                         pin_use, pud_up, pud_dn, pud_off, get_pud, get_ip, get_test,
                         get_testing, get_used, get_name, get_url, get_running,
                         do_script, get_frq, set_frq, set_cfrq, get_dc, set_dc, get_hfrq, get_hdc,
-                        set_hdc, set_hfrq, start_hpwm, spi_names, get_spi_baud, get_spi_flags, start_bash,
-                        stop_bash)
+                        set_hdc, set_hfrq, start_hpwm, spi_names, get_spi_baud, get_spi_flags, tog_failed)
 
 from .pimain import *
 
@@ -16,14 +15,10 @@ from .pimain import *
 
 @login_required
 def main(request):
-    IP = 'http://{}:9000'.format(get_ip())
-    IPB = 'http://{}:9001'.format(get_ip())
-    IPC = 'http://{}:9002'.format(get_ip())
+    IP = 'http://{}:9000'.format(get_ip())  # bash console
+    IPB = 'http://{}:9001'.format(get_ip())  # cat console
+    IPC = 'http://{}:9002'.format(get_ip())  # picamera stream
     IPX = ' {}:8080'.format(get_ip())
-    if request.user.username == "bill":
-        start_bash()
-    else:
-        stop_bash()
     return render(request, 'App/main.html', {'IP': IP, 'IPB': IPB, 'IPC': IPC, 'IPX': IPX})
 
 
@@ -236,8 +231,16 @@ def get_pwms(request):
 
 
 def run_script(request, num):
-    do_script(num)
-    return HttpResponse('Success')
+    if num != 37:  # lock out bash console
+        do_script(num)
+        return HttpResponse('Success')
+
+    if request.user.username == "bill":
+        do_script(num)
+        return HttpResponse('Success')
+
+    if num == 37:
+        tog_failed(37)
 
 
 def gpspibaud(request, spi):

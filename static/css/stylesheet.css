@@ -498,7 +498,7 @@ background-size: 100% auto;
 	width: 100%;
 	justify-self: center;
 	align-self: center;
-	background-color: red;
+	background-color: lightgreen;
 	border-color: white;
   font-size: 13px;
   color: black;
@@ -519,6 +519,19 @@ background-size: 100% auto;
 }
 
 .runningb {
+	box-sizing: border-box;
+	grid-area: scr-runningb;
+	width: 100%;
+	justify-self: center;
+	align-self: center;
+	background-color: lightgreen;
+	border-color: white;
+  font-size: 13px;
+  color: black;
+	border-style: outset;
+}
+
+.runningbf {
 	box-sizing: border-box;
 	grid-area: scr-runningb;
 	width: 100%;
