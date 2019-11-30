@@ -200,19 +200,19 @@
                     <template v-if="pwm.name==16">
                       <a class="spichan">Channel 0:</a>
                       <b class="spibaud">Baud:
-                        <input type="number" style="width: 8em" name="'GPIO' + pwm.spi" v-model.number="pwm.baud" min="32000" max="30000000" v-on:input="gpspibaud(pwm.spi, spi.baud)">
+                        <input type="number" style="width: 8em" name="'GPIO' + pwm.spi" v-model.number="pwm.baud" min="32000" max="30000000" v-on:input="gpspibaud(pwm.spi, pwm.baud)">
                       </b>
                       <b class="spiflags">Mode:
-                        <input type="number" style="width: 7em" name="'GPIO' + pwm.spi" v-model.number="pwm.flags" min="0" max="3" v-on:input="gpspiflags(pwm.spi, spi.flags)">
+                        <input type="number" style="width: 7em" name="'GPIO' + pwm.spi" v-model.number="pwm.flags" min="0" max="3" v-on:input="gpspiflags(pwm.spi, pwm.flags)">
                       </b>
                     </template>
                     <template v-if="pwm.name==19">
                       <a class="spichan">Channel 1:</a>
                       <b class="spibaud">Baud:
-                        <input type="number" style="width: 8em" name="'GPIO' + pwm.spi" v-model.number="pwm.baud" min="32000" max="30000000" v-on:input="gpspibaud(pwm.spi, spi.baud)">
+                        <input type="number" style="width: 8em" name="'GPIO' + pwm.spi" v-model.number="pwm.baud" min="32000" max="30000000" v-on:input="gpspibaud(pwm.spi, pwm.baud)">
                       </b>
                       <b class="spiflags">Mode:
-                        <input type="number" style="width: 7em" name="'GPIO' + pwm.spi" v-model.number="pwm.flags" min="0" max="3" v-on:input="gpspiflags(pwm.spi, spi.flags)">
+                        <input type="number" style="width: 7em" name="'GPIO' + pwm.spi" v-model.number="pwm.flags" min="0" max="3" v-on:input="gpspiflags(pwm.spi, pwm.flags)">
                       </b>
                     </template>
                   </div>

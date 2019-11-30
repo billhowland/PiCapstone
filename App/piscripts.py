@@ -525,19 +525,14 @@ def script_2():
     set_running(2)
     clr_running(1)
     sleep(0.25)
-    # pi.wave_tx_stop()  # stop waveform
-    # pi.wave_clear()  # clear all waveforms
 
     for pin in pin_names:
-        # untest_pin(pin)
         set_not_used(pin)
-    # get_all_pins(init=True)
 
     LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
     for pin in LED_Pins:
         set_used(pin)
-        # pin_out_low(pin)
-    if get_running(19):
+    if get_running(19) or get_running(4):
         set_used(19)
 
     Pushbutton_Pins = [18, 17, 23, 22, 27, 24, 25, 13, 26]
@@ -776,46 +771,6 @@ def script_8():
     sleep(.25)
     clr_running(8)
 
-# Original PIGPIO Wave Example:
-
-    # G1 = 4
-    # G2 = 5
-    #
-    # set_pin_out(G1)
-    # set_pin_out(G2)
-    #
-    # flash_500 = []  # flash every 500 ms
-    # flash_100 = []  # flash every 100 ms
-    #
-    # #                              ON     OFF  DELAY
-    #
-    # flash_500.append(pigpio.pulse(1 << G1, 0, 500000))
-    # flash_500.append(pigpio.pulse(0, 1 << G1, 500000))
-    #
-    # flash_100.append(pigpio.pulse(1 << G1, 1 << G2, 100000))
-    # flash_100.append(pigpio.pulse(1 << G2, 1 << G1, 100000))
-    #
-    # pi.wave_clear()  # clear any existing waveforms
-    #
-    # pi.wave_add_generic(flash_500)  # 500 ms flashes
-    # f500 = pi.wave_create()  # create and save id
-    # # tty_message(str(flash_500))
-    #
-    # pi.wave_add_generic(flash_100)  # 100 ms flashes
-    # f100 = pi.wave_create()  # create and save id
-    # # tty_message(str(flash_100))
-    #
-    # pi.wave_send_repeat(f500)
-    # sleep(4)
-    # pi.wave_send_repeat(f100)
-    # sleep(4)
-    # pi.wave_send_repeat(f500)
-    # sleep(4)
-    #
-    # pi.wave_tx_stop()  # stop waveform
-    # pi.wave_clear()  # clear all waveforms
-    # clr_running(8)
-
 
 # --script 9----------------------------------------------------------------------------
 
@@ -942,8 +897,7 @@ def script_16():
 # --script 17---------------------------------------------------------------------------
 
 # Opens SPI 1
-# Baud is tied to shfrq
-# Flags is tied to shdc
+
 def script_17():
     spiCS0 = 16
     spiMOSI = 19
@@ -977,7 +931,7 @@ def script_17():
         for pin in used_Pins:
             set_used(pin)
             pi.set_mode((pin), pigpio.ALT0)
-            get_all_pins(init=True)
+            get_all_pins(init=False)
         sleep(.25)
 
         h = pi.spi_open(1, 50000, 3)
