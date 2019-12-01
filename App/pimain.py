@@ -1,4 +1,4 @@
-from .piscripts import (get_all_pins, get_scripts, script_0, script_2)
+from .piscripts import (get_all_pins, get_scripts, get_pwms, get_spis, get_i2cs, script_0, script_2)
 import pigpio
 pi = pigpio.pi()
 init = True
@@ -8,6 +8,9 @@ def main():
     global init
     global pins
     global scripts
+    global pwms
+    global spis
+    global i2cs
 
     spi_Pins = [16, 19, 20, 21]  # SPI1
     for pin in spi_Pins:
@@ -27,6 +30,9 @@ def main():
 
     pins = get_all_pins(init)
     scripts = get_scripts(init)
+    pwms = get_pwms()
+    spis = get_spis(init)
+    i2cs = get_i2cs(init)
 
     # Call start config here:
     script_0()

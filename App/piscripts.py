@@ -1,7 +1,7 @@
 import os
 from time import sleep
 import socket
-import picamera
+
 # Daemon must be started FIRST!:
 os.system("sudo pigpiod")
 import pigpio  # NOT an error, DO NOT MOVE!
@@ -14,19 +14,23 @@ pin_info = []
 scripts = []
 script_info = []
 pwms = []
+pwm_info = []
 spis = []
 spi_info = []
-pwm_info = []
+i2cs = []
+i2c_info = []
+
 # pin order on display is set by the list order here:
 pin_names = [4, 10, 9, 8, 11, 7, 5, 6, 12, 13, 26, 25, 27, 24, 23, 22, 18, 17, 2, 3, 14, 15, 16, 19, 20, 21]
 pwm_names = [4, 10, 9, 8, 11, 7, 5, 6, 12, 13, 26, 25, 27, 24, 23, 22, 18, 17, 2, 3, 14, 15, 16, 19, 20, 21]
 spi_names = [0, 1]
+i2c_names = [0, 1]
 script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
                22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]
 script_names = ["Full Configuration", "GPIO Configuration", "Flash LEDs", "Hardware PWM Test",
                 "Strobe LEDs", "Wave Test", "Software PWM LEDs", "Script 8",
                 "Dimmer", "Script 10", "Script 11", "Script 12", "Script 13", "Script 14",
-                "Script 15", "Script 16", "SPI Menu", "Show Pinout", "Hardware PWM", "Software PWM",
+                "Script 15", "I2C Menu", "SPI Menu", "Show Pinout", "Hardware PWM", "Software PWM",
                 "Script 21", "Script 22", "Script 23", "Script 24", "Script 25", "Script 26",
                 "Script 27", "Script 28", "Script 29", "Script 30", "Script 31", "Script 32",
                 "Script 33", "Script 34", "Script 35", "Cam Check", "BASH Console", "PiCamera",
@@ -161,7 +165,6 @@ def set_not_used(pin):
 
 def get_all_pins(init=False):
     global pins
-    global spis
 
     for pin in pin_names:
         func = pin_use(pin)
@@ -189,6 +192,7 @@ def get_all_pins(init=False):
                 'hfrq': hfrq,
                 'hdc': hdc,
             })
+
         else:
             test = get_test(pin)
             testing = get_testing(pin)
@@ -214,16 +218,6 @@ def get_all_pins(init=False):
 
     pins = pin_info
 
-    for spi in spi_names:
-        if init:
-            baud = 32000
-            flags = 0
-            spi_info.append({
-                'spi': spi,
-                'baud': baud,
-                'flags': flags,
-            })
-    spis = spi_info
     # return pins
 
 # Outputs:
@@ -360,26 +354,20 @@ def get_scripts(init):
             name = get_name(scr)
             url = get_url(scr)
             running = False
-            script_info.append({
-                'num': scr,
-                'name': name,
-                'url': url,
-                'running': running,
-                })
         else:
             name = get_name(scr)
             url = get_url(scr)
             running = get_running(scr)
-            script_info.append({
-                'num': scr,
-                'name': name,
-                'url': url,
-                'running': running,
-                })
+        script_info.append({
+            'num': scr,
+            'name': name,
+            'url': url,
+            'running': running,
+            })
     scripts = script_info
 
 
-def get_pwms():
+def get_pwms(init=False):
     global pwms
     pwm_info = []
     for pwm in pwm_names:
@@ -396,17 +384,47 @@ def get_pwms():
             'shfrq': hfrq,
             'shdc': hdc,
             })
+    pwms = pwm_info
 
+
+def get_spis(init=False):
     global spis
+    spi_info = []
     for spi in spi_names:
-        baud = get_spi_baud(spi)
-        flags = get_spi_flags(spi)
-        pwm_info.append({
-            'spi': spi,
+        if init:
+            baud = 32000
+            flags = 0
+        else:
+            baud = get_spi_baud(spi)
+            flags = get_spi_flags(spi)
+        spi_info.append({
+            'name': spi,
             'baud': baud,
             'flags': flags,
             })
-    pwms = pwm_info
+    spis = spi_info
+
+
+def get_i2cs(init=False):
+    global i2cs
+    i2c_info = []
+    for i2c in i2c_names:
+        if init:
+            address = 0x01  # 0 to 0x7F
+            flags = 0  # always 0 for now
+        else:
+            address = get_i2c_address(i2c)
+            flags = 0
+        i2c_info.append({
+            'name': i2c,
+            'address': address,
+            'flags': flags,
+            })
+    i2cs = i2c_info
+
+
+def get_i2c_idx(i2c):
+    return i2c_names.index(i2c)
 
 
 def get_spi_idx(spi):
@@ -418,9 +436,29 @@ def get_spi_baud(spi):
     return spi['baud']
 
 
+def get_i2c_address(i2c):
+    i2c = i2cs[get_i2c_idx(i2c)]
+    return i2c['address']
+
+
 def get_spi_flags(spi):
     spi = spis[get_spi_idx(spi)]
     return spi['flags']
+
+
+def set_spi_baud(spi, baud):
+    idx = get_spi_idx(spi)
+    spis[idx]['baud'] = baud
+
+
+def set_i2c_address(i2c, address):
+    idx = get_i2c_idx(i2c)
+    i2cs[idx]['address'] = address
+
+
+def set_spi_flags(spi, flags):
+    idx = get_spi_idx(spi)
+    spis[idx]['flags'] = flags
 
 
 def get_scr_idx(scr):
@@ -469,6 +507,17 @@ def tog_failed(scr):
         clr_running(scr)
 
 
+def LED_Pins_low(LEDs):
+    for pin in LEDs:
+        set_used(pin)
+        pin_out_low(pin)
+
+
+def BUT_Pins_up(Buttons):
+    for pin in Buttons:
+        set_used(pin)
+        pud_up(pin)
+
 # --script 0----------------------------------------------------------------------------
 
 
@@ -480,13 +529,11 @@ def script_0():
         set_used(pin)
     get_all_pins(init=True)
 
-    LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
-    for pin in LED_Pins:
-        pin_out_low(pin)
+    LEDs = [4, 10, 9, 8, 11, 7, 5, 6, 12]
+    LED_Pins_low(LEDs)
 
-    Pushbutton_Pins = [18, 17, 23, 22, 27, 24, 25, 13, 26]
-    for pin in Pushbutton_Pins:
-        pud_up(pin)
+    Buttons = [18, 17, 23, 22, 27, 24, 25, 13, 26]
+    BUT_Pins_up(Buttons)
 
     sleep(0.25)
 
@@ -529,16 +576,14 @@ def script_2():
     for pin in pin_names:
         set_not_used(pin)
 
-    LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
-    for pin in LED_Pins:
+    LEDs = [4, 10, 9, 8, 11, 7, 5, 6, 12]
+    for pin in LEDs:
         set_used(pin)
     if get_running(19) or get_running(4):
         set_used(19)
 
-    Pushbutton_Pins = [18, 17, 23, 22, 27, 24, 25, 13, 26]
-    for pin in Pushbutton_Pins:
-        set_used(pin)
-        # pud_up(pin)
+    Buttons = [18, 17, 23, 22, 27, 24, 25, 13, 26]
+    BUT_Pins_up(Buttons)
 
     sleep(0.25)
 
@@ -888,10 +933,30 @@ def script_15():
 
 
 def script_16():
-    set_running(16)
-    tty_message("Script 16 Not Implemented.")
-    sleep(.25)
-    clr_running(16)
+    i2c1_scl = 3
+    i2c1_sda = 2
+    h=0
+
+    if get_running(16):
+        clr_running(16)
+        if get_running(1):
+            script_1()
+        if get_running(2):
+            script_2()
+
+    else:
+        script_40()
+        set_running(16)
+
+        for pin in pin_names:
+            set_not_used(pin)
+
+        used_Pins = [(i2c1_scl), (i2c1_sda)]
+        for pin in used_Pins:
+            set_used(pin)
+            pi.set_mode((pin), pigpio.ALT0)
+            get_all_pins(init=False)
+        sleep(.25)
 
 
 # --script 17---------------------------------------------------------------------------
@@ -914,14 +979,7 @@ def script_17():
         pi.spi_close(h)
 
     else:
-        if get_running(20):
-            script_20()
-        if get_running(19):
-            script_19()
-        if get_running(38):
-            script_38()
-        if get_running(39):
-            script_39()
+        script_40()
         set_running(17)
 
         for pin in pin_names:
@@ -975,14 +1033,7 @@ def script_19():
             script_2()
 
     else:
-        if get_running(20):
-            script_20()
-        if get_running(17):
-            script_17()
-        if get_running(38):
-            script_38()
-        if get_running(39):
-            script_39()
+        script_40()
         set_running(19)
         for pin in pin_names:
             set_not_used(pin)
@@ -1015,19 +1066,12 @@ def script_20():
                 pi.set_PWM_dutycycle((pin), 0)
 
     else:
-        if get_running(19):
-            script_19()
-        if get_running(17):
-            script_17()
-        if get_running(38):
-            script_38()
-        if get_running(39):
-            script_39()
+        script_40()
+        set_running(20)
 
         for pin in LED_Pins:
             set_used(pin)
             pi.set_PWM_dutycycle((pin), 48)
-        set_running(20)
 
     sleep(.25)
 
@@ -1242,14 +1286,7 @@ def script_39():
         pi.hardware_clock(4, 0)
         pin_out_low(4)
     else:
-        if get_running(19):
-            script_19()
-        if get_running(17):
-            script_17()
-        if get_running(20):
-            script_20()
-        if get_running(38):
-            script_38()
+        script_40()
         pi.hardware_clock(4, 5000)
         sleep(.25)
         set_running(39)

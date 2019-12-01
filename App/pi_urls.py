@@ -28,7 +28,12 @@ urlpatterns = [
     path('gphfrq/<int:pin>', views.gphfrq, name='gphfrq'),
     path('gpshdc/<int:pin>/<int:hdc>', views.gpshdc, name='gpshdc'),
     path('gpshfrq/<int:pin>/<int:hfrq>', views.gpshfrq, name='gpshfrq'),
-
+    path('get_spis', views.get_spis, name='get_spis'),
     path('gpspibaud/<int:spi>', views.gpspibaud, name='gpspibaud'),
     path('gpspiflags/<int:spi>', views.gpspiflags, name='gpspiflags'),
+    path('gpsspibaud/<int:spi>/<int:baud>', views.gpsspibaud, name='gpsspibaud'),
+    path('gpsspiflags/<int:spi>/<int:flags>', views.gpsspiflags, name='gpsspiflags'),
+    path('get_i2cs', views.get_i2cs, name='get_i2cs'),
+    path('gpi2caddr/<int:i2c>', views.gpi2caddr, name='gpi2caddr'),
+    path('gpsi2caddr/<int:i2c>/<int:address>', views.gpsi2caddr, name='gpsi2caddr'),
 ]

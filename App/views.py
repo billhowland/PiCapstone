@@ -6,7 +6,8 @@ from .piscripts import (pin_names, pwm_names, test_pin, script_nums, set_pin_out
                         pin_use, pud_up, pud_dn, pud_off, get_pud, get_ip, get_test,
                         get_testing, get_used, get_name, get_url, get_running,
                         do_script, get_frq, set_frq, set_cfrq, get_dc, set_dc, get_hfrq, get_hdc,
-                        set_hdc, set_hfrq, start_hpwm, spi_names, get_spi_baud, get_spi_flags, tog_failed)
+                        set_hdc, set_hfrq, start_hpwm, spi_names, get_spi_baud, get_spi_flags,
+                        set_spi_baud, set_spi_flags, tog_failed, i2c_names, get_i2c_address, set_i2c_address)
 
 from .pimain import *
 
@@ -218,16 +219,36 @@ def get_pwms(request):
             'shfrq': hfrq,
             'shdc': hdc,
             })
+
+    return JsonResponse(pwm_info, safe=False)
+
+
+def get_spis(request):
+    spi_info = []
     for spi in spi_names:
         baud = get_spi_baud(spi)
         flags = get_spi_flags(spi)
-        pwm_info.append({
-            'spi': spi,
+        spi_info.append({
+            'name': spi,
             'baud': baud,
             'flags': flags,
             })
 
-    return JsonResponse(pwm_info, safe=False)
+    return JsonResponse(spi_info, safe=False)
+
+
+def get_i2cs(request):
+    i2c_info = []
+    for i2c in i2c_names:
+        address = get_i2c_address(i2c)
+        flags = 0
+        i2c_info.append({
+            'name': i2c,
+            'address': address,
+            'flags': flags,
+            })
+
+    return JsonResponse(i2c_info, safe=False)
 
 
 def run_script(request, num):
@@ -243,9 +264,29 @@ def run_script(request, num):
         tog_failed(37)
 
 
+def gpsspibaud(request, spi, baud):
+    set_spi_baud(spi, baud)
+    return JsonResponse(baud, safe=False)
+
+
+def gpsi2caddr(request, i2c, address):
+    set_i2c_address(i2c, address)
+    return JsonResponse(address, safe=False)
+
+
+def gpsspiflags(request, spi, flags):
+    set_spi_flags(spi, flags)
+    return JsonResponse(flags, safe=False)
+
+
 def gpspibaud(request, spi):
     baud = get_spi_baud(spi)
     return JsonResponse(baud, safe=False)
+
+
+def gpi2caddr(request, i2c):
+    address = get_i2c_address(i2c)
+    return JsonResponse(address, safe=False)
 
 
 def gpspiflags(request, spi):

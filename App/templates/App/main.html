@@ -195,24 +195,24 @@
             <div class="optcol">
               <div class="radio">
                 <div class="lint center">SPI Bus Settings</div>
-                <div v-for="pwm in pwms" v-bind:key='pwm.name'>
+                <div v-for="spi in spis" v-bind:key='spi.name'>
                   <div class='grid' id='spi_menu'>
-                    <template v-if="pwm.name==16">
+                    <template v-if="spi.name==0">
                       <a class="spichan">Channel 0:</a>
                       <b class="spibaud">Baud:
-                        <input type="number" style="width: 8em" name="'GPIO' + pwm.spi" v-model.number="pwm.baud" min="32000" max="30000000" v-on:input="gpspibaud(pwm.spi, pwm.baud)">
+                        <input type="number" style="width: 8em" name="'GPIO' + spi.name" v-model.number="spi.baud" min="32000" max="30000000" v-on:input="gpsspibaud(spi.name, spi.baud)">
                       </b>
                       <b class="spiflags">Mode:
-                        <input type="number" style="width: 7em" name="'GPIO' + pwm.spi" v-model.number="pwm.flags" min="0" max="3" v-on:input="gpspiflags(pwm.spi, pwm.flags)">
+                        <input type="number" style="width: 7em" name="'GPIO' + spi.name" v-model.number="spi.flags" min="0" max="3" v-on:input="gpsspiflags(spi.name, spi.flags)">
                       </b>
                     </template>
-                    <template v-if="pwm.name==19">
+                    <template v-if="spi.name==1">
                       <a class="spichan">Channel 1:</a>
                       <b class="spibaud">Baud:
-                        <input type="number" style="width: 8em" name="'GPIO' + pwm.spi" v-model.number="pwm.baud" min="32000" max="30000000" v-on:input="gpspibaud(pwm.spi, pwm.baud)">
+                        <input type="number" style="width: 8em" name="'GPIO' + spi.name" v-model.number="spi.baud" min="32000" max="30000000" v-on:input="gpsspibaud(spi.name, spi.baud)">
                       </b>
                       <b class="spiflags">Mode:
-                        <input type="number" style="width: 7em" name="'GPIO' + pwm.spi" v-model.number="pwm.flags" min="0" max="3" v-on:input="gpspiflags(pwm.spi, pwm.flags)">
+                        <input type="number" style="width: 7em" name="'GPIO' + spi.name" v-model.number="spi.flags" min="0" max="3" v-on:input="gpsspiflags(spi.name, spi.flags)">
                       </b>
                     </template>
                   </div>
@@ -221,6 +221,38 @@
             </div>
 <!-- ----------------------------------------------------------------------------------------------- -->
           </b>  {# END OF 17:SPI Bus Settings is OFF #}
+<!-- ----------------------------------------------------------------------------------------------- -->
+          <b v-show="scripts[15].running && !scripts[16].running && !scripts[37].running">  {# 15 = 16: I2C Bus Settings is ON #}
+<!-- ----------------------------------------------------------------------------------------------- -->
+            <div class="optcol">
+              <div class="radio">
+                <div class="lint center">I2C Bus Settings</div>
+                <div v-for="i2c in i2cs" v-bind:key='i2c.name'>
+                  <div class='grid' id='spi_menu'>
+                    <template v-if="i2c.name==0">
+                      <a class="spichan">Bus 0:</a>
+                      <b class="spibaud">Addr:
+                        <input type="number" style="width: 8em" name="'GPIO' + i2c.name" v-model.number="i2c.address" min="0x00" max="0x7F" v-on:input="gpsi2caddr(i2c.name, i2c.address)">
+                      </b>
+                      <b class="spiflags">Flags:
+                        <input type="number" style="width: 7em" name="'GPIO' + i2c.name" v-model.number="i2c.flags" min="0" max="0">
+                      </b>
+                    </template>
+                    <template v-if="i2c.name==1">
+                      <a class="spichan">Bus 1:</a>
+                      <b class="spibaud">Addr:
+                        <input type="number" style="width: 8em" name="'GPIO' + i2c.name" v-model.number="i2c.address" min="0x00" max="0x7F" v-on:input="gpsi2caddr(i2c.name, i2c.address)">
+                      </b>
+                      <b class="spiflags">Flags:
+                        <input type="number" style="width: 7em" name="'GPIO' + i2c.name" v-model.number="i2c.flags" min="0" max="0">
+                      </b>
+                    </template>
+                  </div>
+                </div>
+              </div>
+            </div>
+<!-- ----------------------------------------------------------------------------------------------- -->
+          </b>  {# END OF 16:I2C Bus Settings is OFF #}
 <!-- ----------------------------------------------------------------------------------------------- -->
           <b v-show="scripts[19].running && !scripts[17].running && !scripts[37].running">  {# 19 = 20: Soft PWM Settings is ON #}
 <!-- ----------------------------------------------------------------------------------------------- -->
@@ -267,7 +299,7 @@
 <!-- ----------------------------------------------------------------------------------------------- -->
 </b>  {# END OF 39: Hardware Clock Settings is OFF #}
 <!-- ----------------------------------------------------------------------------------------------- -->
-          <a v-show="!scripts[38].running && !scripts[37].running && !scripts[19].running && !scripts[18].running && !scripts[17].running && !scripts[16].running">  {# Exclude optional rightcols #}
+          <a v-show="!scripts[38].running && !scripts[37].running && !scripts[19].running && !scripts[18].running && !scripts[17].running && !scripts[16].running && !scripts[15].running">  {# Exclude optional rightcols #}
             <div class="rightcol">
               <template v-if='"{{request.user.username}}"=="bill" && scripts[36].running'>
                 <div class="linl center">Interactive Console</div>

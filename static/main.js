@@ -18,6 +18,8 @@ let app = new Vue({
     timer: null,
     scripts: null,
     pwms: null,
+    spis: null,
+    i2cs: null,
   },
   mounted: function() {
     this.timer = setInterval(this.getAllPins, 250) //call getAllPins 4 times/sec
@@ -25,6 +27,8 @@ let app = new Vue({
     this.getAllPins()
     this.getScripts()
     this.getPwms()
+    this.getSpis()
+    this.getI2cs()
   },
   beforeDestroy: function() {
     clearInterval(this.timer)
@@ -63,6 +67,22 @@ let app = new Vue({
           return response.json()
         }).then(pwmData => {
           this.pwms = pwmData
+        }).catch(err => console.log(err))
+    },
+    getSpis: function() {
+      const request = fetch('get_spis') // Calls get_spis in views.py
+        .then(response => {
+          return response.json()
+        }).then(spiData => {
+          this.spis = spiData
+        }).catch(err => console.log(err))
+    },
+    getI2cs: function() {
+      const request = fetch('get_i2cs') // Calls get_i2cs in views.py
+        .then(response => {
+          return response.json()
+        }).then(i2cData => {
+          this.i2cs = i2cData
         }).catch(err => console.log(err))
     },
     setPin: function(pin, func) {
@@ -223,20 +243,52 @@ let app = new Vue({
              this.getAllPins()
           }).catch(err => console.log(err))
    },
-   gpspibaud: function(spi, baud) {
-          const request = fetch('gpspibaud/' + spi + '/' + baud)
+   gpsspibaud: function(spi, baud) {
+          const request = fetch('gpsspibaud/' + spi + '/' + baud)
             .then(response => {
             return response.json()
           }).then(baud => {
-             this.getAllPins()
+             this.getSpis()
           }).catch(err => console.log(err))
    },
-   gpspiflags: function(spi, flags) {
-          const request = fetch('gpspiflags/' + spi + '/' + flags)
+   gpsi2caddr: function(i2c, address) {
+          const request = fetch('gpsi2caddr/' + i2c + '/' + address)
+            .then(response => {
+            return response.json()
+          }).then(address => {
+             this.getI2cs()
+          }).catch(err => console.log(err))
+   },
+   gpsspiflags: function(spi, flags) {
+          const request = fetch('gpsspiflags/' + spi + '/' + flags)
             .then(response => {
             return response.json()
           }).then(flags => {
-             this.getAllPins()
+             this.getSpis()
+          }).catch(err => console.log(err))
+   },
+   gpspibaud: function(spi) {
+          const request = fetch('gpspibaud/' + spi)
+            .then(response => {
+            return response.json()
+          }).then(baud => {
+             this.getSpis()
+          }).catch(err => console.log(err))
+   },
+   gpi2caddr: function(i2c) {
+          const request = fetch('gpi2caddr/' + i2c)
+            .then(response => {
+            return response.json()
+          }).then(address => {
+             this.getI2cs()
+          }).catch(err => console.log(err))
+   },
+   gpspiflags: function(spi) {
+          const request = fetch('gpspiflags/' + spi)
+            .then(response => {
+            return response.json()
+          }).then(flags => {
+             this.getSpis()
           }).catch(err => console.log(err))
    },
    dispbash: function() {
