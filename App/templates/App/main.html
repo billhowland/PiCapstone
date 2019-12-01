@@ -46,15 +46,15 @@
                         <a class='col3 center' v-if="pin.func==1 && pin.dc==0">GPIO OUT</a>
                         <a class='col3p center' v-if="pin.name==4 && pin.func==4">Hardware Clock</a>
                         <a class='col3p center' v-if="pin.func==1 && pin.dc!=0">PWM Freq: ${pin.frq}</a>
-                        <a v-show="pin.name==7 && pin.func==4" class='col3 center col3spi'>SPI0 CS1</a>
-                        <a v-show="pin.name==8 && pin.func==4" class='col3 center col3spi'>SPI0 CS0</a>
-                        <a v-show="pin.name==9 && pin.func==4" class='col3 center col3spi'>SPI0 MISO</a>
-                        <a v-show="pin.name==10 && pin.func==4" class='col3 center col3spi'>SPI0 MOSI</a>
-                        <a v-show="pin.name==11 && pin.func==4" class='col3 center col3spi'>SPI0 SCLK</a>
-                        <a v-show="pin.name==16 && pin.func==4" class='col3 center col3spi'>SPI1 CS0</a>
-                        <a v-show="pin.name==19 && pin.func==4" class='col3 center col3spi'>SPI1 MISO</a>
-                        <a v-show="pin.name==20 && pin.func==4" class='col3 center col3spi'>SPI1 MOSI</a>
-                        <a v-show="pin.name==21 && pin.func==4" class='col3 center col3spi'>SPI1 SCLK</a>
+                        <a v-show="pin.name==7 && pin.func==4" class='col3 center col3spi0'>SPI0 CS1</a>
+                        <a v-show="pin.name==8 && pin.func==4" class='col3 center col3spi0'>SPI0 CS0</a>
+                        <a v-show="pin.name==9 && pin.func==4" class='col3 center col3spi0'>SPI0 MISO</a>
+                        <a v-show="pin.name==10 && pin.func==4" class='col3 center col3spi0'>SPI0 MOSI</a>
+                        <a v-show="pin.name==11 && pin.func==4" class='col3 center col3spi0'>SPI0 SCLK</a>
+                        <a v-show="pin.name==16 && pin.func==4" class='col3 center col3spi1'>SPI1 CS0</a>
+                        <a v-show="pin.name==19 && pin.func==4" class='col3 center col3spi1'>SPI1 MISO</a>
+                        <a v-show="pin.name==20 && pin.func==4" class='col3 center col3spi1'>SPI1 MOSI</a>
+                        <a v-show="pin.name==21 && pin.func==4" class='col3 center col3spi1'>SPI1 SCLK</a>
                         <a v-show="pin.name==14 && pin.func==4" class='col3 center col3serial'>SERIAL0 TX</a>
                         <a v-show="pin.name==15 && pin.func==4" class='col3 center col3serial'>SERIAL0 RX</a>
                         <a v-show="pin.name==2 && pin.func==4" class='col3 center col3i2c'>I2C1 SDA</a>

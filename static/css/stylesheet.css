@@ -243,8 +243,13 @@ background-size: 100% auto;
 	background-color: lime;
 }
 
-.col3spi{
+.col3spi1{
 	background-color: magenta;
+}
+
+.col3spi0{
+	background-color: #6a0e6a;
+	color: white;
 }
 
 .col3i2c{
@@ -339,6 +344,20 @@ background-size: 100% auto;
 }
 
 .lina{
+	box-sizing: border-box;
+	grid-area: inout;
+	justify-self: center;
+
+	align-items: center;
+  background-color: white;
+	color: #026201;
+	border-style: outset;
+	border-color: darkgray;
+	width: 100%;
+	font-size: 15px;
+}
+
+.linb{
 	box-sizing: border-box;
 	grid-area: inout;
 	justify-self: center;

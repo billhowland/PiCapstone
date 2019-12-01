@@ -18,7 +18,7 @@ def main():
 
     # spi_Pins = [7, 8, 9, 10, 11]  # SPI0
     # for pin in spi_Pins:
-    #     pi.set_mode((pin), pigpio.ALT0)
+        # pi.set_mode((pin), pigpio.ALT0)
 
     ser_Pins = [14, 15]
     for pin in ser_Pins:

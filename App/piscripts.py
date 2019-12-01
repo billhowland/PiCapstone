@@ -226,7 +226,6 @@ def get_all_pins(init=False):
 def test_pin(pin):  # sets the test flag...
     idx = get_pin_idx(pin)
     pins[idx]['test'] = True
-    # blink_pin(pin)
 
 
 def get_test(pin):
@@ -518,6 +517,15 @@ def BUT_Pins_up(Buttons):
         set_used(pin)
         pud_up(pin)
 
+
+def no_script(num):
+    set_running(num)
+    sleep(.35)
+    tty_message("Script " + str(num) + " Not Implemented.")
+    sleep(.1)
+    clr_running(num)
+
+
 # --script 0----------------------------------------------------------------------------
 
 
@@ -548,19 +556,7 @@ def script_1():
     sleep(0.25)
 
     for pin in pin_names:
-        # untest_pin(pin)
         set_used(pin)
-    # get_all_pins(init=True)
-
-    # LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
-    # for pin in LED_Pins:
-        # if pin_use(pin) != 4 and pin_use(pin) != 2:
-            # pin_out_low(pin)
-
-    # Pushbutton_Pins = [18, 17, 23, 22, 27, 24, 25, 13, 26]
-    # for pin in Pushbutton_Pins:
-        # if pin_use(pin) != 4 and pin_use(pin) != 2:
-            # pud_up(pin)
 
     sleep(0.25)
 
@@ -599,8 +595,6 @@ def script_3():
     LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
     for pin in LED_Pins:
         set_used(pin)
-        # pi.set_PWM_frequency((pin), 10)
-        # pi.set_PWM_dutycycle((pin), 128) # PWM 1/2 on
         test_pin(pin)
         sleep(.75)
 
@@ -712,7 +706,6 @@ def script_5():
                 pin_out_hi(pin)
                 sleep(.04)
                 pin_out_low(pin)
-                # sleep(.1)
             for pin in reversed(LED_Pins):
                 set_used(pin)
                 pin_out_hi(pin)
@@ -807,17 +800,14 @@ def script_7():
     clr_running(7)
     tty_message("Script terminated.")
 
-
 # --script 8: ---------------------------------------------------------------------------
 
+
 def script_8():
-    set_running(8)
-    tty_message("Script 8 Not Implemented.")
-    sleep(.25)
-    clr_running(8)
+    no_script(8)
 
 
-# --script 9----------------------------------------------------------------------------
+# --script 9-Software PWM dimmer--------------------------------------------------------
 
 
 def script_9():
@@ -869,73 +859,13 @@ def script_9():
     tty_message("Script terminated.")
 
 
-# --script 10----------------------------------------------------------------------------
-
-
-def script_10():
-    set_running(10)
-    tty_message("Script 10 Not Implemented.")
-    sleep(.25)
-    clr_running(10)
-
-
-# --script 11----------------------------------------------------------------------------
-
-
-def script_11():
-    set_running(11)
-    tty_message("Script 11 Not Implemented.")
-    sleep(.25)
-    clr_running(11)
-
-
-# --script 12---------------------------------------------------------------------------
-
-
-def script_12():
-    set_running(12)
-    tty_message("Script 12 Not Implemented.")
-    sleep(.25)
-    clr_running(12)
-
-
-# --script 13---------------------------------------------------------------------------
-
-
-def script_13():
-    set_running(13)
-    tty_message("Script 13 Not Implemented.")
-    sleep(.25)
-    clr_running(13)
-
-
-# --script 14---------------------------------------------------------------------------
-
-
-def script_14():
-    set_running(14)
-    tty_message("Script 14 Not Implemented.")
-    sleep(.25)
-    clr_running(14)
-
-
-# --script 15---------------------------------------------------------------------------
-
-
-def script_15():
-    set_running(15)
-    tty_message("Script 15 Not Implemented.")
-    sleep(.25)
-    clr_running(15)
-
-
 # --script 16---------------------------------------------------------------------------
 
 
 def script_16():
     i2c1_scl = 3
     i2c1_sda = 2
-    h=0
+    h = 0
 
     if get_running(16):
         clr_running(16)
@@ -964,14 +894,23 @@ def script_16():
 # Opens SPI 1
 
 def script_17():
-    spiCS0 = 16
-    spiMOSI = 19
-    spiMISO = 20
-    spiSCLK = 21
+    spi1CS0 = 16
+    spi1MOSI = 19
+    spi1MISO = 20
+    spi1SCLK = 21
+    spi0CS0 = 8
+    spi0CS1 = 7
+    spi0MOSI = 10
+    spi0MISO = 9
+    spi0SCLK = 11
+
     h = 0
 
     if get_running(17):
         clr_running(17)
+        spi0 = [7, 8, 9, 10, 11]
+        for pin in spi0:
+            pin_out_low(pin)
         if get_running(1):
             script_1()
         if get_running(2):
@@ -985,7 +924,8 @@ def script_17():
         for pin in pin_names:
             set_not_used(pin)
 
-        used_Pins = [(spiCS0), (spiMOSI), (spiMISO), (spiSCLK)]
+        # used_Pins = [(spi1CS0), (spi1MOSI), (spi1MISO), (spi1SCLK)]
+        used_Pins = [(spi1CS0), (spi1MOSI), (spi1MISO), (spi1SCLK), (spi0CS0), (spi0CS1), (spi0MOSI), (spi0MISO), (spi0SCLK)]
         for pin in used_Pins:
             set_used(pin)
             pi.set_mode((pin), pigpio.ALT0)
@@ -1076,158 +1016,7 @@ def script_20():
     sleep(.25)
 
 
-# --script 21---------------------------------------------------------------------------
-
-
-def script_21():
-    set_running(21)
-    tty_message("Script 21 Not Implemented.")
-    sleep(.25)
-    clr_running(21)
-
-
-# --script 22---------------------------------------------------------------------------
-
-
-def script_22():
-    set_running(22)
-    tty_message("Script 22 Not Implemented.")
-    sleep(.25)
-    clr_running(22)
-
-
-# --script 23---------------------------------------------------------------------------
-
-
-def script_23():
-    set_running(23)
-    tty_message("Script 23 Not Implemented.")
-    sleep(.25)
-    clr_running(23)
-
-
-# --script 24---------------------------------------------------------------------------
-
-
-def script_24():
-    set_running(24)
-    tty_message("Script 24 Not Implemented.")
-    sleep(.25)
-    clr_running(24)
-
-
-# --script 25---------------------------------------------------------------------------
-
-
-def script_25():
-    set_running(25)
-    tty_message("Script 25 Not Implemented.")
-    sleep(.25)
-    clr_running(25)
-
-
-# --script 26---------------------------------------------------------------------------
-
-
-def script_26():
-    set_running(26)
-    tty_message("Script 26 Not Implemented.")
-    sleep(.25)
-    clr_running(26)
-
-
-# --script 27---------------------------------------------------------------------------
-
-
-def script_27():
-    set_running(27)
-    tty_message("Script 27 Not Implemented.")
-    sleep(.25)
-    clr_running(27)
-
-
-# --script 28---------------------------------------------------------------------------
-
-
-def script_28():
-    set_running(28)
-    tty_message("Script 28 Not Implemented.")
-    sleep(.25)
-    clr_running(28)
-
-
-# --script 29---------------------------------------------------------------------------
-
-
-def script_29():
-    set_running(29)
-    tty_message("Script 29 Not Implemented.")
-    sleep(.25)
-    clr_running(29)
-
-
-# --script 30---------------------------------------------------------------------------
-
-
-def script_30():
-    set_running(30)
-    tty_message("Script 30 Not Implemented.")
-    sleep(.25)
-    clr_running(30)
-
-
-# --script 31---------------------------------------------------------------------------
-
-
-def script_31():
-    set_running(31)
-    tty_message("Script 31 Not Implemented.")
-    sleep(.25)
-    clr_running(31)
-
-
-# --script 32---------------------------------------------------------------------------
-
-
-def script_32():
-    set_running(32)
-    tty_message("Script 32 Not Implemented.")
-    sleep(.25)
-    clr_running(32)
-
-
-# --script 33---------------------------------------------------------------------------
-
-
-def script_33():
-    set_running(33)
-    tty_message("Script 33 Not Implemented.")
-    sleep(.25)
-    clr_running(33)
-
-
-# --script 34---------------------------------------------------------------------------
-
-
-def script_34():
-    set_running(34)
-    tty_message("Script 34 Not Implemented.")
-    sleep(.25)
-    clr_running(34)
-
-
-# --script 35---------------------------------------------------------------------------
-
-
-def script_35():
-    set_running(35)
-    tty_message("Script 35 Not Implemented.")
-    sleep(.25)
-    clr_running(35)
-
-
-# --script 36---------------------------------------------------------------------------
-
+# --script 36-check for a camera--------------------------------------------------------
 
 def script_36():
     if get_running(36):
@@ -1240,8 +1029,8 @@ def script_36():
         sleep(.15)
         clr_running(36)
 
-# --script 37---------------------------------------------------------------------------
 
+# --script 37-BASH Console--------------------------------------------------------------
 
 def script_37():
 
@@ -1259,7 +1048,6 @@ def script_37():
 
 # --script 38-Pi Camera-----------------------------------------------------------------
 
-
 def script_38():
 
     if get_running(38):
@@ -1274,7 +1062,6 @@ def script_38():
             set_running(38)
             # start_cam()
     sleep(.25)
-
 
 # --script 39-Hardware Clock Menu-------------------------------------------------------
 
@@ -1291,11 +1078,10 @@ def script_39():
         sleep(.25)
         set_running(39)
 
-
 # --script 40-Clear All-----------------------------------------------------------------
 
 
-def script_40():
+def script_40(verb=False):
     set_running(40)
     global pins
 
@@ -1322,24 +1108,21 @@ def script_40():
     if get_running(2):
         scriptrunning = 2
 
-    sleep(.25)
-
     for script in script_nums:
         clr_running(script)
 
-    tty_message("All scripts terminated.")
+    if verb:
+        tty_message("All scripts terminated.")
 
     if scriptrunning == 1:
         script_1()
     if scriptrunning == 2:
         script_2()
 
-
 # -------------------------------------------------------------------------------------
 
 
 def do_script(num):
-    # script_funcs[num]
 
     if num == 1:
         script_1()
@@ -1360,17 +1143,17 @@ def do_script(num):
     elif num == 9:
         script_9()
     elif num == 10:
-        script_10()
+        no_script(num)
     elif num == 11:
-        script_11()
+        no_script(num)
     elif num == 12:
-        script_12()
+        no_script(num)
     elif num == 13:
-        script_13()
+        no_script(num)
     elif num == 14:
-        script_14()
+        no_script(num)
     elif num == 15:
-        script_15()
+        no_script(num)
     elif num == 16:
         script_16()
     elif num == 17:
@@ -1382,35 +1165,35 @@ def do_script(num):
     elif num == 20:
         script_20()
     elif num == 21:
-        script_21()
+        no_script(num)
     elif num == 22:
-        script_22()
+        no_script(num)
     elif num == 23:
-        script_23()
+        no_script(num)
     elif num == 24:
-        script_24()
+        no_script(num)
     elif num == 25:
-        script_25()
+        no_script(num)
     elif num == 26:
-        script_26()
+        no_script(num)
     elif num == 27:
-        script_27()
+        no_script(num)
     elif num == 28:
-        script_28()
+        no_script(num)
     elif num == 29:
-        script_29()
+        no_script(num)
     elif num == 30:
-        script_30()
+        no_script(num)
     elif num == 31:
-        script_31()
+        no_script(num)
     elif num == 32:
-        script_32()
+        no_script(num)
     elif num == 33:
-        script_33()
+        no_script(num)
     elif num == 34:
-        script_34()
+        no_script(num)
     elif num == 35:
-        script_35()
+        no_script(num)
     elif num == 36:
         script_36()
     elif num == 37:
@@ -1420,4 +1203,4 @@ def do_script(num):
     elif num == 39:
         script_39()
     elif num == 40:
-        script_40()
+        script_40(verb=True)
