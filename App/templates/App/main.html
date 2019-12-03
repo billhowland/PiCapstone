@@ -331,9 +331,10 @@
             <div class="rightcol">
               <template>
                 <div class="linl center">Top Secret sPiCam</div>
-                <iframe class="picam" src="{{IPC}}"></iframe>
+                <iframe id="picam" class="picam" src="{{IPC}}"></iframe>
               </template>
             </div>
+            <script reload(id);></script>
           </a>
           <a v-show="scripts[37].running == 2">
             <div class="rightcol">

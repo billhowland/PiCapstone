@@ -7,7 +7,8 @@ from .piscripts import (pin_names, pwm_names, test_pin, script_nums, set_pin_out
                         get_testing, get_used, get_name, get_url, get_running,
                         do_script, get_frq, set_frq, set_cfrq, get_dc, set_dc, get_hfrq, get_hdc,
                         set_hdc, set_hfrq, start_hpwm, spi_names, get_spi_baud, get_spi_flags,
-                        set_spi_baud, set_spi_flags, tog_failed, i2c_names, get_i2c_address, set_i2c_address)
+                        set_spi_baud, set_spi_flags, tog_failed, i2c_names, get_i2c_address,
+                        set_i2c_address)
 
 from .pimain import *
 
@@ -20,7 +21,7 @@ def main(request):
     IPB = 'http://{}:9001'.format(get_ip())  # cat console
     IPC = 'http://{}:9002'.format(get_ip())  # picamera stream
     IPX = ' {}:8080'.format(get_ip())
-    return render(request, 'App/main.html', {'IP': IP, 'IPB': IPB, 'IPC': IPC, 'IPX': IPX})
+    return render(request, 'App/main.html', {'IP': IP, 'IPB': IPB, 'IPC': IPC, 'IPX': IPX})  # 'IPC': IPC,
 
 
 def gptest(request, pin):

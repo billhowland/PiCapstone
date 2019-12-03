@@ -7,7 +7,7 @@ os.system("sudo pigpiod")
 import pigpio  # NOT an error, DO NOT MOVE!
 pi = pigpio.pi()
 os.system('gotty --config "/home/pi/.gotty9001" cat &')
-os.system('python3 picam_9002.py &')
+# os.system('python3 picam_9002.py &')
 
 pins = []
 pin_info = []
@@ -71,12 +71,12 @@ def stop_bash():
 
 
 def start_cam():
-    os.system('python3 picam_9002.py open &')
+    os.system('python3 picam_9002.py &')
     # pass
 
 
 def stop_cam():
-    os.system('python3 picam_9002.py close &')
+    os.system("kill -9 `ps -ef |grep picam_9002.py |awk '{print $2}'`")
     # pass
 
 
@@ -502,6 +502,7 @@ def tog_failed(scr):
     if get_running(scr) != 2:
         scr = get_scr_idx(scr)
         scripts[scr]['running'] = 2
+        tty_message("Script failed.")
     else:
         clr_running(scr)
 
@@ -1052,15 +1053,16 @@ def script_38():
 
     if get_running(38):
         clr_running(38)
-        # stop_cam()
+        stop_cam()
     else:
         camtest = os.popen('vcgencmd get_camera').read()
         if camtest != "supported=1 detected=1\n":
             tty_message("No camera connected.")
             tog_failed(38)
         else:
+            start_cam()
+            sleep(.5)
             set_running(38)
-            # start_cam()
     sleep(.25)
 
 # --script 39-Hardware Clock Menu-------------------------------------------------------

@@ -297,5 +297,14 @@ let app = new Vue({
    killbash: function() {
           const request = fetch(killbash)
    },
+   refreshIframe: function(name) {
+          const ifr = document.getElementsById(ID)[0];
+          iframe.reload(true);
+          // ifr.src = ifr.src;
+          // document.getElementById('name').contentWindow.location.reload();
+   },
+   reload: function(id) {
+          document.getElementById(id).src += '';
+   },
   }
 })
