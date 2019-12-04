@@ -262,12 +262,13 @@ def run_script(request, num):
         do_script(num)
         return HttpResponse('Success')
 
-    if request.user.username == "bill":
-        do_script(num)
-        return HttpResponse('Success')
-
     if num == 37:
-        tog_failed(37)
+        if request.user.username == "bill":
+            do_script(num)
+            return HttpResponse('Success')
+
+        else:
+            tog_failed(37)
 
 
 def gpsspibaud(request, spi, baud):

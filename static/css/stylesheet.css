@@ -563,6 +563,19 @@ background-size: 100% auto;
 	border-style: outset;
 }
 
+.runningf {
+	box-sizing: border-box;
+	grid-area: scr-running;
+	width: 100%;
+	justify-self: center;
+	align-self: center;
+	background-color: red;
+	border-color: white;
+  font-size: 13px;
+  color: black;
+	border-style: outset;
+}
+
 .notrunningb {
 	box-sizing: border-box;
 	grid-area: scr-runningb;

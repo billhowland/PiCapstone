@@ -123,8 +123,9 @@
                 <div class='script' v-for="script in scripts.slice(0, 20)" v-bind:key='script.name'>
                   <div class='grid' id='script_select'>
                     <button class='scriptbtn' v-bind:name="script.name" value='script.name' v-on:click="runscript(script.num)">${script.name}</button>
-                    <a class='notrunning' v-if="script.running==false">-OFF-</a>
-                    <a class='running' v-if="script.running==true">-ON-</a>
+                    <a class='notrunning' v-if="script.running==0">OFF</a>
+                    <a class='running' v-if="script.running==1">ON</a>
+                    <a class='runningf' v-if="script.running==2">FAIL</a>
                   </div>
                 </div>
               </div>
@@ -132,8 +133,8 @@
                 <div class='script' v-for="script in scripts.slice(20, 40)" v-bind:key='script.name'>
                   <div class='grid' id='script_selectb'>
                     <button class='scriptbtnb' v-bind:name="script.name" value='script.name' v-on:click="runscript(script.num)">${script.name}</button>
-                    <a class='notrunningb' v-if="script.running==false">-OFF-</a>
-                    <a class='runningb' v-if="script.running==true">-ON-</a>
+                    <a class='notrunningb' v-if="script.running==0">OFF</a>
+                    <a class='runningb' v-if="script.running==1">ON</a>
                     <a class='runningbf' v-if="script.running==2">FAIL</a>
                   </div>
                 </div>
@@ -327,7 +328,7 @@
               </template>
             </div>
           </a>
-          <a v-show="scripts[37].running  && !scripts[17].running">
+          <a v-show="scripts[37].running  == 1 && !scripts[17].running">
             <div class="rightcol">
               <template>
                 <div class="linl center">Top Secret sPiCam</div>

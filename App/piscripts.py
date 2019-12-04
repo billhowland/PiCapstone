@@ -521,7 +521,7 @@ def BUT_Pins_up(Buttons):
 
 
 def no_script(num):
-    set_running(num)
+    tog_failed(num)
     sleep(.35)
     tty_message("Script " + str(num) + " Not Implemented.")
     sleep(.1)
@@ -910,6 +910,7 @@ def script_17():
 
     if get_running(17):
         clr_running(17)
+        pi.spi_close(h)
         spi0 = [7, 8, 9, 10, 11]
         for pin in spi0:
             pin_out_low(pin)
@@ -917,7 +918,6 @@ def script_17():
             script_1()
         if get_running(2):
             script_2()
-        pi.spi_close(h)
 
     else:
         script_40()
@@ -1045,7 +1045,6 @@ def script_37():
         set_running(37)
         start_bash()
         sleep(.5)
-    sleep(.25)
 
 
 # --script 38-Pi Camera-----------------------------------------------------------------
