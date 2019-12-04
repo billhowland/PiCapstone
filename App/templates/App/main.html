@@ -327,14 +327,13 @@
               </template>
             </div>
           </a>
-          <a v-show="scripts[37].running == true && !scripts[17].running">
+          <a v-show="scripts[37].running  && !scripts[17].running">
             <div class="rightcol">
               <template>
                 <div class="linl center">Top Secret sPiCam</div>
-                <iframe id="picam" class="picam" src="{{IPC}}"></iframe>
+                <iframe name="picam" class="picam" src="{{IPC}}"></iframe>
               </template>
             </div>
-            <script reload(id);></script>
           </a>
           <a v-show="scripts[37].running == 2">
             <div class="rightcol">

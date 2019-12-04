@@ -253,6 +253,11 @@ def get_i2cs(request):
 
 
 def run_script(request, num):
+    # if num == 38:
+    #     IPC = 'http://{}:9002'.format(get_ip())
+    #     do_script(38)
+    #     return HttpResponse('Success')
+
     if num != 37:  # lock out bash console
         do_script(num)
         return HttpResponse('Success')

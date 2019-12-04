@@ -1,7 +1,8 @@
 import os
 from time import sleep
 import socket
-
+# import picamera
+# camera = picamera.PiCamera()
 # Daemon must be started FIRST!:
 os.system("sudo pigpiod")
 import pigpio  # NOT an error, DO NOT MOVE!

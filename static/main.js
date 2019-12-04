@@ -297,7 +297,7 @@ let app = new Vue({
    killbash: function() {
           const request = fetch(killbash)
    },
-   refreshIframe: function(name) {
+   refreshIframe: function(id) {
           const ifr = document.getElementsById(ID)[0];
           iframe.reload(true);
           // ifr.src = ifr.src;
