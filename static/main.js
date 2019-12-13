@@ -291,20 +291,5 @@ let app = new Vue({
              this.getSpis()
           }).catch(err => console.log(err))
    },
-   dispbash: function() {
-          const request = fetch(dispbash)
-   },
-   killbash: function() {
-          const request = fetch(killbash)
-   },
-   refreshIframe: function(id) {
-          const ifr = document.getElementsById(ID)[0];
-          iframe.reload(true);
-          // ifr.src = ifr.src;
-          // document.getElementById('name').contentWindow.location.reload();
-   },
-   reload: function(id) {
-          document.getElementById(id).src += '';
-   },
   }
 })

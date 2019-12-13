@@ -8,7 +8,6 @@ os.system("sudo pigpiod")
 import pigpio  # NOT an error, DO NOT MOVE!
 pi = pigpio.pi()
 os.system('gotty --config "/home/pi/.gotty9001" cat &')
-# os.system('python3 picam_9002.py &')
 
 pins = []
 pin_info = []
@@ -62,22 +61,27 @@ def get_ip():
 
 def start_bash():
     os.system('killall gotty')
+    sleep(.1)
     os.system('gotty --config "/home/pi/.gotty" bash &')
     os.system('gotty --config "/home/pi/.gotty9001" cat &')
 
 
 def stop_bash():
     os.system('killall gotty')
+    sleep(.1)
     os.system('gotty --config "/home/pi/.gotty9001" cat &')
 
 
 def start_cam():
     os.system('python3 picam_9002.py &')
+    os.system('python3 pistream_9003.py &')
+    sleep(.1)
     # pass
 
 
 def stop_cam():
     os.system("kill -9 `ps -ef |grep picam_9002.py |awk '{print $2}'`")
+    sleep(.1)
     # pass
 
 
@@ -504,6 +508,8 @@ def tog_failed(scr):
         scr = get_scr_idx(scr)
         scripts[scr]['running'] = 2
         tty_message("Script failed.")
+        sleep(.5)
+        scripts[scr]['running'] = 0
     else:
         clr_running(scr)
 
