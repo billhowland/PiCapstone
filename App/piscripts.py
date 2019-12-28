@@ -4,7 +4,7 @@ import socket
 # import picamera
 # camera = picamera.PiCamera()
 # Daemon must be started FIRST!:
-os.system("sudo pigpiod")
+# os.system("sudo pigpiod")
 import pigpio  # NOT an error, DO NOT MOVE!
 pi = pigpio.pi()
 os.system('gotty --config "/home/pi/.gotty9001" cat &')
