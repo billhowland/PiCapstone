@@ -61,14 +61,14 @@ def get_ip():
 
 def start_bash():
     os.system('killall gotty')
-    sleep(.1)
+    # sleep(.1)
     os.system('gotty --config "/home/pi/.gotty" bash &')
     os.system('gotty --config "/home/pi/.gotty9001" cat &')
 
 
 def stop_bash():
     os.system('killall gotty')
-    sleep(.1)
+    # sleep(.1)
     os.system('gotty --config "/home/pi/.gotty9001" cat &')
 
 
@@ -514,6 +514,15 @@ def tog_failed(scr):
         clr_running(scr)
 
 
+def set_failed(scr):
+    if get_running(scr) != 2:
+        scr = get_scr_idx(scr)
+        scripts[scr]['running'] = 2
+        tty_message("Script failed.")
+    else:
+        clr_running(scr)
+
+
 def LED_Pins_low(LEDs):
     for pin in LEDs:
         set_used(pin)
@@ -873,7 +882,7 @@ def script_9():
 def script_16():
     i2c1_scl = 3
     i2c1_sda = 2
-    h = 0
+    # h = 0
 
     if get_running(16):
         clr_running(16)
@@ -1064,7 +1073,7 @@ def script_38():
         camtest = os.popen('vcgencmd get_camera').read()
         if camtest != "supported=1 detected=1\n":
             tty_message("No camera connected.")
-            tog_failed(38)
+            set_failed(38)
         else:
             start_cam()
             sleep(.5)
