@@ -339,6 +339,8 @@ def pud_off(pin):
 
 
 def tty_message(message):
+    # Requires BT disabled.:
+
     (_, _, ttynames) = next(os.walk("/dev/pts"))
     tty_msg = str.encode("\r\n" + "-> " + message + " <-\r\n")
     for ttyname in ttynames:
@@ -1083,6 +1085,8 @@ def script_38():
 # --script 39-Hardware Clock Menu-------------------------------------------------------
 
 
+#  pi3 - 4689 to 250Mhz, pi4 - 13184 to 375Mhz
+#  dmesg | grep model
 def script_39():
 
     if get_running(39):
@@ -1091,7 +1095,7 @@ def script_39():
         pin_out_low(4)
     else:
         script_40()
-        pi.hardware_clock(4, 5000)
+        pi.hardware_clock(4, 14000)
         sleep(.25)
         set_running(39)
 
