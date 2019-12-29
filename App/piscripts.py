@@ -30,7 +30,7 @@ script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
 script_names = ["Full Configuration", "GPIO Configuration", "Flash LEDs", "Hardware PWM Test",
                 "Strobe LEDs", "Wave Test", "Software PWM LEDs", "Script 8",
                 "Dimmer", "Script 10", "Script 11", "Script 12", "Script 13", "Script 14",
-                "Script 15", "I2C Menu", "SPI Menu", "Show Pinout", "Hardware PWM", "Software PWM",
+                "Hardware Version", "I2C Menu", "SPI Menu", "Show Pinout", "Hardware PWM", "Software PWM",
                 "Script 21", "Script 22", "Script 23", "Script 24", "Script 25", "Script 26",
                 "Script 27", "Script 28", "Script 29", "Script 30", "Script 31", "Script 32",
                 "Script 33", "Script 34", "Script 35", "Cam Check", "BASH Console", "PiCamera",
@@ -545,6 +545,16 @@ def no_script(num):
     clr_running(num)
 
 
+def get_hw_version():
+    vernum = str(pi.get_hardware_revision())
+    if vernum == "12595473":
+        return "4B"
+    if vernum == "0":
+        return "3B"
+    else:
+        return "Unknown"
+
+
 # --script 0----------------------------------------------------------------------------
 
 
@@ -877,6 +887,21 @@ def script_9():
     clr_running(9)
     tty_message("Script terminated.")
 
+# --script 15-check pi version ---------------------------------------------------------
+
+
+def script_15():
+    if get_running(15):
+        clr_running(15)
+    else:
+        set_running(15)
+        msg = str(pi.get_hardware_revision())
+        if msg == "12595473":
+            msg = "Raspberry Pi V4 B"
+        tty_message(msg)
+
+        sleep(.15)
+        clr_running(15)
 
 # --script 16---------------------------------------------------------------------------
 
@@ -1095,7 +1120,10 @@ def script_39():
         pin_out_low(4)
     else:
         script_40()
-        pi.hardware_clock(4, 14000)
+        if get_hw_version() == "4B":
+            pi.hardware_clock(4, 13184)
+        else:
+            pi.hardware_clock(4, 4689)
         sleep(.25)
         set_running(39)
 
@@ -1174,7 +1202,7 @@ def do_script(num):
     elif num == 14:
         no_script(num)
     elif num == 15:
-        no_script(num)
+        script_15()
     elif num == 16:
         script_16()
     elif num == 17:

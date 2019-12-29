@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-import sys
+# import sys
 import io
 import os
-import shutil
+# import shutil
 from subprocess import Popen, PIPE
 from string import Template
 from struct import Struct
@@ -134,9 +134,9 @@ def main():
     with picamera.PiCamera() as camera:
         camera.resolution = (WIDTH, HEIGHT)
         camera.framerate = FRAMERATE
-        camera.vflip = VFLIP # flips image rightside up, as needed
-        camera.hflip = HFLIP # flips image left-right, as needed
-        sleep(1) # camera warm-up time
+        camera.vflip = VFLIP  # flips image rightside up, as needed
+        camera.hflip = HFLIP  # flips image left-right, as needed
+        sleep(1)  # camera warm-up time
         print('Initializing websockets server on port %d' % WS_PORT)
         WebSocketWSGIHandler.http_version = '1.1'
         websocket_server = make_server(
