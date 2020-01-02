@@ -3,9 +3,7 @@ from time import sleep
 import socket
 # import picamera
 # camera = picamera.PiCamera()
-# Daemon must be started FIRST!:
-# os.system("sudo pigpiod")
-import pigpio  # NOT an error, DO NOT MOVE!
+import pigpio
 pi = pigpio.pi()
 os.system('gotty --config "/home/pi/.gotty9001" cat &')
 
@@ -42,6 +40,7 @@ script_urls = ["script1", "script2", "script3", "script4", "script5",
                "script24", "script25", "script26", "script27", "script28", "script29",
                "script30", "script31", "script32", "script33", "script34", "script35",
                "script36", "script37", "script38", "script39", "script40"]
+hardware_revs = {0xc03111: "Raspberry Pi V4B 1.1 4GB", 0xa020d3: "Raspberry Pi V3B+ 1.3 1GB"}
 IP = '127.0.0.1'
 
 # URL -> View -> Piscript
@@ -61,14 +60,12 @@ def get_ip():
 
 def start_bash():
     os.system('killall gotty')
-    # sleep(.1)
     os.system('gotty --config "/home/pi/.gotty" bash &')
     os.system('gotty --config "/home/pi/.gotty9001" cat &')
 
 
 def stop_bash():
     os.system('killall gotty')
-    # sleep(.1)
     os.system('gotty --config "/home/pi/.gotty9001" cat &')
 
 
@@ -76,13 +73,11 @@ def start_cam():
     os.system('python3 picam_9002.py &')
     os.system('python3 pistream_9003.py &')
     sleep(.1)
-    # pass
 
 
 def stop_cam():
     os.system("kill -9 `ps -ef |grep picam_9002.py |awk '{print $2}'`")
     sleep(.1)
-    # pass
 
 
 def get_pin_idx(pin):
@@ -223,12 +218,8 @@ def get_all_pins(init=False):
 
     pins = pin_info
 
-    # return pins
 
-# Outputs:
-
-
-def test_pin(pin):  # sets the test flag...
+def test_pin(pin):
     idx = get_pin_idx(pin)
     pins[idx]['test'] = True
 
@@ -287,8 +278,6 @@ def blink_pin(pin):  # Only blinks one pin at a time because each new wave termi
     pi.wave_send_repeat(f500)
     sleep(.1)
 
-# Inputs:
-
 
 def set_pin_in(pin):
     pud = get_pud(pin)
@@ -301,22 +290,9 @@ def set_pin_in(pin):
 def read_pin(pin):
     return pi.read(pin)
 
-# Usage:
-
 
 def pin_use(pin):
     return pi.get_mode(pin)
-    # pigpio #
-    # 0 = pi.INPUT
-    # 1 = pi.OUTPUT
-    # 2 = pi.ALT5
-    # 3 = pi.ALT4
-    # 4 = pi.ALT0
-    # 5 = pi.ALT1
-    # 6 = pi.ALT2
-    # 7 = pi.ALT3
-
-# pull_up_down
 
 
 def pud_dn(pin):
@@ -537,22 +513,19 @@ def BUT_Pins_up(Buttons):
         pud_up(pin)
 
 
-def no_script(num):
-    tog_failed(num)
-    sleep(.35)
-    tty_message("Script " + str(num) + " Not Implemented.")
-    sleep(.1)
-    clr_running(num)
+def no_script(scr):
+    if get_running(scr) != 2:
+        scr = get_scr_idx(scr)
+        scripts[scr]['running'] = 2
+        tty_message("Script " + str(scr) + " Not Implemented.")
+        sleep(.5)
+        scripts[scr]['running'] = 0
+    else:
+        clr_running(scr)
 
 
 def get_hw_version():
-    vernum = str(pi.get_hardware_revision())
-    if vernum == "12595473":
-        return "4B"
-    if vernum == "0":
-        return "3B"
-    else:
-        return "Unknown"
+    return(hardware_revs.get(pi.get_hardware_revision()))
 
 
 # --script 0----------------------------------------------------------------------------
@@ -895,9 +868,11 @@ def script_15():
         clr_running(15)
     else:
         set_running(15)
-        msg = str(pi.get_hardware_revision())
-        if msg == "12595473":
-            msg = "Raspberry Pi V4 B"
+        rev = pi.get_hardware_revision()
+        if rev == 0xc03111:
+            msg = "Raspberry Pi V4B 1.1 4GB"
+        if rev == 0xa020d3:
+            msg = "Raspberry Pi V3B+ 1.3 1GB"
         tty_message(msg)
 
         sleep(.15)
@@ -1120,7 +1095,7 @@ def script_39():
         pin_out_low(4)
     else:
         script_40()
-        if get_hw_version() == "4B":
+        if get_hw_version() == "Raspberry Pi V4B 1.1 4GB":
             pi.hardware_clock(4, 13184)
         else:
             pi.hardware_clock(4, 4689)
