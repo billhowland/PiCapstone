@@ -1,8 +1,6 @@
 import os
 from time import sleep
 import socket
-# import picamera
-# camera = picamera.PiCamera()
 import pigpio
 pi = pigpio.pi()
 os.system('gotty --config "/home/pi/.gotty9001" cat &')
@@ -838,17 +836,17 @@ def script_9():
 
         while get_running(9) and read_pin(exitPin):
 
-            for dc in range(0, 255):
+            for dc in range(1, 255):
                 for pin in ALED_Pins:
                     pi.set_PWM_dutycycle((pin), (dc))  # PWM 1/2 on
                 for pin in BLED_Pins:
-                    pi.set_PWM_dutycycle((pin), (255 - dc))  # PWM 1/2 on
+                    pi.set_PWM_dutycycle((pin), (256 - dc))  # PWM 1/2 on
                 sleep(.015)
-            for dc in range(255, 0, -1):
+            for dc in range(255, 1, -1):
                 for pin in ALED_Pins:
                     pi.set_PWM_dutycycle((pin), (dc))  # PWM 1/2 on
                 for pin in BLED_Pins:
-                    pi.set_PWM_dutycycle((pin), (255 - dc))  # PWM 1/2 on
+                    pi.set_PWM_dutycycle((pin), (256 - dc))  # PWM 1/2 on
                 sleep(.015)
             get_pwms()
 
