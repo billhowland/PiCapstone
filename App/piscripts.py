@@ -871,6 +871,10 @@ def script_15():
             msg = "Raspberry Pi V4B 1.1 4GB"
         if rev == 0xa020d3:
             msg = "Raspberry Pi V3B+ 1.3 1GB"
+        if rev == 0xa02082:
+            msg = "Raspberry Pi V3B 1.2 1GB"
+        else:
+            msg = str(rev)
         tty_message(msg)
 
         sleep(.15)
