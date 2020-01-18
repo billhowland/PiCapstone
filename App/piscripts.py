@@ -27,7 +27,7 @@ script_names = ["Full Configuration", "GPIO Configuration", "Flash LEDs", "Hardw
                 "Strobe LEDs", "Wave Test", "Software PWM LEDs", "Script 8",
                 "Dimmer", "Script 10", "Script 11", "Script 12", "Script 13", "Script 14",
                 "Hardware Version", "I2C Menu", "SPI Menu", "Show Pinout", "Hardware PWM", "Software PWM",
-                "Script 21", "Script 22", "Script 23", "Script 24", "Script 25", "Script 26",
+                "ELLK Configuration", "Script 22", "Script 23", "Script 24", "Script 25", "Script 26",
                 "Script 27", "Script 28", "Script 29", "Script 30", "Script 31", "Script 32",
                 "Script 33", "Script 34", "Script 35", "Cam Check", "BASH Console", "PiCamera",
                 "Hardware Clock", "Clear All"]
@@ -553,6 +553,7 @@ def script_1():
     global pins
     set_running(1)
     clr_running(2)
+    clr_running(21)
     sleep(0.25)
 
     for pin in pin_names:
@@ -567,6 +568,7 @@ def script_2():
     global pins
     set_running(2)
     clr_running(1)
+    clr_running(21)
     sleep(0.25)
 
     for pin in pin_names:
@@ -1033,6 +1035,47 @@ def script_20():
     sleep(.25)
 
 
+# --script 21-ELLK Config ---------------------------------------------------------------
+
+
+def script_21():
+    global pins
+    set_running(21)
+    clr_running(1)
+    clr_running(2)
+    sleep(0.25)
+
+    for pin in pin_names:
+        set_not_used(pin)
+
+    LEDs = [6, 19, 25, 26]
+    for pin in LEDs:
+        set_used(pin)
+        set_pin_out(pin)
+        pin_out_low(pin)
+
+    if get_running(19) or get_running(4): #  if hardware PWM is ON
+        set_used(19)
+
+    Buttons = [16, 20, 21]
+    BUT_Pins_up(Buttons)
+
+    Buzzer = [18]
+    for pin in Buzzer:
+        set_used(pin)
+        # pi.set_PWM_frequency((pin), 20)
+        # pi.set_PWM_dutycycle((pin), 127)
+
+    IOs = [8, 9, 10, 11, 13, 17, 23]
+    for pin in IOs:
+        set_used(pin)
+        set_pin_out(pin)
+        pin_out_low(pin)
+
+    
+
+    sleep(0.25)
+
 # --script 36-check for a camera--------------------------------------------------------
 
 def script_36():
@@ -1187,7 +1230,7 @@ def do_script(num):
     elif num == 20:
         script_20()
     elif num == 21:
-        no_script(num)
+        script_21()
     elif num == 22:
         no_script(num)
     elif num == 23:
