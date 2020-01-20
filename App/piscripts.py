@@ -163,7 +163,7 @@ def set_not_used(pin):
 
 def get_all_pins(init=False):
     global pins
-
+    pin_info = []
     for pin in pin_names:
         func = pin_use(pin)
         in_lvl = read_pin(pin)
@@ -994,6 +994,8 @@ def script_19():
             script_1()
         if get_running(2):
             script_2()
+        if get_running(21):
+            script_21()
 
     else:
         script_40()
@@ -1058,17 +1060,19 @@ def script_21():
         set_pin_out(pin)
         pin_out_low(pin)
 
-    if get_running(19) or get_running(4): #  if hardware PWM is ON
+    if get_running(19) or get_running(4):  # if hardware PWM is ON
         set_used(19)
 
     Buttons = [16, 20, 21]
     BUT_Pins_up(Buttons)
 
-    Buzzer = [18]
-    for pin in Buzzer:
-        set_used(pin)
-        # pi.set_PWM_frequency((pin), 20)
-        # pi.set_PWM_dutycycle((pin), 127)
+    Buzzer = 18
+    set_used(Buzzer)
+    set_pin_out(Buzzer)
+    # pi.set_PWM_frequency((pin), 100)
+    # pi.set_PWM_dutycycle((pin), 127)
+    pi.set_mode((Buzzer), pigpio.ALT5)
+    start_hpwm(Buzzer)
 
     IOs = [8, 9, 10, 11, 13, 17, 23]
     for pin in IOs:
@@ -1076,9 +1080,8 @@ def script_21():
         set_pin_out(pin)
         pin_out_low(pin)
 
-    
-
     sleep(0.25)
+
 
 # --script 36-check for a camera--------------------------------------------------------
 
@@ -1176,6 +1179,8 @@ def script_40(verb=False):
         scriptrunning = 1
     if get_running(2):
         scriptrunning = 2
+    if get_running(21):
+        scriptrunning = 21
 
     for script in script_nums:
         clr_running(script)
@@ -1187,6 +1192,8 @@ def script_40(verb=False):
         script_1()
     if scriptrunning == 2:
         script_2()
+    if scriptrunning == 21:
+        script_21()
 
 # -------------------------------------------------------------------------------------
 
