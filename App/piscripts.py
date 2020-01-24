@@ -906,6 +906,8 @@ def script_16():
             script_1()
         if get_running(2):
             script_2()
+        if get_running(21):
+            script_21()
 
     else:
         script_40()
@@ -949,6 +951,8 @@ def script_17():
             script_1()
         if get_running(2):
             script_2()
+        if get_running(21):
+            script_21()
 
     else:
         script_40()
