@@ -156,6 +156,11 @@ def get_all_pins(request):  # returns pin data back to the html, does not call g
 
     pin_info = []
 
+    if get_running(21):
+        pin_names = [8, 9, 10, 11, 13, 17, 23, 6, 19, 25, 26, 16, 20, 21, 18]
+    else:
+        pin_names = [4, 10, 9, 8, 11, 7, 5, 6, 12, 13, 26, 25, 27, 24, 23, 22, 18, 17, 2, 3, 14, 15, 16, 19, 20, 21]
+
     for pin in pin_names:
         testing = get_testing(pin)
         func = pin_use(pin)

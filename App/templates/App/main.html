@@ -32,10 +32,18 @@
                       <input type="radio" v-bind:name="'GPIO'+pin.name" value='1' v-model="pin.func" v-on:change="setPin(pin.name, pin.func)">
                       <label for="out">Out</label></a>
                       <a class='iosetb' v-if="pin.func==2">ALT 5
-                      <a class='iosetb' v-if="pin.func==2 && scripts[20].running">BUZZER
-                      <a class='ioset' v-if="pin.func==4">ALT 0</a>
+                      <a class='iosetb' v-if="pin.func==2 && scripts[20].running">Obnoxious Buzzer
+                      <a class='ioset' v-if="pin.func==4">ALT 0
+                      <a class='ioset none' v-if="pin.func==1 && pin.name == 6 && scripts[20].running">- OUT -
+                      <a class='ioset none' v-if="pin.func==1 && pin.name == 19 && scripts[20].running">- OUT -
+                      <a class='ioset none' v-if="pin.func==1 && pin.name == 25 && scripts[20].running">- OUT -
+                      <a class='ioset none' v-if="pin.func==1 && pin.name == 26 && scripts[20].running">- OUT -
+                      <a class='ioset rled' v-if="pin.func==0 && pin.name == 16 && scripts[20].running">Red Button
+                      <a class='ioset gled' v-if="pin.func==0 && pin.name == 20 && scripts[20].running">Green Button
+                      <a class='ioset bled' v-if="pin.func==0 && pin.name == 21 && scripts[20].running">Blue Button</a>
+
                       {# This is column 3 stuff #}
-                      <a class='pud' v-if="pin.func==0"> {# 0 = Input #}
+                      <a class='pud' v-if="pin.func==0 && !scripts[20].running"> {# 0 = Input #}
                           <input type="radio" v-bind:name="'PUD'+pin.name" value='up' v-model="pin.pud" v-on:change="gpup(pin.name, pin.pud)">
                           <label for="up">Up</label>
                           <input type="radio" v-bind:name="'PUD'+pin.name" value='down' v-model="pin.pud" v-on:change="gpdn(pin.name, pin.pud)">
@@ -43,16 +51,21 @@
                           <input type="radio" v-bind:name="'PUD'+pin.name" value='off' v-model="pin.pud" v-on:change="gpoff(pin.name, pin.pud)">
                           <label for="off">Off</label></a>
 
+                      <a class='pud' v-if="pin.func==0 && scripts[20].running"> {# 0 = Input #}
+                          <input type="radio" v-bind:name="'PUD'+pin.name" value='up' v-model="pin.pud" v-on:change="gpup(pin.name, pin.pud)">
+                          <label for="up">Up</label>
+                          <input type="radio" v-bind:name="'PUD'+pin.name" value='down' v-model="pin.pud" v-on:change="gpdn(pin.name, pin.pud)">
+                          <label for="down">Dn</label></a>
 
                       <template>
                           <a class='col3 center' v-if="pin.func==1 && pin.dc==0">GPIO OUT</a>
-                          <a class='col3 center' v-if="pin.func==1 && pin.dc==0 && scripts[20].running">GPIO Out</a>
-                          <a class='col3 center' v-if="pin.func==1 && pin.name==6 && scripts[20].running">Green LED</a>
-                          <a class='col3 center' v-if="pin.func==1 && pin.name==19 && scripts[20].running">Yellow LED</a>
-                          <a class='col3 center' v-if="pin.func==1 && pin.name==25 && scripts[20].running">Red LED</a>
-                          <a class='col3 center' v-if="pin.func==1 && pin.name==26 && scripts[20].running">Blue LED</a>
-                          <a class='col3p center' v-if="pin.name==4 && pin.func==4">Hardware Clock</a>
-                          <a class='col3p center' v-if="pin.func==1 && pin.dc!=0">PWM Freq: ${pin.frq}</a>
+                          <a class='col3 center' v-if="pin.func==1 && pin.dc==0 && scripts[20].running">GPIO Pins</a>
+                          <a class='col3 gled center' v-if="pin.func==1 && pin.name==6 && scripts[20].running">Green LED</a>
+                          <a class='col3 yled center' v-if="pin.func==1 && pin.name==19 && scripts[20].running">Yellow LED</a>
+                          <a class='col3 rled center' v-if="pin.func==1 && pin.name==25 && scripts[20].running">Red LED</a>
+                          <a class='col3 bled center' v-if="pin.func==1 && pin.name==26 && scripts[20].running">Blue LED</a>
+                          <a class='col3 pwm center' v-if="pin.name==4 && pin.func==4">Hardware Clock</a>
+                          <a class='col3 pwm center' v-if="pin.func==1 && pin.dc!=0">PWM Freq: ${pin.frq}</a>
                           <a v-show="pin.name==7 && pin.func==4" class='col3 center col3spi0'>SPI0 CS1</a>
                           <a v-show="pin.name==8 && pin.func==4" class='col3 center col3spi0'>SPI0 CS0</a>
                           <a v-show="pin.name==9 && pin.func==4" class='col3 center col3spi0'>SPI0 MISO</a>
@@ -70,6 +83,7 @@
                           <a v-show="pin.name==13 && pin.func==4" class='col3 center col3pwm'>PWM1 Duty Cycle: ${pin.hdc}</a>
                           <a v-show="pin.name==18 && pin.func==2"class='col3 center col3pwm'>PWM0 Duty Cycle: ${pin.hdc}</a>
                           <a v-show="pin.name==19 && pin.func==2"class='col3 center col3pwm'>PWM1 Duty Cycle: ${pin.hdc}</a>
+                          <a v-show="pin.name==18 && pin.func==2 && scripts[20].running"class='col3 center col3pwm'>Duty Cycle: ${pin.hdc}</a>
                       </template>
 
 

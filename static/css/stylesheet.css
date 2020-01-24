@@ -225,6 +225,34 @@ background-size: 100% auto;
 	font-size: 15px;
 }
 
+.pwm{
+  background-color: lightgreen;
+}
+
+.gled{
+  background-color: green;
+	color: white;
+}
+
+.yled{
+  background-color: yellow;
+}
+
+.rled{
+  background-color: red;
+	color: white;
+}
+
+.bled{
+  background-color: blue;
+	color: white;
+}
+
+.none{
+  background-color: darkgray;
+	color: black;
+}
+
 .col3p{
 	grid-area: pud;
 	justify-self: center;

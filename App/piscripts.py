@@ -550,25 +550,30 @@ def script_0():
 
 
 def script_1():
-    global pins
-    set_running(1)
-    clr_running(2)
-    clr_running(21)
-    sleep(0.25)
+    if not get_running(21):
+        global pins
+        set_running(1)
+        clr_running(2)
+        clr_running(21)
+        sleep(0.25)
 
-    for pin in pin_names:
-        set_used(pin)
+        for pin in pin_names:
+            set_used(pin)
+        sleep(0.25)
 
-    sleep(0.25)
 
 # --script 2-My Hat Configuration-------------------------------------------------------
 
 
 def script_2():
+
+    if get_running(21):
+        clr_running(21)
+        set_running(2)
+        script_40()
     global pins
     set_running(2)
     clr_running(1)
-    clr_running(21)
     sleep(0.25)
 
     for pin in pin_names:
@@ -1195,6 +1200,10 @@ def script_40(verb=False):
     Pushbutton_Pins = [18, 17, 23, 22, 27, 24, 25, 13, 26]
     for pin in Pushbutton_Pins:
         pud_up(pin)
+
+    spi_Pins = [16, 19, 20, 21]  # SPI1
+    for pin in spi_Pins:
+        pi.set_mode((pin), pigpio.ALT0)
 
     if get_running(1):
         scriptrunning = 1
