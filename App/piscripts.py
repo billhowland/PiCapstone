@@ -574,6 +574,11 @@ def script_2():
     for pin in pin_names:
         set_not_used(pin)
 
+    hpwms = [12, 13, 18, 19]
+
+    for hpwm in hpwms:
+        stop_hpwm(hpwm)
+
     LEDs = [4, 10, 9, 8, 11, 7, 5, 6, 12]
     for pin in LEDs:
         set_used(pin)
@@ -871,9 +876,9 @@ def script_15():
         rev = pi.get_hardware_revision()
         if rev == 0xc03111:
             msg = "Raspberry Pi V4B 1.1 4GB"
-        if rev == 0xa020d3:
+        elif rev == 0xa020d3:
             msg = "Raspberry Pi V3B+ 1.3 1GB"
-        if rev == 0xa02082:
+        elif rev == 0xa02082:
             msg = "Raspberry Pi V3B 1.2 1GB"
         else:
             msg = str(rev)
@@ -1067,18 +1072,34 @@ def script_21():
     BUT_Pins_up(Buttons)
 
     Buzzer = 18
+    stop_hpwm(12)
+    stop_hpwm(18)
     set_used(Buzzer)
     set_pin_out(Buzzer)
+    pi.set_mode((Buzzer), pigpio.ALT5)
+
+    # for software pwm:
     # pi.set_PWM_frequency((pin), 100)
     # pi.set_PWM_dutycycle((pin), 127)
-    pi.set_mode((Buzzer), pigpio.ALT5)
-    start_hpwm(Buzzer)
 
     IOs = [8, 9, 10, 11, 13, 17, 23]
     for pin in IOs:
         set_used(pin)
         set_pin_out(pin)
         pin_out_low(pin)
+
+    while get_running(21):
+        if read_pin(16) == 0:
+            set_hfrq(Buzzer, 1000)
+            start_hpwm(Buzzer)
+        elif read_pin(20) == 0:
+            set_hfrq(Buzzer, 900)
+            start_hpwm(Buzzer)
+        elif read_pin(21) == 0:
+            set_hfrq(Buzzer, 1100)
+            start_hpwm(Buzzer)
+        else:
+            stop_hpwm(Buzzer)
 
     sleep(0.25)
 
