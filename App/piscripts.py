@@ -1062,7 +1062,11 @@ def script_21():
     sleep(0.25)
 
     for pin in pin_names:
+        set_pin_out(pin)
+        pin_out_low(pin)
         set_not_used(pin)
+
+    sleep(0.2)
 
     LEDs = [6, 19, 25, 26]
     for pin in LEDs:
@@ -1105,8 +1109,6 @@ def script_21():
             start_hpwm(Buzzer)
         else:
             stop_hpwm(Buzzer)
-
-    sleep(0.25)
 
 
 # --script 36-check for a camera--------------------------------------------------------
