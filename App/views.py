@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
-from .piscripts import (pin_names, pwm_names, test_pin, script_nums, set_pin_out,
+from .piscripts import (pwm_names, test_pin, script_nums, set_pin_out,
                         pin_out_hi, pin_out_low, pin_tog, set_pin_in, read_pin,
                         pin_use, pud_up, pud_dn, pud_off, get_pud, get_ip, get_test,
                         get_testing, get_used, get_name, get_url, get_running,

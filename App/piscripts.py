@@ -1102,17 +1102,29 @@ def script_21():
         pin_out_low(pin)
 
     while get_running(21):
-        if read_pin(16) == 0:
-            set_hfrq(Buzzer, 1000)
-            start_hpwm(Buzzer)
-        elif read_pin(20) == 0:
+        if read_pin(16) == 0:  # red 25
             set_hfrq(Buzzer, 900)
             start_hpwm(Buzzer)
-        elif read_pin(21) == 0:
+            while read_pin(16) == 0:
+                pin_out_hi(25)
+            pin_out_low(25)
+        elif read_pin(20) == 0:  # green 6
+            set_hfrq(Buzzer, 1000)
+            start_hpwm(Buzzer)
+            while read_pin(20) == 0:
+                pin_out_hi(6)
+            pin_out_low(6)    
+        elif read_pin(21) == 0:  # yellow 19
             set_hfrq(Buzzer, 1100)
             start_hpwm(Buzzer)
+            while read_pin(21) == 0:
+                pin_out_hi(19)
+            pin_out_low(19)
         else:
             stop_hpwm(Buzzer)
+            # leds = [6, 19, 25]
+            # for pin in leds:
+            #     pin_out_low(pin)
 
 
 # --script 36-check for a camera--------------------------------------------------------

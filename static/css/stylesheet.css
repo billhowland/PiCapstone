@@ -184,20 +184,9 @@ background-size: 100% auto;
 	border-color: darkgray;
 }
 
-.iosetb{
-	font-size: 15px;
-	box-sizing: border-box;
-	grid-area: set;
-	width: 100%;
-	text-align: center;
-	color: white;
-	justify-self: center;
-	align-self: stretch;
-	align-items: stretch;
-	justify-content: center;
+.alt{
+	color: black;
   background-color: #8a9100;
-	border-style: outset;
-	border-color: darkgray;
 }
 
 .pud{
@@ -236,6 +225,7 @@ background-size: 100% auto;
 
 .yled{
   background-color: yellow;
+	color: black;
 }
 
 .rled{
