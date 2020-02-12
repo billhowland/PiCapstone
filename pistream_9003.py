@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-# import sys
+import sys
 import io
 import os
-# import shutil
+import shutil
 from subprocess import Popen, PIPE
 from string import Template
 from struct import Struct
@@ -26,8 +26,8 @@ from ws4py.server.wsgiutils import WebSocketWSGIApplication
 WIDTH = 640
 HEIGHT = 480
 FRAMERATE = 24
-HTTP_PORT = 8082
-WS_PORT = 9003
+HTTP_PORT = 9003
+WS_PORT = 9005
 COLOR = u'#444'
 BGCOLOR = u'#333'
 JSMPEG_MAGIC = b'jsmp'

@@ -3,6 +3,7 @@ from time import sleep
 import socket
 import pigpio
 pi = pigpio.pi()
+os.system('python3 picam_9002.py &')
 os.system('gotty --config "/home/pi/.gotty9001" cat &')
 
 pins = []
@@ -68,13 +69,14 @@ def stop_bash():
 
 
 def start_cam():
-    os.system('python3 picam_9002.py &')
+    # os.system('python3 picam_9002.py &')
     os.system('python3 pistream_9003.py &')
     sleep(.1)
 
 
 def stop_cam():
-    os.system("kill -9 `ps -ef |grep picam_9002.py |awk '{print $2}'`")
+    # os.system("kill -9 `ps -ef |grep picam_9002.py |awk '{print $2}'`")
+    os.system("kill -9 `ps -ef |grep pistream_9003.py |awk '{print $2}'`")
     sleep(.1)
 
 
@@ -515,8 +517,8 @@ def no_script(scr):
     if get_running(scr) != 2:
         scr = get_scr_idx(scr)
         scripts[scr]['running'] = 2
-        tty_message("Script " + str(scr) + " Not Implemented.")
         sleep(.5)
+        tty_message("Script " + str(scr) + " Not Implemented.")
         scripts[scr]['running'] = 0
     else:
         clr_running(scr)
@@ -1113,7 +1115,7 @@ def script_21():
             start_hpwm(Buzzer)
             while read_pin(20) == 0:
                 pin_out_hi(6)
-            pin_out_low(6)    
+            pin_out_low(6)
         elif read_pin(21) == 0:  # yellow 19
             set_hfrq(Buzzer, 1100)
             start_hpwm(Buzzer)
@@ -1162,14 +1164,14 @@ def script_38():
 
     if get_running(38):
         clr_running(38)
-        stop_cam()
+        # stop_cam()
     else:
         camtest = os.popen('vcgencmd get_camera').read()
         if camtest != "supported=1 detected=1\n":
             tty_message("No camera connected.")
             set_failed(38)
         else:
-            start_cam()
+            # start_cam()
             sleep(.5)
             set_running(38)
     sleep(.25)
