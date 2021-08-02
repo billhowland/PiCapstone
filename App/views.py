@@ -20,8 +20,9 @@ def main(request):
     IP = 'http://{}:9000'.format(get_ip())  # bash console
     IPB = 'http://{}:9001'.format(get_ip())  # cat console
     IPC = 'http://{}:9002'.format(get_ip())  # picamera stream
+    IPS = 'http://{}:9004'.format(get_ip())  # serial console
     IPX = ' {}:8080'.format(get_ip())
-    return render(request, 'App/main.html', {'IP': IP, 'IPB': IPB, 'IPC': IPC, 'IPX': IPX})  # 'IPC': IPC,
+    return render(request, 'App/main.html', {'IP': IP, 'IPB': IPB, 'IPC': IPC, 'IPX': IPX, 'IPS': IPS})  # 'IPC': IPC,
 
 
 def gptest(request, pin):

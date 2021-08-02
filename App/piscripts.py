@@ -3,7 +3,7 @@ from time import sleep
 import socket
 import pigpio
 pi = pigpio.pi()
-os.system('gotty --config "/home/pi/.gotty9001" cat &')
+os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty9001" cat &')
 
 pins = []
 pin_info = []
@@ -23,13 +23,13 @@ spi_names = [0, 1]
 i2c_names = [0, 1]
 script_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
                22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]
-script_names = ["Full Configuration", "GPIO Configuration", "Flash LEDs", "Hardware PWM Test",
+script_names = ["Full Configuration", "GPIO Configuration", "Test All LEDs", "Hardware PWM Test",
                 "Strobe LEDs", "Wave Test", "Software PWM LEDs", "Script 8",
                 "Dimmer", "Script 10", "Script 11", "Script 12", "Script 13", "Script 14",
                 "Hardware Version", "I2C Menu", "SPI Menu", "Show Pinout", "Hardware PWM", "Software PWM",
                 "ELLK Configuration", "Script 22", "Script 23", "Script 24", "Script 25", "Script 26",
                 "Script 27", "Script 28", "Script 29", "Script 30", "Script 31", "Script 32",
-                "Script 33", "Script 34", "Script 35", "Cam Check", "BASH Console", "PiCamera",
+                "Script 33", "Script 34", "Serial Menu", "Cam Check", "BASH Console", "PiCamera",
                 "Hardware Clock", "Clear All"]
 script_urls = ["script1", "script2", "script3", "script4", "script5",
                "script6", "script7", "script8", "script9", "script10", "script11",
@@ -38,7 +38,7 @@ script_urls = ["script1", "script2", "script3", "script4", "script5",
                "script24", "script25", "script26", "script27", "script28", "script29",
                "script30", "script31", "script32", "script33", "script34", "script35",
                "script36", "script37", "script38", "script39", "script40"]
-hardware_revs = {0xc03111: "Raspberry Pi V4B 1.1 4GB", 0xa020d3: "Raspberry Pi V3B+ 1.3 1GB"}
+hardware_revs = {0xc03111: "Raspberry Pi V4B 1.1 4GB", 0xa020d3: "Raspberry Pi V3B+ 1.3 1GB", 0xc03130: "Raspberry Pi 400"}
 IP = '127.0.0.1'
 
 # URL -> View -> Piscript
@@ -58,13 +58,13 @@ def get_ip():
 
 def start_bash():
     os.system('killall gotty')
-    os.system('gotty --config "/home/pi/.gotty" bash &')
-    os.system('gotty --config "/home/pi/.gotty9001" cat &')
+    os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty" bash &')
+    os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty9001" cat &')
 
 
 def stop_bash():
     os.system('killall gotty')
-    os.system('gotty --config "/home/pi/.gotty9001" cat &')
+    os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty9001" cat &')
 
 
 def start_cam():
@@ -513,11 +513,11 @@ def BUT_Pins_up(Buttons):
 
 def no_script(scr):
     if get_running(scr) != 2:
-        scr = get_scr_idx(scr)
-        scripts[scr]['running'] = 2
+        scr_idx = get_scr_idx(scr)
+        scripts[scr_idx]['running'] = 2
         tty_message("Script " + str(scr) + " Not Implemented.")
         sleep(.5)
-        scripts[scr]['running'] = 0
+        scripts[scr_idx]['running'] = 0
     else:
         clr_running(scr)
 
@@ -550,16 +550,19 @@ def script_0():
 
 
 def script_1():
-    if not get_running(21):
-        global pins
-        set_running(1)
-        clr_running(2)
+    if get_running(21):
         clr_running(21)
-        sleep(0.25)
+        set_running(1)
+        script_40()
+    global pins
+    set_running(1)
+    clr_running(2)
 
-        for pin in pin_names:
-            set_used(pin)
-        sleep(0.25)
+    sleep(0.25)
+
+    for pin in pin_names:
+        set_used(pin)
+    sleep(0.25)
 
 
 # --script 2-My Hat Configuration-------------------------------------------------------
@@ -601,17 +604,26 @@ def script_2():
 
 def script_3():
     global pins
-    set_running(3)
+    if get_running(21):
+        LED_Pins = [6, 19, 25, 26]
+    else:
+        LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
 
-    tty_message("Script 3: all pins to 'Test' mode at 750ms interval.")
-    LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
-    for pin in LED_Pins:
-        set_used(pin)
-        test_pin(pin)
-        sleep(.75)
+    if get_running(3):
 
-    clr_running(3)
-    tty_message("Script terminated.")
+        for pin in LED_Pins:
+            untest_pin(pin)
+            pin_out_low(pin)
+        clr_running(3)
+    else:
+        set_running(3)
+        tty_message("Script 3: all pins to 'Test' mode at 750ms interval.")
+
+        for pin in LED_Pins:
+            if get_running(3):
+                test_pin(pin)
+                sleep(.75)
+
 
 # --script 4 Hardware PWM Test----------------------------------------------------------
 
@@ -623,8 +635,6 @@ def script_4():
     pwmPind = 19
     butPin = 17
     exitPin = 25
-    pud_up(butPin)  # Button pin set as input w/ pull-up
-    pud_up(exitPin)
 
     if get_running(4):
         clr_running(4)
@@ -649,38 +659,41 @@ def script_4():
             script_2()
 
     else:
-        tty_message("Script 4: Hardware PWM test.")
-        set_running(4)
-        for pin in pin_names:
-            untest_pin(pin)
-        get_all_pins(init=True)
+        if not get_running(21):
+            pud_up(butPin)  # Button pin set as input w/ pull-up
+            pud_up(exitPin)
+            tty_message("Script 4: Hardware PWM test.")
+            set_running(4)
+            for pin in pin_names:
+                untest_pin(pin)
+            get_all_pins(init=True)
 
-        for pin in pin_names:
-            set_not_used(pin)
+            for pin in pin_names:
+                set_not_used(pin)
 
-        used_Pins = [(pwmPina), (pwmPinb), (pwmPinc), (pwmPind), (butPin), (exitPin)]
-        for pin in used_Pins:
-            set_used(pin)
+            used_Pins = [(pwmPina), (pwmPinb), (pwmPinc), (pwmPind), (butPin), (exitPin)]
+            for pin in used_Pins:
+                set_used(pin)
 
-        sleep(.125)
-        set_pin_out(pwmPind)
-        set_hfrq(pwmPind, 2)
-        set_hdc(pwmPind, 500000)
-        set_pin_out(pwmPinb)
+            sleep(.125)
+            set_pin_out(pwmPind)
+            set_hfrq(pwmPind, 2)
+            set_hdc(pwmPind, 500000)
+            set_pin_out(pwmPinb)
 
-        start_hpwm(pwmPind)
-        set_hfrq(pwmPinb, 1)
-        set_hdc(pwmPinb, 500000)
-        start_hpwm(pwmPinb)
+            start_hpwm(pwmPind)
+            set_hfrq(pwmPinb, 1)
+            set_hdc(pwmPinb, 500000)
+            start_hpwm(pwmPinb)
 
-        set_pin_out(pwmPina)
-        pi.set_mode((pwmPina), pigpio.ALT0)
-        set_pin_out(pwmPinc)
-        pi.set_mode((pwmPinc), pigpio.ALT0)
+            set_pin_out(pwmPina)
+            pi.set_mode((pwmPina), pigpio.ALT0)
+            set_pin_out(pwmPinc)
+            pi.set_mode((pwmPinc), pigpio.ALT0)
 
-        tty_message("Hardware PWM on pins 12, 13, 18, 19")
-        tty_message("Press GPIO 25 to terminate")
-        tty_message("Press GPIO 17 button for fun")
+            tty_message("Hardware PWM on pins 12, 13, 18, 19")
+            tty_message("Press GPIO 25 to terminate")
+            tty_message("Press GPIO 17 button for fun")
 
         while get_running(4):
             if read_pin(butPin):
@@ -705,10 +718,14 @@ def script_5():
         set_running(5)
         tty_message("Script 5: one LED at a time...")
         tty_message("Back -n- Forth...")
-        LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
-
-        butPin = 17
-        exitPin = 25
+        if get_running(21):
+            LED_Pins = [6, 19, 25, 26]
+            butPin = 20
+            exitPin = 16
+        else:
+            LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
+            butPin = 17
+            exitPin = 25
         pud_up(butPin)  # Button pin set as input w/ pull-up
         pud_up(exitPin)
 
@@ -737,10 +754,15 @@ def script_6():
         set_running(6)
         tty_message("Script 6: wave test.")
         flash_500 = []  # flash every 500 ms
-        LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
 
-        butPin = 17
-        exitPin = 25
+        if get_running(21):
+            LED_Pins = [6, 19, 25, 26]
+            butPin = 20
+            exitPin = 16
+        else:
+            LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
+            butPin = 17
+            exitPin = 25
         pud_up(butPin)  # Button pin set as input w/ pull-up
         pud_up(exitPin)
 
@@ -774,19 +796,25 @@ def script_7():
     global pins
     if get_running(7):
         clr_running(7)
-        clr_running(20)
+
     else:
         set_running(7)
+        if get_running(21):
+            LED_Pins = [6, 19, 25, 26]
+            butPin = 16
+            exitPin = 20
+        else:
+            LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
+            butPin = 17
+            exitPin = 25
 
         tty_message("Script 7: Software PWM at 20Hz.")
         tty_message("Back -n- Forth...")
-        LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
+
         for pin in LED_Pins:
             set_used(pin)
             pi.set_PWM_frequency((pin), 10)
 
-        butPin = 17
-        exitPin = 25
         pud_up(butPin)  # Button pin set as input w/ pull-up
         pud_up(exitPin)
 
@@ -807,8 +835,9 @@ def script_7():
                 sleep(.15)
             get_pwms()
 
-    for pin in LED_Pins:
-        pin_out_low(pin)
+    if not get_running(20):
+        for pin in LED_Pins:
+            pin_out_low(pin)
     clr_running(7)
     tty_message("Script terminated.")
 
@@ -824,51 +853,64 @@ def script_8():
 
 def script_9():
     global pins
+    if get_running(21):
+        ALED_Pins = [6, 25]
+        BLED_Pins = [19, 26]
+        butPin = 20
+        exitPin = 16
+    else:
+        ALED_Pins = [4, 9, 11, 5, 12]
+        BLED_Pins = [10, 8, 7, 6]
+        butPin = 17
+        exitPin = 25
+
     if get_running(9):
         clr_running(9)
-        clr_running(20)
+        if not get_running(20):
+            for pin in ALED_Pins:
+                pin_out_low(pin)
+            for pin in BLED_Pins:
+                pin_out_low(pin)
+        tty_message("Script terminated.")
     else:
         set_running(9)
         tty_message("Script 9: Software PWM dimmer")
 
-        ALED_Pins = [4, 9, 11, 5, 12]
         for pin in ALED_Pins:
             set_used(pin)
             pi.set_PWM_frequency((pin), 100)
 
-        BLED_Pins = [10, 8, 7, 6]
         for pin in BLED_Pins:
             set_used(pin)
             pi.set_PWM_frequency((pin), 100)
 
-        butPin = 17
-        exitPin = 25
         pud_up(butPin)  # Button pin set as input w/ pull-up
         pud_up(exitPin)
 
         while get_running(9) and read_pin(exitPin):
 
-            for dc in range(1, 255):
-                for pin in ALED_Pins:
-                    pi.set_PWM_dutycycle((pin), (dc))  # PWM 1/2 on
-                for pin in BLED_Pins:
-                    pi.set_PWM_dutycycle((pin), (256 - dc))  # PWM 1/2 on
-                sleep(.015)
-            for dc in range(255, 1, -1):
-                for pin in ALED_Pins:
-                    pi.set_PWM_dutycycle((pin), (dc))  # PWM 1/2 on
-                for pin in BLED_Pins:
-                    pi.set_PWM_dutycycle((pin), (256 - dc))  # PWM 1/2 on
-                sleep(.015)
+            if get_running(9):
+                for dc in range(1, 255):
+                    for pin in ALED_Pins:
+                        pi.set_PWM_dutycycle((pin), (dc))  # PWM 1/2 on
+                    for pin in BLED_Pins:
+                        pi.set_PWM_dutycycle((pin), (256 - dc))  # PWM 1/2 on
+                    sleep(.015)
+            if get_running(9):
+                for dc in range(255, 1, -1):
+                    for pin in ALED_Pins:
+                        pi.set_PWM_dutycycle((pin), (dc))  # PWM 1/2 on
+                    for pin in BLED_Pins:
+                        pi.set_PWM_dutycycle((pin), (256 - dc))  # PWM 1/2 on
+                    sleep(.015)
             get_pwms()
-
-    for pin in ALED_Pins:
-        pin_out_low(pin)
-    for pin in BLED_Pins:
-        pin_out_low(pin)
-
-    clr_running(9)
-    tty_message("Script terminated.")
+        clr_running(9)
+        if not get_running(20):
+            for pin in ALED_Pins:
+                pin_out_low(pin)
+            for pin in BLED_Pins:
+                pin_out_low(pin)
+        tty_message("Script terminated.")
 
 # --script 15-check pi version ---------------------------------------------------------
 
@@ -878,18 +920,10 @@ def script_15():
         clr_running(15)
     else:
         set_running(15)
-        rev = pi.get_hardware_revision()
-        if rev == 0xc03111:
-            msg = "Raspberry Pi V4B 1.1 4GB"
-        elif rev == 0xa020d3:
-            msg = "Raspberry Pi V3B+ 1.3 1GB"
-        elif rev == 0xa02082:
-            msg = "Raspberry Pi V3B 1.2 1GB"
-        else:
-            msg = str(rev)
+        msg = get_hw_version()
         tty_message(msg)
 
-        sleep(.15)
+        sleep(.25)
         clr_running(15)
 
 # --script 16---------------------------------------------------------------------------
@@ -910,18 +944,19 @@ def script_16():
             script_21()
 
     else:
-        script_40()
-        set_running(16)
+        if not get_running(21):
+            script_40()
+            set_running(16)
 
-        for pin in pin_names:
-            set_not_used(pin)
+            for pin in pin_names:
+                set_not_used(pin)
 
-        used_Pins = [(i2c1_scl), (i2c1_sda)]
-        for pin in used_Pins:
-            set_used(pin)
-            pi.set_mode((pin), pigpio.ALT0)
-            get_all_pins(init=False)
-        sleep(.25)
+            used_Pins = [(i2c1_scl), (i2c1_sda)]
+            for pin in used_Pins:
+                set_used(pin)
+                pi.set_mode((pin), pigpio.ALT0)
+                get_all_pins(init=False)
+            sleep(.25)
 
 
 # --script 17---------------------------------------------------------------------------
@@ -955,21 +990,22 @@ def script_17():
             script_21()
 
     else:
-        script_40()
-        set_running(17)
+        if not get_running(21):
+            script_40()
+            set_running(17)
 
-        for pin in pin_names:
-            set_not_used(pin)
+            for pin in pin_names:
+                set_not_used(pin)
 
-        # used_Pins = [(spi1CS0), (spi1MOSI), (spi1MISO), (spi1SCLK)]
-        used_Pins = [(spi1CS0), (spi1MOSI), (spi1MISO), (spi1SCLK), (spi0CS0), (spi0CS1), (spi0MOSI), (spi0MISO), (spi0SCLK)]
-        for pin in used_Pins:
-            set_used(pin)
-            pi.set_mode((pin), pigpio.ALT0)
-            get_all_pins(init=False)
-        sleep(.25)
+            # used_Pins = [(spi1CS0), (spi1MOSI), (spi1MISO), (spi1SCLK)]
+            used_Pins = [(spi1CS0), (spi1MOSI), (spi1MISO), (spi1SCLK), (spi0CS0), (spi0CS1), (spi0MOSI), (spi0MISO), (spi0SCLK)]
+            for pin in used_Pins:
+                set_used(pin)
+                pi.set_mode((pin), pigpio.ALT0)
+                get_all_pins(init=False)
+            sleep(.25)
 
-        h = pi.spi_open(1, 50000, 3)
+            h = pi.spi_open(1, 50000, 3)
 
 # --script 18---------------------------------------------------------------------------
 
@@ -1012,32 +1048,34 @@ def script_19():
             script_21()
 
     else:
-        script_40()
-        set_running(19)
-        for pin in pin_names:
-            set_not_used(pin)
+        if not get_running(21):
+            script_40()
+            set_running(19)
+            for pin in pin_names:
+                set_not_used(pin)
 
-        used_Pins = [(pwmPina), (pwmPinb), (pwmPinc), (pwmPind)]
-        for pin in used_Pins:
-            set_used(pin)
-            set_pin_out(pin)
+            used_Pins = [(pwmPina), (pwmPinb), (pwmPinc), (pwmPind)]
+            for pin in used_Pins:
+                set_used(pin)
+                set_pin_out(pin)
 
-        pi.set_mode((pwmPina), pigpio.ALT0)
-        pi.set_mode((pwmPinb), pigpio.ALT5)
-        start_hpwm(pwmPina)
-        pi.set_mode((pwmPinc), pigpio.ALT0)
-        pi.set_mode((pwmPind), pigpio.ALT5)
-        start_hpwm(pwmPinc)
+            pi.set_mode((pwmPina), pigpio.ALT0)
+            pi.set_mode((pwmPinb), pigpio.ALT5)
+            start_hpwm(pwmPina)
+            pi.set_mode((pwmPinc), pigpio.ALT0)
+            pi.set_mode((pwmPind), pigpio.ALT5)
+            start_hpwm(pwmPinc)
 
-    sleep(.25)
+        sleep(.25)
 
 
 # --script 20-Software PWM Menu----------------------------------------------------------
 
 
 def script_20():
+    if not get_running(21):
+        LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
 
-    LED_Pins = [4, 10, 9, 8, 11, 7, 5, 6, 12]
     if get_running(20):
         clr_running(20)
         if not get_running(7):
@@ -1045,14 +1083,15 @@ def script_20():
                 pi.set_PWM_dutycycle((pin), 0)
 
     else:
-        script_40()
-        set_running(20)
+        if not get_running(21):
+            script_40()
+            set_running(20)
 
-        for pin in LED_Pins:
-            set_used(pin)
-            pi.set_PWM_dutycycle((pin), 48)
+            for pin in LED_Pins:
+                set_used(pin)
+                pi.set_PWM_dutycycle((pin), 48)
 
-    sleep(.25)
+        sleep(.25)
 
 
 # --script 21-ELLK Config ---------------------------------------------------------------
@@ -1066,8 +1105,6 @@ def script_21():
     sleep(0.25)
 
     for pin in pin_names:
-        set_pin_out(pin)
-        pin_out_low(pin)
         set_not_used(pin)
 
     sleep(0.2)
@@ -1077,9 +1114,6 @@ def script_21():
         set_used(pin)
         set_pin_out(pin)
         pin_out_low(pin)
-
-    if get_running(19) or get_running(4):  # if hardware PWM is ON
-        set_used(19)
 
     Buttons = [16, 20, 21]
     BUT_Pins_up(Buttons)
@@ -1113,7 +1147,7 @@ def script_21():
             start_hpwm(Buzzer)
             while read_pin(20) == 0:
                 pin_out_hi(6)
-            pin_out_low(6)    
+            pin_out_low(6)
         elif read_pin(21) == 0:  # yellow 19
             set_hfrq(Buzzer, 1100)
             start_hpwm(Buzzer)
@@ -1126,8 +1160,39 @@ def script_21():
             # for pin in leds:
             #     pin_out_low(pin)
 
+# --script 35-Serial Menu--------------------------------------------------------
+
+
+def script_35():
+    ser_tx = 14
+    ser_rx = 15
+
+    if get_running(35):
+        clr_running(35)
+        if get_running(1):
+            script_1()
+        if get_running(2):
+            script_2()
+        if get_running(21):
+            script_21()
+    else:
+        if not get_running(21):
+            script_40()
+            set_running(35)
+            for pin in pin_names:
+                set_not_used(pin)
+
+            used_Pins = [(ser_tx), (ser_rx)]
+            for pin in used_Pins:
+                set_used(pin)
+                pi.set_mode((pin), pigpio.ALT0)
+                get_all_pins(init=False)
+            sleep(.25)
+            tty_message("test message")
+            # os.system("ls-l > cat /dev/ttyAMA0")
 
 # --script 36-check for a camera--------------------------------------------------------
+
 
 def script_36():
     if get_running(36):
@@ -1137,7 +1202,7 @@ def script_36():
         camtest = os.popen('vcgencmd get_camera').read()
         tty_message(camtest)
 
-        sleep(.15)
+        sleep(.5)
         clr_running(36)
 
 
@@ -1186,19 +1251,25 @@ def script_39():
         pi.hardware_clock(4, 0)
         pin_out_low(4)
     else:
-        script_40()
-        if get_hw_version() == "Raspberry Pi V4B 1.1 4GB":
-            pi.hardware_clock(4, 13184)
-        else:
-            pi.hardware_clock(4, 4689)
-        sleep(.25)
-        set_running(39)
+        if not get_running(21):
+            script_40()
+            sleep(.25)
+            if get_hw_version() == "Raspberry Pi V4B 1.1 4GB":
+                pi.hardware_clock(4, 13184)
+            elif get_hw_version() == "Raspberry Pi 400":
+                pi.hardware_clock(4, 13184)
+            else:
+                pi.hardware_clock(4, 4689)
+            sleep(.25)
+            set_running(39)
+
 
 # --script 40-Clear All-----------------------------------------------------------------
 
 
 def script_40(verb=False):
-    set_running(40)
+    if verb:
+        set_running(40)
     global pins
 
     hpwms = [12, 13, 18, 19]
@@ -1231,7 +1302,8 @@ def script_40(verb=False):
         scriptrunning = 21
 
     for script in script_nums:
-        clr_running(script)
+        if script < 40:
+            clr_running(script)
 
     if verb:
         tty_message("All scripts terminated.")
@@ -1242,6 +1314,7 @@ def script_40(verb=False):
         script_2()
     if scriptrunning == 21:
         script_21()
+    clr_running(40)
 
 # -------------------------------------------------------------------------------------
 
@@ -1317,7 +1390,7 @@ def do_script(num):
     elif num == 34:
         no_script(num)
     elif num == 35:
-        no_script(num)
+        script_35()
     elif num == 36:
         script_36()
     elif num == 37:

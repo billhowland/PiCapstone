@@ -27,7 +27,7 @@ background-size: 100% auto;
 #io_select {
 	display: grid;
 	grid-template-areas: "name set pud inout";
-	grid-template-columns: 60px 110px 160px 135px;
+	grid-template-columns: 60px 110px 160px 160px;
 }
 
 #spi_menu {
@@ -46,21 +46,21 @@ background-size: 100% auto;
 	display: grid;
 	grid-area: ccleft;
 	grid-template-areas: "scr-running scriptbtn";
-	grid-template-columns: 45px 145px;
+	grid-template-columns: 45px 139px;
 }
 
 #script_selectb {
 	display: grid;
 	grid-area: ccright;
 	grid-template-areas: "scriptbtnb scr-runningb";
-	grid-template-columns: 145px 45px;
+	grid-template-columns: 139px 45px;
 }
 
 #centercol {
 	display: grid;
 	grid-area: center-col;
 	grid-template-areas: "ccleft ccright";
-	grid-template-columns: 196px 196px;
+	grid-template-columns: 190px 190px;
 }
 
 #logout {
@@ -204,8 +204,6 @@ background-size: 100% auto;
 	grid-area: pud;
 	justify-self: center;
 	box-sizing: border-box;
-
-	align-items: center;
   background-color: wheat;
 	color: black;
 	border-style: outset;
@@ -254,7 +252,7 @@ background-size: 100% auto;
 	border-style: outset;
 	border-color: darkgray;
 	width: 100%;
-	font-size: 15px;
+	font-size: 12px;
 }
 
 .col3serial{
@@ -307,10 +305,6 @@ background-size: 100% auto;
 
 .lint{
 	box-sizing: border-box;
-	grid-area: inout;
-	justify-self: center;
-
-	align-items: center;
   background-color: lightgray;
 	color: black;
 	border-style: outset;
@@ -321,10 +315,6 @@ background-size: 100% auto;
 
 .linl{
 	box-sizing: border-box;
-	grid-area: inout;
-	justify-self: center;
-
-	align-items: center;
   background-color: black;
 	color: white;
 	border-style: outset;
@@ -337,8 +327,6 @@ background-size: 100% auto;
 	box-sizing: border-box;
 	grid-area: inout;
 	justify-self: center;
-
-	align-items: center;
   background-color: green;
 	color: white;
 	border-style: outset;
@@ -351,8 +339,6 @@ background-size: 100% auto;
 	box-sizing: border-box;
 	grid-area: inout;
 	justify-self: center;
-
-	align-items: center;
   background-color: lightgreen;
 	color: black;
 	border-style: outset;
@@ -365,8 +351,6 @@ background-size: 100% auto;
 	box-sizing: border-box;
 	grid-area: inout;
 	justify-self: center;
-
-	align-items: center;
   background-color: white;
 	color: #026201;
 	border-style: outset;
@@ -415,8 +399,6 @@ background-size: 100% auto;
 }
 
 .header {
-	top: 0;
-	left: 0;
 	font-weight: bolder;
 	font-family: Arial;
 	font-size: 1.8rem;
@@ -440,7 +422,6 @@ background-size: 100% auto;
 
 .rightcol {
 
-	grid-area: right-col;
 	border-style: ridge;
 	border-width: 10px;
 	border-color: darkgray;
@@ -460,7 +441,6 @@ background-size: 100% auto;
 
 .optcol {
 	font-size: 12px;
-	grid-area: right-col;
 	border-style: ridge;
 	border-width: 10px;
 	border-color: darkgray;
@@ -506,7 +486,6 @@ background-size: 100% auto;
 	height: auto;
 	justify-self: stretch;
 	align-self: stretch;
-	justify-content: center;
   background-color: lightblue;
 	border-color: white;
   font-size: 12px;
@@ -521,7 +500,6 @@ background-size: 100% auto;
 	height: auto;
 	justify-self: stretch;
 	align-self: stretch;
-	justify-content: center;
   background-color: lightblue;
 	border-color: white;
   font-size: 12px;
@@ -625,6 +603,11 @@ background-size: 100% auto;
 
 .pyterm {
 	height: 540;
+	width: 500;
+}
+
+.pyterm_ser {
+	height: 300;
 	width: 500;
 }
 
