@@ -4,6 +4,7 @@ import socket
 import pigpio
 pi = pigpio.pi()
 os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty9001" cat &')
+os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty9004" cat &')
 
 pins = []
 pin_info = []
@@ -60,11 +61,13 @@ def start_bash():
     os.system('killall gotty')
     os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty" bash &')
     os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty9001" cat &')
+    os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty9004" cat &')
 
 
 def stop_bash():
     os.system('killall gotty')
     os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty9001" cat &')
+    os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty9004" cat &')
 
 
 def start_cam():
@@ -1189,7 +1192,6 @@ def script_35():
                 get_all_pins(init=False)
             sleep(.25)
             tty_message("test message")
-            # os.system("ls-l > cat /dev/ttyAMA0")
 
 # --script 36-check for a camera--------------------------------------------------------
 
