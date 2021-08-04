@@ -160,9 +160,6 @@ background-size: 100% auto;
 .set{
 	box-sizing: border-box;
 	grid-area: set;
-	justify-self: stretch;
-	align-self: stretch;
-	justify-content: center;
   background-color: darkgray;
 	border-style: outset;
 	border-color: darkgray;
@@ -194,7 +191,7 @@ background-size: 100% auto;
 	grid-area: pud;
 	justify-self: stretch;
 	align-self: stretch;
-	justify-content: center;
+	text-align: center;
   background-color: #8475ff;
 	border-style: outset;
 	border-color: darkgray;
@@ -293,8 +290,6 @@ background-size: 100% auto;
 	box-sizing: border-box;
 	grid-area: inout;
 	justify-self: center;
-
-	align-items: center;
   background-color: red;
 	color: black;
 	border-style: outset;
@@ -376,7 +371,7 @@ background-size: 100% auto;
 .lout{
 	box-sizing: border-box;
 	grid-area: inout;
-	justify-self: center;
+	text-align: center;
 	align-self: center;
 	align-items: center;
   background-color: inherit;
