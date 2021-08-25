@@ -4,7 +4,7 @@ import socket
 import pigpio
 pi = pigpio.pi()
 os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty9001" cat &')
-os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty9004" cat &')
+# os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty9004" cat &')
 
 pins = []
 pin_info = []
@@ -61,12 +61,12 @@ def start_bash():
     os.system('killall gotty')
     os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty" bash &')
     os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty9001" cat &')
-    os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty9004" cat &')
+    # os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty9004" cat &')
 
 def stop_bash():
     os.system('killall gotty')
     os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty9001" cat &')
-    os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty9004" cat &')
+    # os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty9004" cat &')
 
 def start_cam():
     # os.system('python3 picam_9002.py &')
