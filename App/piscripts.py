@@ -63,12 +63,10 @@ def start_bash():
     os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty9001" cat &')
     os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty9004" cat &')
 
-
 def stop_bash():
     os.system('killall gotty')
     os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty9001" cat &')
     os.system('gotty --config "/home/pi/Documents/PiCapstone/.gotty9004" cat &')
-
 
 def start_cam():
     # os.system('python3 picam_9002.py &')
@@ -1191,7 +1189,7 @@ def script_35():
                 set_used(pin)
                 pi.set_mode((pin), pigpio.ALT0)
                 get_all_pins(init=False)
-            sleep(.25)
+            sleep(.5)
             tty_message("test message")
 
 # --script 36-check for a camera--------------------------------------------------------
